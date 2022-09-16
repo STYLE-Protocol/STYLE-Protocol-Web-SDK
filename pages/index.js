@@ -94,29 +94,33 @@ export default function Home() {
               >
                 Requested NFTs
                 {requestedNFTs.map(
-                  ({
-                    tokenAddress,
-                    tokenId,
-                    payment,
-                    paymentToken,
-                    tailorId,
-                    jobId,
-                    uri,
-                    bidder,
-                    signature,
-                    environment,
-                    metaverseId,
-                    adminSignature,
-                    asset,
-                    cid,
-                    numberOfDerivatives,
-                  }) => (
+                  (
+                    {
+                      tokenAddress,
+                      tokenId,
+                      payment,
+                      paymentToken,
+                      tailorId,
+                      jobId,
+                      uri,
+                      bidder,
+                      signature,
+                      environment,
+                      metaverseId,
+                      adminSignature,
+                      asset,
+                      cid,
+                      numberOfDerivatives,
+                    },
+                    index
+                  ) => (
                     <div
                       style={{
                         border: "solid",
                         margin: "1rem",
                         padding: "0.5rem",
                       }}
+                      key={index}
                     >
                       <div>Token Address: {tokenAddress}</div>
                       <div>Token Id: {tokenId}</div>
@@ -153,22 +157,26 @@ export default function Home() {
               >
                 Listed NFTs
                 {listedNFTs.map(
-                  ({
-                    tokenId,
-                    payment,
-                    seller,
-                    contract_,
-                    paymentToken,
-                    environment,
-                    metaverse,
-                    asset,
-                  }) => (
+                  (
+                    {
+                      tokenId,
+                      payment,
+                      seller,
+                      contract_,
+                      paymentToken,
+                      environment,
+                      metaverse,
+                      asset,
+                    },
+                    index
+                  ) => (
                     <div
                       style={{
                         border: "solid",
                         margin: "1rem",
                         padding: "0.5rem",
                       }}
+                      key={index}
                     >
                       <div>Token Address: {contract_}</div>
                       <div>Token Id: {tokenId}</div>
