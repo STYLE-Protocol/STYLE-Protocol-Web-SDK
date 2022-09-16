@@ -95,10 +95,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      env:
-        NEXT_PUBLIC_RINKEBY_ENDPOINT: ${{ secrets.NEXT_PUBLIC_RINKEBY_ENDPOINT }}
-        NEXT_PUBLIC_PINATA_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }}
-        NEXT_PUBLIC_PINATA_SECRET_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }}
     runs-on: ubuntu-latest
     needs: build
     steps:
