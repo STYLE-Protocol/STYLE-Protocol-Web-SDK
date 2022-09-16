@@ -60,7 +60,7 @@ jobs:
           #
           # You may remove this line if you want to manage the configuration yourself.
           static_site_generator: next
-        
+
       - name: Restore cache
         uses: actions/cache@v3
         with:
@@ -74,11 +74,11 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
+        env:
+          NEXT_PUBLIC_RINKEBY_ENDPOINT: ${{ secrets.NEXT_PUBLIC_RINKEBY_ENDPOINT }}
+          NEXT_PUBLIC_PINATA_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }}
+          NEXT_PUBLIC_PINATA_SECRET_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-        env: 
-            NEXT_PUBLIC_RINKEBY_ENDPOINT: ${{ secrets.NEXT_PUBLIC_RINKEBY_ENDPOINT }}
-            NEXT_PUBLIC_PINATA_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }}
-            NEXT_PUBLIC_PINATA_SECRET_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }}
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
