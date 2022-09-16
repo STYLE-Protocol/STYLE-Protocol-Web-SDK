@@ -204,6 +204,19 @@ const Base_ABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [],
+    name: "metaverseId",
+    outputs: [
+      {
+        internalType: "uint96",
+        name: "metaverseId_",
+        type: "uint96",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 const getRequestedNFTs = async ({
@@ -370,12 +383,12 @@ const getListedNFTs = async ({
       const metadata = await (await fetch(ipfsUrl)).json();
 
       const tokenContract = new web3.eth.Contract(ERC20_ABI, data.paymentToken);
+
+      const decimals = await tokenContract.methods.decimals().call();
+
       data.payment = {
         value: BigNumber.from(data.payment),
-        stringValue: `${
-          Number.parseInt(data.payment) /
-          10 ** (await tokenContract.methods.decimals().call())
-        }`,
+        stringValue: `${Number.parseInt(data.payment) / 10 ** decimals}`,
       };
       data.paymentToken = {
         address: data.paymentToken,
