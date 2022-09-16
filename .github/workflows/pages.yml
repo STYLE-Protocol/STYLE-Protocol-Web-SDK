@@ -80,7 +80,7 @@ jobs:
           envkey_NEXT_PUBLIC_RINKEBY_ENDPOINT: ${{ secrets.NEXT_PUBLIC_RINKEBY_ENDPOINT }}
           envkey_NEXT_PUBLIC_PINATA_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }}
           envkey_NEXT_PUBLIC_PINATA_SECRET_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }}
-          directory: ../../
+          directory: /home/runner/work/Style-SDK/Style-SDK
           file_name: .env
           fail_on_empty: false
       - name: Build with Next.js
