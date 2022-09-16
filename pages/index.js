@@ -112,7 +112,7 @@ export default function Home() {
                       cid,
                       numberOfDerivatives,
                     },
-                    index
+                    key
                   ) => (
                     <div
                       style={{
@@ -120,7 +120,7 @@ export default function Home() {
                         margin: "1rem",
                         padding: "0.5rem",
                       }}
-                      key={index}
+                      key={key}
                     >
                       <div>Token Address: {tokenAddress}</div>
                       <div>Token Id: {tokenId}</div>
@@ -168,7 +168,7 @@ export default function Home() {
                       metaverse,
                       asset,
                     },
-                    index
+                    key
                   ) => (
                     <div
                       style={{
@@ -176,7 +176,7 @@ export default function Home() {
                         margin: "1rem",
                         padding: "0.5rem",
                       }}
-                      key={index}
+                      key={key}
                     >
                       <div>Token Address: {contract_}</div>
                       <div>Token Id: {tokenId}</div>
