@@ -76,6 +76,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
+          envkey_DEBUG: false
           envkey_NEXT_PUBLIC_RINKEBY_ENDPOINT: ${{ secrets.NEXT_PUBLIC_RINKEBY_ENDPOINT }}
           envkey_NEXT_PUBLIC_PINATA_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }}
           envkey_NEXT_PUBLIC_PINATA_SECRET_API_KEY: ${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }}
