@@ -13,9 +13,21 @@
     "next": "12.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dots-loader": "^1.1.4",
     "web3": "^1.7.4",
     "axios": "^0.27.2",
-    "ethers": "^5.7.0"
+    "ethers": "^5.7.0",
+    "@react-three/drei": "^9.23.8",
+    "@react-three/fiber": "^8.6.0",
+    "three": "^0.143.0",
+    "@chakra-ui/icons": "^2.0.2",
+    "@chakra-ui/react": "^2.3.3",
+    "@chakra-ui/button": "^2.0.10",
+    "@chakra-ui/layout": "^2.1.7",
+    "@chakra-ui/spinner": "^2.0.9",
+    "framer-motion": "^6",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11"
   },
   "devDependencies": {
     "eslint": "8.23.1",

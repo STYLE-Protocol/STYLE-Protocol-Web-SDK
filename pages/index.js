@@ -1,45 +1,195 @@
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { getRequestedNFTs, getListedNFTs } from "../services/contractService";
 import { isCommunityResourcable } from "@ethersproject/providers";
 
+import Card from "../components/Card";
+import PropertySelector from "../components/PropertySelector";
+import {
+  Text,
+  Box,
+  VStack,
+  Flex,
+  Button,
+  Grid,
+  Container,
+  Wrap,
+  Center,
+  Divider,
+  Spinner,
+} from "@chakra-ui/react";
+
+import { IDS2ENVIRONMENT, PROTOCOL_CONTRACTS } from "../constants";
+
+import NFTMarketplace_metadata from "../public/contracts/NFTMarketplace_metadata.json";
+import ERC20_ABI from "../public/contracts/ERC20_ABI.json";
+
+import { AppContext } from "../contexts/AppContext";
+
+import { BigNumber } from "ethers";
+
 export default function Home() {
+  const {
+    walletAddress,
+    web3,
+    chainId,
+    isLoading,
+    setIsLoading,
+    checkIfWalletIsConnected,
+    connectWallet,
+  } = useContext(AppContext);
+
   const [requestedNFTs, setRequestedNFTs] = useState([]);
   const [listedNFTs, setListedNFTs] = useState([]);
-  const [query, setQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [metaverseFilter, setMetaverseFilter] = useState("");
 
-  const fetchRequestedNFTS = async (cursor, amount, chainId, metaverse) => {
+  const allProperties = {
+    METAVERSE: ["DECENTRALAND", "SANDBOX", "SOMNIUM_SPACE", "CRYPTOVOXELS"],
+  };
+
+  const allSetters = {
+    METAVERSE: setMetaverseFilter,
+  };
+
+  const fetchRequestedNFTs = async (cursor, amount, chainId_, metaverse_) => {
     setIsLoading(true);
     const requestedNFTs_ = await getRequestedNFTs({
       cursor,
       amount,
-      chainId,
-      metaverse,
+      chainId: chainId_,
+      metaverse: metaverse_,
     });
-    setQuery("requested");
     setRequestedNFTs(requestedNFTs_);
     setIsLoading(false);
   };
 
-  const fetchListedNFTS = async (cursor, amount, chainId, metaverse) => {
+  const fetchListedNFTs = async (cursor, amount, chainId_, metaverse_) => {
     setIsLoading(true);
     const listedNFTs_ = await getListedNFTs({
       cursor,
       amount,
-      chainId,
-      metaverse,
+      chainId: chainId_,
+      metaverse: metaverse_,
     });
-    setQuery("listed");
     setListedNFTs(listedNFTs_);
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    fetchRequestedNFTs(0, 100, 4, "");
+    fetchListedNFTs(0, 100, 4, "");
+  }, []);
+
+  useEffect(() => {
+    fetchRequestedNFTs(0, 100, 4, metaverseFilter);
+    fetchListedNFTs(0, 100, 4, metaverseFilter);
+  }, [metaverseFilter]);
+
+  const onBuyAndMint = async (
+    paymentToken,
+    payment,
+    tokenAddress,
+    tokenId,
+    uri,
+    bidder,
+    environment,
+    metaverseId,
+    signature,
+    adminSignature
+  ) => {
+    setIsLoading(true);
+    try {
+      await preBuy();
+      const tokenContract = new web3.eth.Contract(
+        ERC20_ABI,
+        paymentToken.address
+      );
+
+      const allowance = await tokenContract.methods
+        .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
+        .call();
+      if (payment.value.gt(allowance)) {
+        await tokenContract.methods
+          .approve(PROTOCOL_CONTRACTS[chainId], payment.value)
+          .send({ from: walletAddress });
+      }
+
+      const protocolContract = new web3.eth.Contract(
+        NFTMarketplace_metadata["output"]["abi"],
+        PROTOCOL_CONTRACTS[chainId]
+      );
+
+      await protocolContract.methods
+        .buyAndMint(
+          walletAddress,
+          {
+            tokenAddress: tokenAddress,
+            tokenId: tokenId,
+            payment: payment.value,
+            paymentToken: paymentToken.address,
+            uri: uri,
+            bidder: bidder,
+            environment: environment,
+            metaverseId: metaverseId,
+            signature: signature,
+          },
+          adminSignature,
+          payment.value
+        )
+        .send({ from: walletAddress });
+
+      fetchRequestedNFTs(0, 100, chainId, filteredMetaverse);
+    } catch (error) {
+      console.log("buyAndMintError", error);
+    }
+    setIsLoading(false);
+  };
+
+  const onBuy = async (paymentToken, payment, contract_, tokenId) => {
+    setIsLoading(true);
+    try {
+      await preBuy();
+      const tokenContract = new web3.eth.Contract(
+        ERC20_ABI,
+        paymentToken.address
+      );
+
+      const allowance = await tokenContract.methods
+        .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
+        .call();
+      if (payment.value.gt(allowance)) {
+        await tokenContract.methods
+          .approve(PROTOCOL_CONTRACTS[chainId], payment.value)
+          .send({ from: walletAddress });
+      }
+
+      const protocolContract = new web3.eth.Contract(
+        NFTMarketplace_metadata["output"]["abi"],
+        PROTOCOL_CONTRACTS[chainId]
+      );
+
+      await protocolContract.methods
+        .buyItem(contract_, tokenId, payment.value)
+        .send({ from: walletAddress });
+
+      fetchListedNFTs(0, 100, chainId, filteredMetaverse);
+    } catch (error) {
+      console.log("buyError", error);
+    }
+    setIsLoading(false);
+  };
+
+  const preBuy = async () => {
+    if (!(await checkIfWalletIsConnected())) {
+      await connectWallet();
+    }
+  };
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <meta
           name="viewport"
@@ -53,46 +203,48 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main
-        className={styles.main}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gridGap: "1rem",
-          }}
-        >
-          <button onClick={() => fetchRequestedNFTS(0, 100, 4, "")}>
-            Fetch Requested NFTs
-          </button>
-          <button onClick={() => fetchListedNFTS(0, 100, 4, "")}>
-            Fetch Listed NFTs
-          </button>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {!isLoading ? (
-            query == "requested" ? (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                Requested NFTs
+      <Box>
+        <Flex>
+          <VStack w={"20%"} borderRight={"solid"} borderWidth={"3px"}>
+            {Object.keys(allProperties).map((property, key) => (
+              <Box key={key}>
+                <PropertySelector
+                  name={property}
+                  properties={allProperties[property]}
+                  setter={allSetters[property]}
+                />
+                <Divider orientation="horizontal" />
+              </Box>
+            ))}
+          </VStack>
+          <Center w={"100%"}>
+            {!isLoading ? (
+              <Wrap>
+                {listedNFTs.map(
+                  (
+                    {
+                      tokenId,
+                      payment,
+                      contract_,
+                      paymentToken,
+                      metaverse,
+                      asset,
+                    },
+                    key
+                  ) => (
+                    <Box key={key}>
+                      <Card
+                        name={asset.name}
+                        animation_url={asset.animation_url}
+                        properties={{ Metaverse: metaverse }}
+                        onClickFunction={() =>
+                          onBuy(paymentToken, payment, contract_, tokenId)
+                        }
+                        availiableDerivatives={1}
+                      />
+                    </Box>
+                  )
+                )}
                 {requestedNFTs.map(
                   (
                     {
@@ -100,8 +252,6 @@ export default function Home() {
                       tokenId,
                       payment,
                       paymentToken,
-                      tailorId,
-                      jobId,
                       uri,
                       bidder,
                       signature,
@@ -109,98 +259,45 @@ export default function Home() {
                       metaverseId,
                       adminSignature,
                       asset,
-                      cid,
                       numberOfDerivatives,
                     },
                     key
                   ) => (
-                    <div
-                      style={{
-                        border: "solid",
-                        margin: "1rem",
-                        padding: "0.5rem",
-                      }}
-                      key={key}
-                    >
-                      <div>Token Address: {tokenAddress}</div>
-                      <div>Token Id: {tokenId}</div>
-                      <div>
-                        Payment: {payment.stringValue} {paymentToken.symbol}
-                      </div>
-                      <div>Tailor Id: {tailorId}</div>
-                      <div>Job Id: {jobId}</div>
-                      <div>Token URI: {uri}</div>
-                      <div>Tailor: {bidder}</div>
-                      <div>Tailor Signature: {signature}</div>
-                      <div>Environment: {environment}</div>
-                      <div>Metaverse ID: {metaverseId}</div>
-                      <div>Admin Signature: {adminSignature}</div>
-                      <div>
-                        Asset: <a href={asset.animation_url}>{asset.name}</a>
-                      </div>
-                      <div>CID: {cid}</div>
-                      <div>
-                        Number Of Availiable Derivatives: {numberOfDerivatives}
-                      </div>
-                    </div>
+                    <Box key={key}>
+                      <Card
+                        name={asset.name}
+                        animation_url={asset.animation_url}
+                        properties={{
+                          Metaverse: IDS2ENVIRONMENT[metaverseId],
+                        }}
+                        onClickFunction={() =>
+                          onBuyAndMint(
+                            paymentToken,
+                            payment,
+                            tokenAddress,
+                            tokenId,
+                            uri,
+                            bidder,
+                            environment,
+                            metaverseId,
+                            signature,
+                            adminSignature
+                          )
+                        }
+                        availiableDerivatives={numberOfDerivatives}
+                      />
+                    </Box>
                   )
                 )}
-              </div>
-            ) : query == "listed" ? (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                Listed NFTs
-                {listedNFTs.map(
-                  (
-                    {
-                      tokenId,
-                      payment,
-                      seller,
-                      contract_,
-                      paymentToken,
-                      environment,
-                      metaverse,
-                      asset,
-                    },
-                    key
-                  ) => (
-                    <div
-                      style={{
-                        border: "solid",
-                        margin: "1rem",
-                        padding: "0.5rem",
-                      }}
-                      key={key}
-                    >
-                      <div>Token Address: {contract_}</div>
-                      <div>Token Id: {tokenId}</div>
-                      <div>
-                        Payment: {payment.stringValue} {paymentToken.symbol}
-                      </div>
-                      <div>Seller: {seller}</div>
-                      <div>Environment: {environment}</div>
-                      <div>Metaverse: {metaverse}</div>
-                      <div>
-                        Asset: <a href={asset.animation_url}>{asset.name}</a>
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
+              </Wrap>
             ) : (
-              <div></div>
-            )
-          ) : (
-            <div>Loading...</div>
-          )}
-        </div>
-      </main>
+              <Center>
+                <Spinner size={"lg"} />
+              </Center>
+            )}
+          </Center>
+        </Flex>
+      </Box>
 
       <footer className={styles.footer}>
         <a
