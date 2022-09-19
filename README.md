@@ -1,18 +1,15 @@
-# Style-SDK
+---
+description: Style-SDK is way to integrate with your website using HTML & JS file only.
+---
 
-Style-SDK is way to integrate with your website using HTML &amp; JS file only.
+# 👋 Welcome to Style-SDK
 
-## SDK
 
-It is possible to get a list of NFTs availiable for purchase. For that you need to:
 
-- Copy [contractService](./services/contractService.js) to your directory
-- Create `.env` or `.env.local` file with the same structure:
+## Get Started
 
-```
-NEXT_PUBLIC_RINKEBY_ENDPOINT=https://rinkeby.infura.io/v3/id  // provider endpoint e.g. by Infura (https://infura.io/)
-NEXT_PUBLIC_PINATA_API_KEY=api_key                            // api key by Pinata (https://www.pinata.cloud/)
-NEXT_PUBLIC_PINATA_SECRET_API_KEY=secret_api_key              // secret api key by Pinata (https://www.pinata.cloud/)
-```
+We've put together some helpful guides for you to get setup with our product quickly and easily.
 
-Now you can use `getRequestedNFTs` and `getListedNFTs` functions from [contractService](./services/contractService.js)
+{% content-ref url="fundamentals/getting-set-up/" %}
+[getting-set-up](fundamentals/getting-set-up/)
+{% endcontent-ref %}
