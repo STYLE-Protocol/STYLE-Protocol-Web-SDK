@@ -1,7 +1,7 @@
-import React, { createContext, useMemo, useEffect, useState } from "react";
+import React, { createContext, useMemo, useState } from "react";
 // import { ethers } from 'ethers'
 import Web3 from "web3";
-import { Flex, useToast } from "@chakra-ui/react";
+import { Flex, useToast, useDisclosure } from "@chakra-ui/react";
 
 export const AppContext = createContext();
 
