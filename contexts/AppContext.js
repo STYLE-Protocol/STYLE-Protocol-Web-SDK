@@ -10,6 +10,7 @@ import "react-dots-loader/index.css";
 
 export const AppProvider = ({ children }) => {
   const toast = useToast();
+  const { onClose, onOpen } = useDisclosure();
   // GLOBAL STATES
   const [isLoading, setIsLoading] = useState(false);
   const [isOverlayLoading, setIsOverlayLoading] = useState(false);
