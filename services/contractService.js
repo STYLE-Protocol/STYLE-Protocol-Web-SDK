@@ -353,7 +353,6 @@ const getListedNFTs = async ({
   chainId = 4,
   metaverse = "",
 }) => {
-  console.log("check", process.env.NEXT_PUBLIC_CHECK, "check");
   const web3 = new Web3(
     new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT)
   );
