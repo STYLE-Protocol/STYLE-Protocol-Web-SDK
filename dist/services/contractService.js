@@ -429,3 +429,6 @@ const getListedNFTs = async ({
 
   return parsedData;
 };
+
+exports.getRequestedNFTs = getRequestedNFTs;
+exports.getListedNFTs = getListedNFTs;
