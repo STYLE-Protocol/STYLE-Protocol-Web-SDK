@@ -1,13 +1,8 @@
 import Head from "next/head";
-import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useContext, useEffect, useState } from "react";
 
-import {
-  getRequestedNFTs,
-  getListedNFTs,
-} from "../dist/services/contractService";
-import { isCommunityResourcable } from "@ethersproject/providers";
+import { getRequestedNFTs, getListedNFTs } from "../services/contractService";
 
 import Card from "../components/Card";
 import PropertySelector from "../components/PropertySelector";
@@ -16,9 +11,6 @@ import {
   Box,
   VStack,
   Flex,
-  Button,
-  Grid,
-  Container,
   Wrap,
   Center,
   Divider,
