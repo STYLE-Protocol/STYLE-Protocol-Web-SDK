@@ -2,8 +2,8 @@
 
 ## Fetch NFTs Functions
 
-* Copy [contractService](../../services/contractService.js) to your directory
-* Create `.env` or `.env.local` file (depends on your framework) with the same structure:
+1. Install [npm package](https://www.npmjs.com/package/@styleprotocol/style-sdk) with `npm i @styleprotocol/style-sdk.`
+2. Create `.env` or `.env.local` file (depends on your framework) with the same structure:
 
 ```
 NEXT_PUBLIC_RINKEBY_ENDPOINT=https://rinkeby.infura.io/v3/id  // provider endpoint e.g. by Infura (https://infura.io/)
