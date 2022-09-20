@@ -1,6 +1,6 @@
 {
   "name": "@styleprotocol/style-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -33,7 +33,7 @@
     "eslint-config-next": "12.3.0"
   },
   "description": "[Documentation](https://style-protocol.gitbook.io/style-sdk/)",
-  "main": "next.config.js",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/STYLE-Protocol/Style-SDK.git"
