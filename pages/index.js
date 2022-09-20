@@ -29,8 +29,6 @@ import ERC20_ABI from "../public/contracts/ERC20_ABI.json";
 
 import { AppContext } from "../contexts/AppContext";
 
-import { BigNumber } from "ethers";
-
 export default function Home() {
   const {
     walletAddress,
@@ -56,6 +54,7 @@ export default function Home() {
 
   const fetchRequestedNFTs = async (cursor, amount, chainId_, metaverse_) => {
     setIsLoading(true);
+    setRequestedNFTs([]);
     const requestedNFTs_ = await getRequestedNFTs({
       cursor,
       amount,
@@ -68,6 +67,7 @@ export default function Home() {
 
   const fetchListedNFTs = async (cursor, amount, chainId_, metaverse_) => {
     setIsLoading(true);
+    setListedNFTs([]);
     const listedNFTs_ = await getListedNFTs({
       cursor,
       amount,
