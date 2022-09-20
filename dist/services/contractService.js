@@ -1,6 +1,6 @@
-import axios from "axios";
-import Web3 from "web3";
-import { BigNumber } from "ethers";
+const axios = require("axios");
+const Web3 = require("web3");
+const { BigNumber } = require("ethers");
 
 const PROTOCOL_CONTRACTS = {
   4: "0x36ACbdcBf366558AD8c6Be12F217Dc64f78d7B72",
