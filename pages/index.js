@@ -45,7 +45,9 @@ export default function Home() {
   const [metaverseFilter, setMetaverseFilter] = useState("");
 
   const allProperties = {
-    METAVERSE: ["DECENTRALAND", "SANDBOX", "SOMNIUM_SPACE", "CRYPTOVOXELS"],
+    METAVERSE: metaversesJson.map((cur) => {
+      return { name: cur.name, slug: cur.slug };
+    }),
   };
 
   const allSetters = {
@@ -290,6 +292,11 @@ export default function Home() {
                       />
                     </Box>
                   )
+                )}
+                {listedNFTs.length === 0 && requestedNFTs.length === 0 && (
+                  <Text fontSize={"1.15rem"} fontWeight={"600"}>
+                    No items to buy.
+                  </Text>
                 )}
               </Wrap>
             ) : (

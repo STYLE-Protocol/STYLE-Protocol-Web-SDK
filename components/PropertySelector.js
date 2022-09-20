@@ -12,9 +12,9 @@ const PropertySelector = ({ name, properties, setter }) => {
             key={key}
             colorScheme={"teal"}
             variant={"ghost"}
-            onClick={() => setter(property)}
+            onClick={() => setter(property.slug)}
           >
-            {property}
+            {property.name}
           </Button>
         ))}
       </VStack>

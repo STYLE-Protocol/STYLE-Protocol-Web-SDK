@@ -1,7 +1,3 @@
-import axios from "axios";
-import Web3 from "web3";
-import { BigNumber } from "ethers";
-
 const PROTOCOL_CONTRACTS = {
   4: "0x36ACbdcBf366558AD8c6Be12F217Dc64f78d7B72",
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
@@ -270,7 +266,7 @@ const getRequestedNFTs = async ({
     method: "get",
     url: `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT${
       !!metaverse
-        ? `&metadata[keyvalues]={"metaverse": {"value": "${metaverse}", "op": "eq"}}`
+        ? `&metadata[keyvalues]={"metaverse": {"value": "${metaverse.toLowerCase()}", "op": "eq"}}`
         : ""
     }`,
     headers: {
