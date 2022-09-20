@@ -430,12 +430,4 @@ const getListedNFTs = async ({
   return parsedData;
 };
 
-export {
-  PROTOCOL_CONTRACTS,
-  metaversesJson,
-  NFTMarketplace_ABI,
-  ERC20_ABI,
-  Base_ABI,
-  getRequestedNFTs,
-  getListedNFTs,
-};
+export { getRequestedNFTs, getListedNFTs };

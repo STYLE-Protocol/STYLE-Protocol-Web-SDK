@@ -1,9 +1,4 @@
-("use strict");
-
-import contractService from "../dist/services/contractService";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true,
-});
-
-exports.contractService = contractService;
+exports.getRequestedNFTs =
+  require("../dist/services/contractService").getRequestedNFTs;
+exports.getListedNFTs =
+  require("../dist/services/contractService").getListedNFTs;
