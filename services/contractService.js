@@ -7,7 +7,7 @@ const PROTOCOL_CONTRACTS = {
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
 };
 
-export const metaversesJson = [
+const metaversesJson = [
   {
     id: "0",
     icon: "decentraland.svg",
@@ -430,4 +430,12 @@ const getListedNFTs = async ({
   return parsedData;
 };
 
-export { getRequestedNFTs, getListedNFTs };
+export {
+  PROTOCOL_CONTRACTS,
+  metaversesJson,
+  NFTMarketplace_ABI,
+  ERC20_ABI,
+  Base_ABI,
+  getRequestedNFTs,
+  getListedNFTs,
+};

@@ -1,7 +1,6 @@
 {
-  "name": "style-sdk",
+  "name": "@styleprotocol/style-sdk",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -32,5 +31,23 @@
   "devDependencies": {
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.0"
-  }
+  },
+  "description": "[Documentation](https://style-protocol.gitbook.io/style-sdk/)",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STYLE-Protocol/Style-SDK.git"
+  },
+  "keywords": [
+    "ethereum",
+    "polygon",
+    "metaverse",
+    "sdk"
+  ],
+  "author": "Hamza Salem & Andrey Korokhov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/STYLE-Protocol/Style-SDK/issues"
+  },
+  "homepage": "https://github.com/STYLE-Protocol/Style-SDK#readme"
 }
