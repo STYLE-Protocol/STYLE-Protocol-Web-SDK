@@ -429,5 +429,3 @@ const getListedNFTs = async ({
 
   return parsedData;
 };
-
-export { getRequestedNFTs, getListedNFTs };
