@@ -7,12 +7,36 @@ const PROTOCOL_CONTRACTS = {
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
 };
 
-const IDS2ENVIRONMENT = {
-  0: "DECENTRALAND",
-  1: "SANDBOX",
-  2: "SOMNIUM_SPACE",
-  3: "CRYPTOVOXELS",
-};
+export const metaversesJson = [
+  {
+    id: "0",
+    icon: "decentraland.svg",
+    name: "Decentraland",
+    slug: "decentraland",
+    price: 600,
+  },
+  {
+    id: "1",
+    icon: "sandbox.svg",
+    name: "The Sandbox",
+    slug: "sandbox",
+    price: 200,
+  },
+  {
+    id: "2",
+    icon: "somnium.svg",
+    name: "Somnium Space",
+    slug: "somnium_space",
+    price: 200,
+  },
+  {
+    id: "3",
+    icon: "cryptovoxels.svg",
+    name: "Cryptovoxels",
+    slug: "cryptovoxels",
+    price: 170.01,
+  },
+];
 
 const NFTMarketplace_ABI = [
   {
@@ -371,8 +395,11 @@ const getListedNFTs = async ({
     const nftContract = new web3.eth.Contract(Base_ABI, cur.contract_);
 
     const metaverseId = await nftContract.methods.metaverseId().call();
-    if (!metaverse || IDS2ENVIRONMENT[metaverseId] === metaverse) {
-      var data = { ...cur, metaverse: IDS2ENVIRONMENT[metaverseId] };
+    const metaverseFilter = metaversesJson
+      .filter((cur) => cur.id === `${metaverseId}`)[0]
+      .slug.toLowerCase();
+    if (!metaverse || metaverseFilter === metaverse.toLowerCase()) {
+      var data = { ...cur, metaverse: metaverseFilter };
 
       var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
       if (ipfsUrl.slice(0, 4) === "ipfs") {

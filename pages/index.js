@@ -22,7 +22,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
-import { IDS2ENVIRONMENT, PROTOCOL_CONTRACTS } from "../constants";
+import { metaversesJson, PROTOCOL_CONTRACTS } from "../constants";
 
 import NFTMarketplace_metadata from "../public/contracts/NFTMarketplace_metadata.json";
 import ERC20_ABI from "../public/contracts/ERC20_ABI.json";
@@ -268,7 +268,9 @@ export default function Home() {
                         name={asset.name}
                         animation_url={asset.animation_url}
                         properties={{
-                          Metaverse: IDS2ENVIRONMENT[metaverseId],
+                          Metaverse: metaversesJson
+                            .filter((cur) => cur.id === `${metaverseId}`)[0]
+                            .slug.toLowerCase(),
                         }}
                         onClickFunction={() =>
                           onBuyAndMint(
