@@ -3,7 +3,10 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useContext, useEffect, useState } from "react";
 
-import { getRequestedNFTs, getListedNFTs } from "../services/contractService";
+import {
+  getRequestedNFTs,
+  getListedNFTs,
+} from "../dist/services/contractService";
 import { isCommunityResourcable } from "@ethersproject/providers";
 
 import Card from "../components/Card";
