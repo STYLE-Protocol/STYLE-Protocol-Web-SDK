@@ -7,7 +7,7 @@
 How to import:
 
 ```javascript
-import { getListedNFTs } from '@styleprotocol/style-sdk'
+import { getListedNFTs } from '@style-protocol/style-sdk'
 ```
 
 How it looks like:
@@ -31,7 +31,7 @@ How it looks like:
 How to import:
 
 ```javascript
-import { getRequestedNFTs } from '@styleprotocol/style-sdk'
+import { getRequestedNFTs } from '@style-protocol/style-sdk'
 ```
 
 How it looks like:

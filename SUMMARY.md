@@ -1,6 +1,6 @@
 # Table of contents
 
-* [👋 Welcome to Style-SDK](README.md)
+* [👋 Welcome to STYLE-Protocol-SDK](README.md)
 
 ## Overview
 

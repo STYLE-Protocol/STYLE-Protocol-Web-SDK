@@ -2,7 +2,7 @@
 
 ## Fetch NFTs Functions
 
-1. Install [npm package](https://www.npmjs.com/package/@styleprotocol/style-sdk) with `npm i @styleprotocol/style-sdk.`
+1. Install [npm package](https://www.npmjs.com/package/@styleprotocol/style-sdk) with `npm i @style-protocol/style-sdk.`
 2. Create `.env` or `.env.local` file (depends on your framework) with the same structure:
 
 ```
