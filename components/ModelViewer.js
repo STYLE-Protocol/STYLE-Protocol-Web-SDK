@@ -1,24 +1,20 @@
-import { Suspense, useMemo } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useLoader, Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Model = ({ model }) => {
-  const { scene } = useLoader(GLTFLoader, model);
-  const copiedScene = useMemo(() => scene.clone(), [scene]);
+  const [mdl, set] = useState();
+  useEffect(() => new GLTFLoader().load(model, set), []);
+  if (!mdl) return null;
   return (
-    <group>
-      <primitive
-        object={copiedScene}
-        scale={50}
-        position={[0, 0, 0]}
-        rotation={[0, 1.5, 0]}
-      />
+    <group position={[0, 0, 0]}>
+      <primitive object={mdl.scene} rotation={[0, 1.5, 0]} />
     </group>
   );
 };
 
-const ModelViewer = ({ model, canvaStyles = {} }) => {
+const ModelViewer = ({ model, canvaStyles = {}, headerModelFile }) => {
   return (
     model && (
       <div>
@@ -40,7 +36,10 @@ const ModelViewer = ({ model, canvaStyles = {} }) => {
           />
           <Suspense fallback={null}>
             {/* Model */}
-            <Model model={model} />
+            <mesh scale={5}>
+              <Model model={model} />
+            </mesh>
+            {/* <Environment preset='warehouse' /> */}
             {/* Settings */}
             <ambientLight intensity={0.3} />
             <pointLight intensity={0.5} position={[10, 20, 30]} />
