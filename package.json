@@ -1,5 +1,5 @@
 {
-  "name": "@style-protocol/style-sdk",
+  "name": "@style-protocol/sdk",
   "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
@@ -32,11 +32,11 @@
     "eslint": "8.23.1",
     "eslint-config-next": "12.3.0"
   },
-  "description": "[Documentation](https://style-protocol.gitbook.io/style-sdk/)",
+  "description": "[Documentation](https://style-protocol.gitbook.io/sdk/)",
   "main": "./dist/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/STYLE-Protocol/Style-SDK.git"
+    "url": "git+https://github.com/STYLE-Protocol/STYLE-Protocol-SDK.git"
   },
   "keywords": [
     "ethereum",
@@ -47,7 +47,7 @@
   "author": "Hamza Salem & Andrey Korokhov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/STYLE-Protocol/Style-SDK/issues"
+    "url": "https://github.com/STYLE-Protocol/STYLE-Protocol-SDK/issues"
   },
-  "homepage": "https://github.com/STYLE-Protocol/Style-SDK#readme"
+  "homepage": "https://github.com/STYLE-Protocol/STYLE-Protocol-SDK#readme"
 }
