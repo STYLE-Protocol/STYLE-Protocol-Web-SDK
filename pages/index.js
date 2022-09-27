@@ -2,7 +2,13 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { useContext, useEffect, useState } from "react";
 
-import { getRequestedNFTs, getListedNFTs } from "../services/contractService";
+import {
+  getRequestedNFTs,
+  getListedNFTs,
+  approveERC20,
+  buyItem,
+  buyAndMintItem,
+} from "../services/contractService";
 
 import Card from "../components/Card";
 import PropertySelector from "../components/PropertySelector";
@@ -17,10 +23,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
-import { metaversesJson, PROTOCOL_CONTRACTS } from "../constants";
-
-import NFTMarketplace_metadata from "../public/contracts/NFTMarketplace_metadata.json";
-import ERC20_ABI from "../public/contracts/ERC20_ABI.json";
+import { metaversesJson } from "../constants";
 
 import { AppContext } from "../contexts/AppContext";
 
@@ -85,58 +88,18 @@ export default function Home() {
     fetchListedNFTs(0, 100, 4, metaverseFilter);
   }, [metaverseFilter]);
 
-  const onBuyAndMint = async (
-    paymentToken,
-    payment,
-    tokenAddress,
-    tokenId,
-    uri,
-    bidder,
-    environment,
-    metaverseId,
-    signature,
-    adminSignature
-  ) => {
+  const onBuyAndMint = async (NFT) => {
     setIsLoading(true);
     try {
       await preBuy();
-      const tokenContract = new web3.eth.Contract(
-        ERC20_ABI,
-        paymentToken.address
-      );
+      await approveERC20({
+        web3,
+        walletAddress,
+        chainId,
+        NFT,
+      });
 
-      const allowance = await tokenContract.methods
-        .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
-        .call();
-      if (payment.value.gt(allowance)) {
-        await tokenContract.methods
-          .approve(PROTOCOL_CONTRACTS[chainId], payment.value)
-          .send({ from: walletAddress });
-      }
-
-      const protocolContract = new web3.eth.Contract(
-        NFTMarketplace_metadata["output"]["abi"],
-        PROTOCOL_CONTRACTS[chainId]
-      );
-
-      await protocolContract.methods
-        .buyAndMint(
-          walletAddress,
-          {
-            tokenAddress: tokenAddress,
-            tokenId: tokenId,
-            payment: payment.value,
-            paymentToken: paymentToken.address,
-            uri: uri,
-            bidder: bidder,
-            environment: environment,
-            metaverseId: metaverseId,
-            signature: signature,
-          },
-          adminSignature,
-          payment.value
-        )
-        .send({ from: walletAddress });
+      await buyAndMintItem({ web3, walletAddress, chainId, NFT });
 
       fetchRequestedNFTs(0, 100, chainId, filteredMetaverse);
     } catch (error) {
@@ -145,32 +108,18 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  const onBuy = async (paymentToken, payment, contract_, tokenId) => {
+  const onBuy = async (NFT) => {
     setIsLoading(true);
     try {
       await preBuy();
-      const tokenContract = new web3.eth.Contract(
-        ERC20_ABI,
-        paymentToken.address
-      );
+      await approveERC20({
+        web3,
+        walletAddress,
+        chainId,
+        NFT,
+      });
 
-      const allowance = await tokenContract.methods
-        .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
-        .call();
-      if (payment.value.gt(allowance)) {
-        await tokenContract.methods
-          .approve(PROTOCOL_CONTRACTS[chainId], payment.value)
-          .send({ from: walletAddress });
-      }
-
-      const protocolContract = new web3.eth.Contract(
-        NFTMarketplace_metadata["output"]["abi"],
-        PROTOCOL_CONTRACTS[chainId]
-      );
-
-      await protocolContract.methods
-        .buyItem(contract_, tokenId, payment.value)
-        .send({ from: walletAddress });
+      await buyItem({ web3, walletAddress, chainId, NFT });
 
       fetchListedNFTs(0, 100, chainId, filteredMetaverse);
     } catch (error) {
@@ -217,77 +166,32 @@ export default function Home() {
           <Center w={"100%"}>
             {!isLoading ? (
               <Wrap>
-                {listedNFTs.map(
-                  (
-                    {
-                      tokenId,
-                      payment,
-                      contract_,
-                      paymentToken,
-                      metaverse,
-                      asset,
-                    },
-                    key
-                  ) => (
-                    <Box key={key}>
-                      <Card
-                        name={asset.name}
-                        animation_url={asset.animation_url}
-                        properties={{ Metaverse: metaverse }}
-                        onClickFunction={() =>
-                          onBuy(paymentToken, payment, contract_, tokenId)
-                        }
-                        availiableDerivatives={1}
-                      />
-                    </Box>
-                  )
-                )}
-                {requestedNFTs.map(
-                  (
-                    {
-                      tokenAddress,
-                      tokenId,
-                      payment,
-                      paymentToken,
-                      uri,
-                      bidder,
-                      signature,
-                      environment,
-                      metaverseId,
-                      adminSignature,
-                      asset,
-                      numberOfDerivatives,
-                    },
-                    key
-                  ) => (
-                    <Box key={key}>
-                      <Card
-                        name={asset.name}
-                        animation_url={asset.animation_url}
-                        properties={{
-                          Metaverse: metaversesJson
-                            .filter((cur) => cur.id === `${metaverseId}`)[0]
-                            .slug.toLowerCase(),
-                        }}
-                        onClickFunction={() =>
-                          onBuyAndMint(
-                            paymentToken,
-                            payment,
-                            tokenAddress,
-                            tokenId,
-                            uri,
-                            bidder,
-                            environment,
-                            metaverseId,
-                            signature,
-                            adminSignature
-                          )
-                        }
-                        availiableDerivatives={numberOfDerivatives}
-                      />
-                    </Box>
-                  )
-                )}
+                {listedNFTs.map((NFT, key) => (
+                  <Box key={key}>
+                    <Card
+                      name={NFT.asset.name}
+                      animation_url={NFT.asset.animation_url}
+                      properties={{ Metaverse: NFT.metaverse }}
+                      onClickFunction={() => onBuy(NFT)}
+                      availiableDerivatives={1}
+                    />
+                  </Box>
+                ))}
+                {requestedNFTs.map((NFT, key) => (
+                  <Box key={key}>
+                    <Card
+                      name={NFT.asset.name}
+                      animation_url={NFT.asset.animation_url}
+                      properties={{
+                        Metaverse: metaversesJson
+                          .filter((cur) => cur.id === `${NFT.metaverseId}`)[0]
+                          .slug.toLowerCase(),
+                      }}
+                      onClickFunction={() => onBuyAndMint(NFT)}
+                      availiableDerivatives={NFT.numberOfDerivatives}
+                    />
+                  </Box>
+                ))}
                 {listedNFTs.length === 0 && requestedNFTs.length === 0 && (
                   <Text fontSize={"1.15rem"} fontWeight={"600"}>
                     No items to buy.

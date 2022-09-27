@@ -161,6 +161,104 @@ const NFTMarketplace_ABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "contract_",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "buyItem",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "redeemer",
+        type: "address",
+      },
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "tokenAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "payment",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "paymentToken",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "uri",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "bidder",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "environment",
+            type: "address",
+          },
+          {
+            internalType: "uint96",
+            name: "metaverseId",
+            type: "uint96",
+          },
+          {
+            internalType: "bytes",
+            name: "signature",
+            type: "bytes",
+          },
+        ],
+        internalType: "struct ILazyMintingStructs.NonmintedNFT",
+        name: "nonmintedNFT",
+        type: "tuple",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "buyAndMint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
 ];
 
 const ERC20_ABI = [
@@ -204,6 +302,52 @@ const ERC20_ABI = [
     ],
     payable: false,
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: "_owner",
+        type: "address",
+      },
+      {
+        name: "_spender",
+        type: "address",
+      },
+    ],
+    name: "allowance",
+    outputs: [
+      {
+        name: "",
+        type: "uint256",
+      },
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: "_spender",
+        type: "address",
+      },
+      {
+        name: "_value",
+        type: "uint256",
+      },
+    ],
+    name: "approve",
+    outputs: [
+      {
+        name: "",
+        type: "bool",
+      },
+    ],
+    payable: false,
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];
@@ -430,4 +574,64 @@ const getListedNFTs = async ({
   return parsedData;
 };
 
-export { getRequestedNFTs, getListedNFTs };
+const approveERC20 = async ({ web3, walletAddress, chainId, NFT }) => {
+  const tokenContract = new web3.eth.Contract(
+    ERC20_ABI,
+    NFT.paymentToken.address
+  );
+
+  const allowance = await tokenContract.methods
+    .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
+    .call();
+
+  if (NFT.payment.value.gt(allowance)) {
+    await tokenContract.methods
+      .approve(PROTOCOL_CONTRACTS[chainId], NFT.payment.value)
+      .send({ from: walletAddress });
+  }
+};
+
+const buyItem = async ({ web3, walletAddress, chainId, NFT }) => {
+  const protocolContract = new web3.eth.Contract(
+    NFTMarketplace_ABI,
+    PROTOCOL_CONTRACTS[chainId]
+  );
+
+  await protocolContract.methods
+    .buyItem(NFT.contract_, NFT.tokenId, NFT.payment.value)
+    .send({ from: walletAddress });
+};
+
+const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
+  const protocolContract = new web3.eth.Contract(
+    NFTMarketplace_ABI,
+    PROTOCOL_CONTRACTS[chainId]
+  );
+
+  await protocolContract.methods
+    .buyAndMint(
+      walletAddress,
+      {
+        tokenAddress: NFT.tokenAddress,
+        tokenId: NFT.tokenId,
+        payment: NFT.payment.value,
+        paymentToken: NFT.paymentToken.address,
+        uri: NFT.uri,
+        bidder: NFT.bidder,
+        environment: NFT.environment,
+        metaverseId: NFT.metaverseId,
+        signature: NFT.signature,
+      },
+      NFT.adminSignature,
+      NFT.payment.value
+    )
+    .send({ from: walletAddress });
+};
+
+export {
+  getRequestedNFTs,
+  getListedNFTs,
+  approveERC20,
+  buyItem,
+  buyAndMintItem,
+};
