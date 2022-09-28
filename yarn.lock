@@ -1572,14 +1572,13 @@
     utility-types "^3.10.0"
     zustand "^3.5.13"
 
-"@react-three/fiber@8.8.4":
-  version "8.8.4"
-  resolved "https://registry.yarnpkg.com/@react-three/fiber/-/fiber-8.8.4.tgz#22880605e15921526390e765bc5557cd5169afa1"
-  integrity sha512-Jy1rRwf+NucHASE3h46jWNWhE0mJxMoAIH4msJH+9tlrth0VcWdYqg98TD7CBW+7mPfkFrUhbvV203LH21IhQA==
+"@react-three/fiber@8.7.4":
+  version "8.7.4"
+  resolved "https://registry.yarnpkg.com/@react-three/fiber/-/fiber-8.7.4.tgz#f97a400512af001ae445ead3b4420485e9d9e75e"
+  integrity sha512-vT/lhYA6XyPejOtz00rJ4weqBrigc79l8a0/tu/pH0Ci73nn08C4zeJ+uTO6GGJWR5PIzsdG+dTLAJMqcu7w4Q==
   dependencies:
     "@babel/runtime" "^7.17.8"
     "@types/react-reconciler" "^0.26.7"
-    its-fine "^1.0.2"
     react-reconciler "^0.27.0"
     react-use-measure "^2.1.1"
     scheduler "^0.21.0"
@@ -1699,13 +1698,6 @@
   version "0.26.7"
   resolved "https://registry.yarnpkg.com/@types/react-reconciler/-/react-reconciler-0.26.7.tgz#0c4643f30821ae057e401b0d9037e03e8e9b2a36"
   integrity sha512-mBDYl8x+oyPX/VBb3E638N0B7xG+SPk/EAMcVPeexqus/5aTpTphQi0curhhshOqRrc9t6OPoJfEUkbymse/lQ==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react-reconciler@^0.28.0":
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/@types/react-reconciler/-/react-reconciler-0.28.0.tgz#513acbed173140e958c909041ca14eb40412077f"
-  integrity sha512-5cjk9ottZAj7eaTsqzPUIlrVbh3hBAO2YaEL1rkjHKB3xNAId7oU8GhzvAX+gfmlfoxTwJnBjPxEHyxkEA1Ffg==
   dependencies:
     "@types/react" "*"
 
@@ -3949,13 +3941,6 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==
-
-its-fine@^1.0.2:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/its-fine/-/its-fine-1.0.4.tgz#1d4956ecdb724247bee68094338ef991bc036f26"
-  integrity sha512-6nco3aUwt6isNlGLAhXLDV8y8X42J9dqRi8pY2vLaONUczUUbPaFAch1s3nfq6QfT05RTCNJ11B/GsWci1RUmQ==
-  dependencies:
-    "@types/react-reconciler" "^0.28.0"
 
 js-sdsl@^4.1.4:
   version "4.1.4"
