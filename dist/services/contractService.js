@@ -493,7 +493,7 @@ const getRequestedNFTs = async ({
 
     let resExtras = [];
     let allDataParsed = [];
-    resultGot.forEach((cur) => {
+    resultGotNew.forEach((cur) => {
       const curStake =
         stakesData[
           `${cur.tokenAddress.toLowerCase()}|${BigNumber.from(
