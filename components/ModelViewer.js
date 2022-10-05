@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useLoader, Canvas } from "@react-three/fiber";
-import { Environment, OrbitControls } from "@react-three/drei";
+import { Bounds, Environment, OrbitControls } from "@react-three/drei";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const Model = ({ model }) => {
@@ -8,8 +8,12 @@ const Model = ({ model }) => {
   useEffect(() => new GLTFLoader().load(model, set), []);
   if (!mdl) return null;
   return (
-    <group position={[0, 0, 0]}>
-      <primitive object={mdl.scene} rotation={[0, 1.5, 0]} />
+    <group position={[0, 0, 0]} dispose={null}>
+      <primitive
+        object={mdl.scene}
+        position={[0, 0, 0]}
+        rotation={[0, 1.5, 0]}
+      />
     </group>
   );
 };
@@ -36,9 +40,10 @@ const ModelViewer = ({ model, canvaStyles = {}, headerModelFile }) => {
           />
           <Suspense fallback={null}>
             {/* Model */}
-            <mesh scale={5}>
+            <Bounds fit clip observe={false} damping={6} margin={1.2}>
               <Model model={model} />
-            </mesh>
+            </Bounds>
+
             {/* <Environment preset='warehouse' /> */}
             {/* Settings */}
             <ambientLight intensity={0.3} />

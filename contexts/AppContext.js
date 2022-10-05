@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from "react";
+import React, { createContext, useMemo, useState, useEffect } from "react";
 // import { ethers } from 'ethers'
 import Web3 from "web3";
 import { Flex, useToast, useDisclosure } from "@chakra-ui/react";
@@ -24,7 +24,7 @@ export const AppProvider = ({ children }) => {
   }, [walletAddress]);
   const [provider, setProvider] = useState(null);
   const [web3, setWeb3] = useState(new Web3());
-  const [chainId, setChainId] = useState(1);
+  const [chainId, setChainId] = useState(null);
 
   // APP CONTEXT
   const checkIfWalletIsConnected = async () => {
@@ -47,6 +47,7 @@ export const AppProvider = ({ children }) => {
         return true;
       }
     } catch (error) {
+      console.log(error, "error");
       toast({
         title: error?.error,
         status: "error",
@@ -79,6 +80,7 @@ export const AppProvider = ({ children }) => {
       // setIsOverlayLoading(false)
       onClose();
     } catch (error) {
+      console.log(error, "error1");
       setIsOverlayLoading(false);
       toast({
         status: "error",
@@ -87,6 +89,10 @@ export const AppProvider = ({ children }) => {
       });
     }
   };
+
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
 
   return (
     <AppContext.Provider

@@ -5,6 +5,7 @@ const { BigNumber } = require("ethers");
 const PROTOCOL_CONTRACTS = {
   4: "0x8538D073aF2aD3C1Ecb61cfc97C56acA03CFF479",
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
+  5: "0x469d74Af73694A3CC8d8573A1534E942040f1d82",
 };
 
 const metaversesJson = [
@@ -387,132 +388,155 @@ const Base_ABI = [
   },
 ];
 
+const endpoints = {
+  4: process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT,
+  5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
+};
 const getRequestedNFTs = async ({
   cursor = 0,
   amount = 100,
   chainId = 4,
   metaverse = "",
 }) => {
-  const web3 = new Web3(
-    new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT)
-  );
-  const protocolContract = new web3.eth.Contract(
-    NFTMarketplace_ABI,
-    PROTOCOL_CONTRACTS[chainId]
-  );
+  try {
+    const web3 = new Web3(new Web3.providers.HttpProvider(endpoints[chainId]));
+    const protocolContract = new web3.eth.Contract(
+      NFTMarketplace_ABI,
+      PROTOCOL_CONTRACTS[chainId]
+    );
 
-  const stakes = (
-    await protocolContract.methods.getStakes(cursor, amount).call()
-  )[0];
+    const stakes = (
+      await protocolContract.methods.getStakes(cursor, amount).call()
+    )[0];
 
-  var stakesData = {};
-  stakes.forEach((stake) => {
-    stakesData[`${stake.tokenAddress.toLowerCase()}|${stake.tokenId}`] = stake;
-  });
+    var stakesData = {};
+    stakes.forEach((stake) => {
+      stakesData[`${stake.tokenAddress.toLowerCase()}|${stake.tokenId}`] =
+        stake;
+    });
 
-  var config = {
-    method: "get",
-    url: `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT${
-      !!metaverse
-        ? `&metadata[keyvalues]={"metaverse": {"value": "${metaverse.toLowerCase()}", "op": "eq"}}`
-        : ""
-    }`,
-    headers: {
-      "Content-Type": "application/json",
-      pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-      pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-    },
-  };
-  let result = await axios(config);
-  result = result.data.rows;
-
-  let resultGot = await Promise.all(
-    result.map((cur) =>
-      fetch(`https://stylexchange.mypinata.cloud/ipfs/${cur.ipfs_pin_hash}`)
-    )
-  );
-  resultGot = await Promise.all(resultGot.map((cur) => cur.json()));
-
-  const values = await Promise.all([
-    Promise.all(
-      resultGot.map((cur) =>
-        new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
-          .decimals()
-          .call()
-      )
-    ),
-    Promise.all(
-      resultGot.map((cur) =>
-        new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods.name().call()
-      )
-    ),
-    Promise.all(
-      resultGot.map((cur) =>
-        new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
-          .symbol()
-          .call()
-      )
-    ),
-  ]);
-
-  const decimals = values[0];
-  const names = values[1];
-  const symbols = values[2];
-
-  resultGot.forEach((cur, index) => {
-    cur.payment = {
-      value: BigNumber.from(cur.payment),
-      stringValue: `${Number.parseInt(cur.payment) / 10 ** decimals[index]}`,
+    var config = {
+      method: "get",
+      url: `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT${
+        !!metaverse
+          ? `&metadata[keyvalues]={"metaverse": {"value": "${metaverse.toLowerCase()}", "op": "eq"}}`
+          : ""
+      }`,
+      headers: {
+        "Content-Type": "application/json",
+        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+      },
     };
-    cur.paymentToken = {
-      address: cur.paymentToken,
-      name: names[index],
-      symbol: symbols[index],
-    };
-  });
+    let result = await axios(config);
+    result = result.data.rows;
 
-  let resExtras = [];
-  let allDataParsed = [];
-  resultGot.forEach((cur) => {
-    const curStake =
-      stakesData[
-        `${cur.tokenAddress.toLowerCase()}|${BigNumber.from(
-          cur.tokenId
-        ).toNumber()}`
-      ];
+    let resultGot = await Promise.all(
+      result.map((cur) =>
+        fetch(`https://stylexchange.mypinata.cloud/ipfs/${cur.ipfs_pin_hash}`)
+      )
+    );
+    resultGot = await Promise.all(resultGot.map((cur) => cur.json()));
 
-    if (Number.parseInt(curStake?.numberOfDerivatives) > 0) {
-      var ipfsUrl = cur.uri;
-      if (ipfsUrl.slice(0, 4) === "ipfs") {
-        ipfsUrl = `https://stylexchange.mypinata.cloud/ipfs/${ipfsUrl.slice(
-          7
-        )}`;
+    const decimals = [];
+    for (let cur of resultGot) {
+      try {
+        decimals.push(
+          await new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
+            .decimals()
+            .call()
+        );
+      } catch (e) {
+        decimals.push(null);
       }
-      resExtras.push(fetch(ipfsUrl));
-      allDataParsed.push(cur);
     }
-  });
 
-  resExtras = await Promise.all(resExtras);
-  resExtras = await Promise.all(resExtras.map((cur) => cur.json()));
+    const resultGotNew = [];
+    for (let i = 0; i < resultGot.length; i++) {
+      if (decimals[i] !== null) {
+        resultGotNew.push({
+          ...resultGot[i],
+          payment: {
+            value: BigNumber.from(resultGot[i].payment),
+            stringValue: `${
+              Number.parseInt(resultGot[i].payment) / 10 ** decimals[i]
+            }`,
+          },
+        });
+      }
+    }
 
-  allDataParsed = allDataParsed.map((data, index) => {
-    const curStake =
-      stakesData[
-        `${data.tokenAddress.toLowerCase()}|${BigNumber.from(
-          data.tokenId
-        ).toNumber()}`
-      ];
+    const values = await Promise.all([
+      Promise.all(
+        resultGotNew.map((cur) => {
+          return new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
+            .name()
+            .call();
+        })
+      ),
+      Promise.all(
+        resultGotNew.map((cur) => {
+          return new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
+            .symbol()
+            .call();
+        })
+      ),
+    ]);
 
-    return {
-      ...data,
-      asset: resExtras[index],
-      cid: result[index].ipfs_pin_hash,
-      numberOfDerivatives: Number.parseInt(curStake.numberOfDerivatives),
-    };
-  });
+    for (let i = 0; i < resultGotNew.length; i++) {
+      resultGotNew[i].paymentToken = {
+        address: resultGotNew[i].paymentToken,
+        name: values[0][i],
+        symbol: values[1][i],
+      };
+    }
 
-  return allDataParsed;
+    let resExtras = [];
+    let allDataParsed = [];
+    resultGot.forEach((cur) => {
+      const curStake =
+        stakesData[
+          `${cur.tokenAddress.toLowerCase()}|${BigNumber.from(
+            cur.tokenId
+          ).toNumber()}`
+        ];
+
+      if (Number.parseInt(curStake?.numberOfDerivatives) > 0) {
+        var ipfsUrl = cur.uri;
+        if (ipfsUrl.slice(0, 4) === "ipfs") {
+          ipfsUrl = `https://stylexchange.mypinata.cloud/ipfs/${ipfsUrl.slice(
+            7
+          )}`;
+        }
+        resExtras.push(fetch(ipfsUrl));
+        allDataParsed.push(cur);
+      }
+    });
+
+    resExtras = await Promise.all(resExtras);
+    resExtras = await Promise.all(resExtras.map((cur) => cur.json()));
+
+    allDataParsed = allDataParsed.map((data, index) => {
+      const curStake =
+        stakesData[
+          `${data.tokenAddress.toLowerCase()}|${BigNumber.from(
+            data.tokenId
+          ).toNumber()}`
+        ];
+
+      return {
+        ...data,
+        asset: resExtras[index],
+        cid: result[index].ipfs_pin_hash,
+        numberOfDerivatives: Number.parseInt(curStake.numberOfDerivatives),
+      };
+    });
+
+    return allDataParsed;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
 };
 
 const getListedNFTs = async ({
@@ -521,111 +545,136 @@ const getListedNFTs = async ({
   chainId = 4,
   metaverse = "",
 }) => {
-  const web3 = new Web3(
-    new Web3.providers.HttpProvider(process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT)
-  );
+  try {
+    const web3 = new Web3(new Web3.providers.HttpProvider(endpoints[chainId]));
 
-  const protocolContract = new web3.eth.Contract(
-    NFTMarketplace_ABI,
-    PROTOCOL_CONTRACTS[chainId]
-  );
+    const protocolContract = new web3.eth.Contract(
+      NFTMarketplace_ABI,
+      PROTOCOL_CONTRACTS[chainId]
+    );
 
-  const res = (
-    await protocolContract.methods.getListings(cursor, amount).call()
-  )[0];
+    const res = (
+      await protocolContract.methods.getListings(cursor, amount).call()
+    )[0];
 
-  var parsedData = [];
-  for (let cur of res) {
-    const nftContract = new web3.eth.Contract(Base_ABI, cur.contract_);
+    var parsedData = [];
+    for (let cur of res) {
+      const nftContract = new web3.eth.Contract(Base_ABI, cur.contract_);
 
-    const metaverseId = await nftContract.methods.metaverseId().call();
-    const metaverseFilter = metaversesJson
-      .filter((cur) => cur.id === `${metaverseId}`)[0]
-      .slug.toLowerCase();
-    if (!metaverse || metaverseFilter === metaverse.toLowerCase()) {
-      var data = { ...cur, metaverse: metaverseFilter };
+      const metaverseId = await nftContract.methods.metaverseId().call();
+      const metaverseFilter = metaversesJson
+        .filter((cur) => cur.id === `${metaverseId}`)[0]
+        .slug.toLowerCase();
+      if (!metaverse || metaverseFilter === metaverse.toLowerCase()) {
+        var data = { ...cur, metaverse: metaverseFilter };
 
-      var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
-      if (ipfsUrl.slice(0, 4) === "ipfs") {
-        ipfsUrl = `https://stylexchange.mypinata.cloud/ipfs/${ipfsUrl.slice(
-          7
-        )}`;
+        var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
+        if (ipfsUrl.slice(0, 4) === "ipfs") {
+          ipfsUrl = `https://stylexchange.mypinata.cloud/ipfs/${ipfsUrl.slice(
+            7
+          )}`;
+        }
+        const metadata = await (await fetch(ipfsUrl)).json();
+
+        const tokenContract = new web3.eth.Contract(
+          ERC20_ABI,
+          data.paymentToken
+        );
+
+        const decimals = await tokenContract.methods.decimals().call();
+
+        data.payment = {
+          value: BigNumber.from(data.payment),
+          stringValue: `${Number.parseInt(data.payment) / 10 ** decimals}`,
+        };
+        data.paymentToken = {
+          address: data.paymentToken,
+          name: await tokenContract.methods.name().call(),
+          symbol: await tokenContract.methods.symbol().call(),
+        };
+
+        parsedData.push({ ...data, asset: metadata });
       }
-      const metadata = await (await fetch(ipfsUrl)).json();
-
-      const tokenContract = new web3.eth.Contract(ERC20_ABI, data.paymentToken);
-
-      const decimals = await tokenContract.methods.decimals().call();
-
-      data.payment = {
-        value: BigNumber.from(data.payment),
-        stringValue: `${Number.parseInt(data.payment) / 10 ** decimals}`,
-      };
-      data.paymentToken = {
-        address: data.paymentToken,
-        name: await tokenContract.methods.name().call(),
-        symbol: await tokenContract.methods.symbol().call(),
-      };
-
-      parsedData.push({ ...data, asset: metadata });
     }
-  }
 
-  return parsedData;
+    return parsedData;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
 };
 
 const approveERC20 = async ({ web3, walletAddress, chainId, NFT }) => {
-  const tokenContract = new web3.eth.Contract(
-    ERC20_ABI,
-    NFT.paymentToken.address
-  );
+  try {
+    const tokenContract = new web3.eth.Contract(
+      ERC20_ABI,
+      NFT.paymentToken.address
+    );
 
-  const allowance = await tokenContract.methods
-    .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
-    .call();
+    const allowance = await tokenContract.methods
+      .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
+      .call();
 
-  if (NFT.payment.value.gt(allowance)) {
-    await tokenContract.methods
-      .approve(PROTOCOL_CONTRACTS[chainId], NFT.payment.value)
-      .send({ from: walletAddress });
+    if (NFT.payment.value.gt(allowance)) {
+      await tokenContract.methods
+        .approve(PROTOCOL_CONTRACTS[chainId], NFT.payment.value)
+        .send({ from: walletAddress });
+    }
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };
 
 const buyItem = async ({ web3, walletAddress, chainId, NFT }) => {
-  const protocolContract = new web3.eth.Contract(
-    NFTMarketplace_ABI,
-    PROTOCOL_CONTRACTS[chainId]
-  );
+  try {
+    const protocolContract = new web3.eth.Contract(
+      NFTMarketplace_ABI,
+      PROTOCOL_CONTRACTS[chainId]
+    );
 
-  await protocolContract.methods
-    .buyItem(NFT.contract_, NFT.tokenId, NFT.payment.value)
-    .send({ from: walletAddress });
+    await protocolContract.methods
+      .buyItem(NFT.contract_, NFT.tokenId, NFT.payment.value)
+      .send({ from: walletAddress });
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 };
 
 const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
-  const protocolContract = new web3.eth.Contract(
-    NFTMarketplace_ABI,
-    PROTOCOL_CONTRACTS[chainId]
-  );
+  try {
+    const protocolContract = new web3.eth.Contract(
+      NFTMarketplace_ABI,
+      PROTOCOL_CONTRACTS[chainId]
+    );
 
-  await protocolContract.methods
-    .buyAndMint(
-      walletAddress,
-      {
-        tokenAddress: NFT.tokenAddress,
-        tokenId: NFT.tokenId,
-        payment: NFT.payment.value,
-        paymentToken: NFT.paymentToken.address,
-        uri: NFT.uri,
-        bidder: NFT.bidder,
-        environment: NFT.environment,
-        metaverseId: NFT.metaverseId,
-        signature: NFT.signature,
-      },
-      NFT.adminSignature,
-      NFT.payment.value
-    )
-    .send({ from: walletAddress });
+    await protocolContract.methods
+      .buyAndMint(
+        walletAddress,
+        {
+          tokenAddress: NFT.tokenAddress,
+          tokenId: NFT.tokenId,
+          payment: NFT.payment.value,
+          paymentToken: NFT.paymentToken.address,
+          uri: NFT.uri,
+          bidder: NFT.bidder,
+          environment: NFT.environment,
+          metaverseId: NFT.metaverseId,
+          signature: NFT.signature,
+        },
+        NFT.adminSignature,
+        NFT.payment.value
+      )
+      .send({ from: walletAddress });
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
 };
 
 exports.getRequestedNFTs = getRequestedNFTs;

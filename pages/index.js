@@ -79,14 +79,9 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetchRequestedNFTs(0, 100, 4, "");
-    fetchListedNFTs(0, 100, 4, "");
-  }, []);
-
-  useEffect(() => {
-    fetchRequestedNFTs(0, 100, 4, metaverseFilter);
-    fetchListedNFTs(0, 100, 4, metaverseFilter);
-  }, [metaverseFilter]);
+    fetchRequestedNFTs(0, 100, chainId || 5, metaverseFilter);
+    fetchListedNFTs(0, 100, chainId || 5, metaverseFilter);
+  }, [chainId, metaverseFilter]);
 
   const onBuyAndMint = async (NFT) => {
     setIsLoading(true);
@@ -95,13 +90,13 @@ export default function Home() {
       await approveERC20({
         web3,
         walletAddress,
-        chainId,
+        chainId: chainId || 5,
         NFT,
       });
 
-      await buyAndMintItem({ web3, walletAddress, chainId, NFT });
+      await buyAndMintItem({ web3, walletAddress, chainId: chainId || 5, NFT });
 
-      fetchRequestedNFTs(0, 100, chainId, filteredMetaverse);
+      fetchRequestedNFTs(0, 100, chainId || 5, metaverseFilter);
     } catch (error) {
       console.log("buyAndMintError", error);
     }
@@ -115,13 +110,13 @@ export default function Home() {
       await approveERC20({
         web3,
         walletAddress,
-        chainId,
+        chainId: chainId || 5,
         NFT,
       });
 
-      await buyItem({ web3, walletAddress, chainId, NFT });
+      await buyItem({ web3, walletAddress, chainId: chainId || 5, NFT });
 
-      fetchListedNFTs(0, 100, chainId, filteredMetaverse);
+      fetchListedNFTs(0, 100, chainId || 5, metaverseFilter);
     } catch (error) {
       console.log("buyError", error);
     }
