@@ -454,17 +454,20 @@ const getRequestedNFTs = async ({
 
     const resultGotNew = [];
     for (let i = 0; i < resultGot.length; i++) {
-      if (decimals[i] !== null) {
-        resultGotNew.push({
-          ...resultGot[i],
-          payment: {
-            value: BigNumber.from(resultGot[i].payment),
-            stringValue: `${
-              Number.parseInt(resultGot[i].payment) / 10 ** decimals[i]
-            }`,
-          },
-        });
-      }
+      try {
+        if (decimals[i] !== null) {
+          console.log(decimals[i]);
+          resultGotNew.push({
+            ...resultGot[i],
+            payment: {
+              value: BigNumber.from(resultGot[i].payment),
+              stringValue: `${
+                Number.parseInt(resultGot[i].payment) / 10 ** decimals[i]
+              }`,
+            },
+          });
+        }
+      } catch (e) {}
     }
 
     const values = await Promise.all([
