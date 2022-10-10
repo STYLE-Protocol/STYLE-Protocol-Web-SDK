@@ -59,7 +59,7 @@ export default function Home() {
       cursor,
       amount,
       chainId: chainId_,
-      metaverse: metaverse_,
+      metaverseFilter: metaverse_,
     });
     setRequestedNFTs(requestedNFTs_);
     setIsLoading(false);
@@ -72,7 +72,7 @@ export default function Home() {
       cursor,
       amount,
       chainId: chainId_,
-      metaverse: metaverse_,
+      metaverseFilter: metaverse_,
     });
     setListedNFTs(listedNFTs_);
     setIsLoading(false);

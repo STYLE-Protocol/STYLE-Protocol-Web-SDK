@@ -1,57 +1,94 @@
-import { Suspense, useEffect, useMemo, useState } from "react";
-import { useLoader, Canvas } from "@react-three/fiber";
-import { Bounds, Environment, OrbitControls } from "@react-three/drei";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unknown-property */
+import * as THREE from "three";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import {
+  BBAnchor,
+  Bounds,
+  MapControls,
+  OrbitControls,
+  Stage,
+  useBounds,
+} from "@react-three/drei";
+import dynamic from "next/dynamic";
+import { Center, Spinner } from "@chakra-ui/react";
 
-const Model = ({ model }) => {
-  const [mdl, set] = useState();
-  useEffect(() => new GLTFLoader().load(model, set), []);
-  if (!mdl) return null;
+const deg2rad = (degrees) => degrees * (Math.PI / 180);
+
+const ModelComponent = dynamic(() => import("./Model"), {
+  suspense: true,
+});
+
+const Controls = () => {
+  const { camera } = useThree();
+  const controlsRef = useRef();
+
+  useEffect(() => {
+    controlsRef.current.addEventListener("change", function () {
+      if (this.target.y < -10) {
+        this.target.y = -10;
+        camera.position.y = -10;
+      } else if (this.target.y > 10) {
+        this.target.y = 10;
+        camera.position.y = 10;
+      }
+    });
+  }, []);
+
   return (
-    <group position={[0, 0, 0]} dispose={null}>
-      <primitive
-        object={mdl.scene}
-        position={[0, 0, 0]}
-        rotation={[0, 1.5, 0]}
+    <MapControls ref={controlsRef} enableZoom={false} enableRotate={false} />
+  );
+};
+const Scene = ({ model }) => {
+  useThree(({ camera }) => {
+    camera.rotation.set(deg2rad(30), 0, 0);
+  });
+  return (
+    <>
+      <spotLight
+        intensity={0.5}
+        angle={0.2}
+        penumbra={1}
+        position={[10, 10, 10]}
       />
-    </group>
+
+      <BBAnchor anchor={[1, 1, 1]} frustumCulled={false}>
+        <Bounds observe fit clip clone margin={1.4} damping={0}>
+          <ModelComponent model={model} />
+        </Bounds>
+        <Controls />
+      </BBAnchor>
+
+      <ambientLight intensity={0.3} />
+      <pointLight intensity={0.5} position={[10, 10, 10]} />
+      <directionalLight color="white" position={[0, 5, -5]} />
+      <OrbitControls makeDefault />
+    </>
   );
 };
 
-const ModelViewer = ({ model, canvaStyles = {}, headerModelFile }) => {
+const ModelViewer = ({
+  model,
+  canvaStyles = {},
+  headerModelFile,
+  isEnlarge,
+}) => {
+  if (!model) return null;
   return (
     model && (
-      <div>
-        <Canvas
-          frameloop="demand"
-          style={{
-            width: "18rem",
-            height: "18rem",
-            ...canvaStyles,
-          }}
-          dpr={[1, 2]}
-          camera={{ position: [0, 0, 5], fov: 45 }}
-        >
-          <spotLight
-            intensity={0.5}
-            angle={0.2}
-            penumbra={1}
-            position={[5, 15, 10]}
-          />
-          <Suspense fallback={null}>
-            {/* Model */}
-            <Bounds fit clip observe={false} damping={6} margin={1.2}>
-              <Model model={model} />
-            </Bounds>
-
-            {/* <Environment preset='warehouse' /> */}
-            {/* Settings */}
-            <ambientLight intensity={0.3} />
-            <pointLight intensity={0.5} position={[10, 20, 30]} />
-            <directionalLight color="white" position={[0, 5, -5]} />
-            <OrbitControls />
-          </Suspense>
-        </Canvas>
+      <div
+        style={{
+          width: isEnlarge ? "50rem" : "18rem",
+          height: isEnlarge ? "40rem" : "18rem",
+          ...canvaStyles,
+        }}
+      >
+        <Suspense fallback={null}>
+          <Canvas orthographic>
+            <Scene model={model} />
+          </Canvas>
+        </Suspense>
       </div>
     )
   );

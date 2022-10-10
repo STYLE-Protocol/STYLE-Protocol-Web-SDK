@@ -393,13 +393,84 @@ const endpoints = {
   5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
 };
 
+const validateMetaverseFilter = (metaverseFilter) => {
+  if (typeof metaverseFilter === "string") {
+    metaverseFilter = [metaverseFilter];
+  } else if (metaverseFilter.length === 0) {
+    metaverseFilter.push("");
+  }
+
+  const availiableMetaverses = metaversesJson.map((m) => m.slug.toLowerCase());
+
+  if (metaverseFilter.length == 1 && metaverseFilter[0] == "") {
+  } else {
+    metaverseFilter = new Set(metaverseFilter.map((m) => m.toLowerCase()));
+    for (const m of metaverseFilter) {
+      if (!availiableMetaverses.includes(m)) {
+        return false;
+      }
+    }
+  }
+
+  return Array.from(metaverseFilter);
+};
+
+const validateTypeFilter = (typeFilter) => {
+  if (typeof typeFilter === "string") {
+    typeFilter = [typeFilter];
+  } else if (typeFilter.length === 0) {
+    typeFilter.push("");
+  }
+
+  const availiableTypes = ["AVATAR", "WEARABLE", "MISC"];
+
+  if (typeFilter.length == 1 && typeFilter[0] == "") {
+  } else {
+    typeFilter = new Set(typeFilter.map((m) => m.toUpperCase()));
+    for (const m of typeFilter) {
+      if (!availiableTypes.includes(m)) {
+        return false;
+      }
+    }
+  }
+
+  return Array.from(typeFilter);
+};
+
+const validateSubtypeFilter = (subtypeFilter) => {
+  if (typeof subtypeFilter === "string") {
+    subtypeFilter = [subtypeFilter];
+  } else if (subtypeFilter.length === 0) {
+    subtypeFilter.push("");
+  }
+
+  subtypeFilter = new Set(subtypeFilter.map((m) => m.toLowerCase()));
+
+  return Array.from(subtypeFilter);
+};
+
 const getRequestedNFTs = async ({
   cursor = 0,
   amount = 100,
-  chainId = 4,
-  metaverse = "",
+  chainId = 5,
+  metaverseFilter = [],
+  typeFilter = [],
+  subtypeFilter = [],
 }) => {
   try {
+    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    typeFilter = validateTypeFilter(typeFilter);
+    subtypeFilter = validateSubtypeFilter(subtypeFilter);
+
+    if (
+      metaverseFilter === false ||
+      typeFilter === false ||
+      subtypeFilter === false
+    ) {
+      console.log("improper filter");
+      return [];
+    }
+
     const web3 = new Web3(new Web3.providers.HttpProvider(endpoints[chainId]));
     const protocolContract = new web3.eth.Contract(
       NFTMarketplace_ABI,
@@ -416,21 +487,37 @@ const getRequestedNFTs = async ({
         stake;
     });
 
-    var config = {
-      method: "get",
-      url: `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT${
-        !!metaverse
-          ? `&metadata[keyvalues]={"metaverse": {"value": "${metaverse.toLowerCase()}", "op": "eq"}}`
-          : ""
-      }`,
-      headers: {
-        "Content-Type": "application/json",
-        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-      },
+    const getNFTs = async (url) => {
+      var config = {
+        method: "get",
+        url: url,
+        headers: {
+          "Content-Type": "application/json",
+          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+        },
+      };
+      let resultTmp = await axios(config);
+      return resultTmp.data.rows;
     };
-    let result = await axios(config);
-    result = result.data.rows;
+
+    let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}`;
+
+    if (metaverseFilter[0] != "") {
+      url += `, "metaverse": {"value": "${metaverseFilter.join(
+        "|"
+      )}", "op": "regexp"}`;
+    }
+    if (typeFilter[0] != "") {
+      url += `, "type": {"value": "${typeFilter.join("|")}", "op": "eq"}`;
+    }
+    if (subtypeFilter[0] != "") {
+      url += `, "subtype": {"value": "${subtypeFilter.join("|")}", "op": "eq"}`;
+    }
+
+    url += "}";
+
+    let result = await getNFTs(url);
 
     let resultGot = await Promise.all(
       result.map((cur) =>
@@ -456,7 +543,6 @@ const getRequestedNFTs = async ({
     for (let i = 0; i < resultGot.length; i++) {
       try {
         if (decimals[i] !== null) {
-          console.log(decimals[i]);
           resultGotNew.push({
             ...resultGot[i],
             payment: {
@@ -546,10 +632,12 @@ const getRequestedNFTs = async ({
 const getListedNFTs = async ({
   cursor = 0,
   amount = 100,
-  chainId = 4,
-  metaverse = "",
+  chainId = 5,
+  metaverseFilter = [],
 }) => {
   try {
+    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+
     const web3 = new Web3(new Web3.providers.HttpProvider(endpoints[chainId]));
 
     const protocolContract = new web3.eth.Contract(
@@ -566,11 +654,14 @@ const getListedNFTs = async ({
       const nftContract = new web3.eth.Contract(Base_ABI, cur.contract_);
 
       const metaverseId = await nftContract.methods.metaverseId().call();
-      const metaverseFilter = metaversesJson
+      const metaverseSlug = metaversesJson
         .filter((cur) => cur.id === `${metaverseId}`)[0]
         .slug.toLowerCase();
-      if (!metaverse || metaverseFilter === metaverse.toLowerCase()) {
-        var data = { ...cur, metaverse: metaverseFilter };
+      if (
+        metaverseFilter[0] === "" ||
+        metaverseFilter.includes(metaverseSlug)
+      ) {
+        var data = { ...cur, metaverse: metaverseSlug };
 
         var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
         if (ipfsUrl.slice(0, 4) === "ipfs") {
