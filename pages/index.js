@@ -40,7 +40,7 @@ export default function Home() {
 
   const [requestedNFTs, setRequestedNFTs] = useState([]);
   const [listedNFTs, setListedNFTs] = useState([]);
-  const [metaverseFilter, setMetaverseFilter] = useState("");
+  const [metaverseFilter, setMetaverseFilter] = useState([]);
 
   const allProperties = {
     METAVERSE: metaversesJson.map((cur) => {

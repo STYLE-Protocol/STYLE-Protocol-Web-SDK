@@ -397,12 +397,11 @@ const validateMetaverseFilter = (metaverseFilter) => {
   if (typeof metaverseFilter === "string") {
     metaverseFilter = [metaverseFilter];
   } else if (metaverseFilter.length === 0) {
-    metaverseFilter.push("");
+    metaverseFilter.push(null);
   }
 
   const availiableMetaverses = metaversesJson.map((m) => m.slug.toLowerCase());
-
-  if (metaverseFilter.length == 1 && metaverseFilter[0] == "") {
+  if (metaverseFilter.length == 1 && metaverseFilter[0] == null) {
   } else {
     metaverseFilter = new Set(metaverseFilter.map((m) => m.toLowerCase()));
     for (const m of metaverseFilter) {
@@ -419,12 +418,12 @@ const validateTypeFilter = (typeFilter) => {
   if (typeof typeFilter === "string") {
     typeFilter = [typeFilter];
   } else if (typeFilter.length === 0) {
-    typeFilter.push("");
+    typeFilter.push(null);
   }
 
   const availiableTypes = ["AVATAR", "WEARABLE", "MISC"];
 
-  if (typeFilter.length == 1 && typeFilter[0] == "") {
+  if (typeFilter.length == 1 && typeFilter[0] == null) {
   } else {
     typeFilter = new Set(typeFilter.map((m) => m.toUpperCase()));
     for (const m of typeFilter) {
@@ -441,10 +440,10 @@ const validateSubtypeFilter = (subtypeFilter) => {
   if (typeof subtypeFilter === "string") {
     subtypeFilter = [subtypeFilter];
   } else if (subtypeFilter.length === 0) {
-    subtypeFilter.push("");
+    subtypeFilter.push(null);
   }
 
-  subtypeFilter = new Set(subtypeFilter.map((m) => m.toLowerCase()));
+  subtypeFilter = new Set(subtypeFilter);
 
   return Array.from(subtypeFilter);
 };
@@ -462,11 +461,7 @@ const getRequestedNFTs = async ({
     typeFilter = validateTypeFilter(typeFilter);
     subtypeFilter = validateSubtypeFilter(subtypeFilter);
 
-    if (
-      metaverseFilter === false ||
-      typeFilter === false ||
-      subtypeFilter === false
-    ) {
+    if (metaverseFilter === false || typeFilter === false) {
       console.log("improper filter");
       return [];
     }
@@ -503,16 +498,18 @@ const getRequestedNFTs = async ({
 
     let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}`;
 
-    if (metaverseFilter[0] != "") {
+    if (metaverseFilter[0] != null) {
       url += `, "metaverse": {"value": "${metaverseFilter.join(
         "|"
       )}", "op": "regexp"}`;
     }
-    if (typeFilter[0] != "") {
-      url += `, "type": {"value": "${typeFilter.join("|")}", "op": "eq"}`;
+    if (typeFilter[0] != null) {
+      url += `, "type": {"value": "${typeFilter.join("|")}", "op": "regexp"}`;
     }
-    if (subtypeFilter[0] != "") {
-      url += `, "subtype": {"value": "${subtypeFilter.join("|")}", "op": "eq"}`;
+    if (subtypeFilter[0] != null) {
+      url += `, "subtype": {"value": "${subtypeFilter.join(
+        "|"
+      )}", "op": "regexp"}`;
     }
 
     url += "}";
