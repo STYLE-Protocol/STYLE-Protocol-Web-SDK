@@ -34,3 +34,8 @@ export const metaversesJson = [
     price: 170.01,
   },
 ];
+
+export const ENDPOINTS = {
+  4: process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT,
+  5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
+};

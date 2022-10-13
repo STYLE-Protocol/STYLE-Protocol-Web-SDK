@@ -2,452 +2,21 @@ const axios = require("axios");
 const Web3 = require("web3");
 const { BigNumber } = require("ethers");
 
-const PROTOCOL_CONTRACTS = {
-  4: "0x8538D073aF2aD3C1Ecb61cfc97C56acA03CFF479",
-  80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
-  5: "0x469d74Af73694A3CC8d8573A1534E942040f1d82",
-};
+const {
+  PROTOCOL_CONTRACTS,
+  metaversesJson,
+  ENDPOINTS,
+} = require("../../constants");
 
-const metaversesJson = [
-  {
-    id: "0",
-    icon: "decentraland.svg",
-    name: "Decentraland",
-    slug: "decentraland",
-    price: 600,
-  },
-  {
-    id: "1",
-    icon: "sandbox.svg",
-    name: "The Sandbox",
-    slug: "sandbox",
-    price: 200,
-  },
-  {
-    id: "2",
-    icon: "somnium.svg",
-    name: "Somnium Space",
-    slug: "somnium_space",
-    price: 200,
-  },
-  {
-    id: "3",
-    icon: "cryptovoxels.svg",
-    name: "Cryptovoxels",
-    slug: "cryptovoxels",
-    price: 170.01,
-  },
-];
+const NFTMarketplace_metadata = require("../../public/contracts/NFTMarketplace_metadata.json");
+const ERC20_ABI = require("../../public/contracts/ERC20_ABI.json");
+const Base_metadata = require("../../public/contracts/Base_metadata.json");
 
-const NFTMarketplace_ABI = [
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "cursor",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "howMany",
-        type: "uint256",
-      },
-    ],
-    name: "getListings",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "payment",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "seller",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "contract_",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "paymentToken",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "environment",
-            type: "address",
-          },
-        ],
-        internalType: "struct INFTMarketplaceStructs.Listing[]",
-        name: "listings",
-        type: "tuple[]",
-      },
-      {
-        internalType: "uint256",
-        name: "newCursor",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint80",
-        name: "cursor",
-        type: "uint80",
-      },
-      {
-        internalType: "uint80",
-        name: "howMany",
-        type: "uint80",
-      },
-    ],
-    name: "getStakes",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "tokenAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint96",
-            name: "numberOfDerivatives",
-            type: "uint96",
-          },
-          {
-            internalType: "address",
-            name: "stakeOwner",
-            type: "address",
-          },
-          {
-            internalType: "enum IStakingStructs.StakeStatus",
-            name: "status",
-            type: "uint8",
-          },
-          {
-            internalType: "string",
-            name: "purpose",
-            type: "string",
-          },
-        ],
-        internalType: "struct IStakingStructs.Stake[]",
-        name: "stakes",
-        type: "tuple[]",
-      },
-      {
-        internalType: "uint80",
-        name: "newCursor",
-        type: "uint80",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "contract_",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "buyItem",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "redeemer",
-        type: "address",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "tokenAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "payment",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "paymentToken",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "uri",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "bidder",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "environment",
-            type: "address",
-          },
-          {
-            internalType: "uint96",
-            name: "metaverseId",
-            type: "uint96",
-          },
-          {
-            internalType: "bytes",
-            name: "signature",
-            type: "bytes",
-          },
-        ],
-        internalType: "struct ILazyMintingStructs.NonmintedNFT",
-        name: "nonmintedNFT",
-        type: "tuple",
-      },
-      {
-        internalType: "bytes",
-        name: "signature",
-        type: "bytes",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "buyAndMint",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-];
-
-const ERC20_ABI = [
-  {
-    constant: true,
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        name: "",
-        type: "string",
-      },
-    ],
-    payable: false,
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: "decimals",
-    outputs: [
-      {
-        name: "",
-        type: "uint8",
-      },
-    ],
-    payable: false,
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: "symbol",
-    outputs: [
-      {
-        name: "",
-        type: "string",
-      },
-    ],
-    payable: false,
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: "_owner",
-        type: "address",
-      },
-      {
-        name: "_spender",
-        type: "address",
-      },
-    ],
-    name: "allowance",
-    outputs: [
-      {
-        name: "",
-        type: "uint256",
-      },
-    ],
-    payable: false,
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: "_spender",
-        type: "address",
-      },
-      {
-        name: "_value",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [
-      {
-        name: "",
-        type: "bool",
-      },
-    ],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-];
-
-const Base_ABI = [
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "tokenURI",
-    outputs: [
-      {
-        internalType: "string",
-        name: "_tokenURI",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "metaverseId",
-    outputs: [
-      {
-        internalType: "uint96",
-        name: "metaverseId_",
-        type: "uint96",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-];
-
-const endpoints = {
-  4: process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT,
-  5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
-};
-
-const validateMetaverseFilter = (metaverseFilter) => {
-  if (typeof metaverseFilter === "string") {
-    metaverseFilter = [metaverseFilter];
-  } else if (metaverseFilter.length === 0) {
-    metaverseFilter.push(null);
-  }
-
-  const availiableMetaverses = metaversesJson.map((m) => m.slug.toLowerCase());
-
-  if (metaverseFilter.length == 1 && metaverseFilter[0] == null) {
-  } else {
-    metaverseFilter = new Set(metaverseFilter.map((m) => m.toLowerCase()));
-    for (const m of metaverseFilter) {
-      if (!availiableMetaverses.includes(m)) {
-        return false;
-      }
-    }
-  }
-
-  return Array.from(metaverseFilter);
-};
-
-const validateTypeFilter = (typeFilter) => {
-  if (typeof typeFilter === "string") {
-    typeFilter = [typeFilter];
-  } else if (typeFilter.length === 0) {
-    typeFilter.push(null);
-  }
-
-  const availiableTypes = ["AVATAR", "WEARABLE", "MISC"];
-
-  if (typeFilter.length == 1 && typeFilter[0] == null) {
-  } else {
-    typeFilter = new Set(typeFilter.map((m) => m.toUpperCase()));
-    for (const m of typeFilter) {
-      if (!availiableTypes.includes(m)) {
-        return false;
-      }
-    }
-  }
-
-  return Array.from(typeFilter);
-};
-
-const validateSubtypeFilter = (subtypeFilter) => {
-  if (typeof subtypeFilter === "string") {
-    subtypeFilter = [subtypeFilter];
-  } else if (subtypeFilter.length === 0) {
-    subtypeFilter.push(null);
-  }
-
-  subtypeFilter = new Set(subtypeFilter);
-
-  return Array.from(subtypeFilter);
-};
+const {
+  validateMetaverseFilter,
+  validateTypeFilter,
+  validateSubtypeFilter,
+} = require("../../utils/inputValidation");
 
 const getRequestedNFTs = async ({
   cursor = 0,
@@ -467,9 +36,9 @@ const getRequestedNFTs = async ({
       return [];
     }
 
-    const web3 = new Web3(new Web3.providers.HttpProvider(endpoints[chainId]));
+    const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINTS[chainId]));
     const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_ABI,
+      NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
     );
 
@@ -636,10 +205,10 @@ const getListedNFTs = async ({
   try {
     metaverseFilter = validateMetaverseFilter(metaverseFilter);
 
-    const web3 = new Web3(new Web3.providers.HttpProvider(endpoints[chainId]));
+    const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINTS[chainId]));
 
     const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_ABI,
+      NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
     );
 
@@ -649,7 +218,10 @@ const getListedNFTs = async ({
 
     var parsedData = [];
     for (let cur of res) {
-      const nftContract = new web3.eth.Contract(Base_ABI, cur.contract_);
+      const nftContract = new web3.eth.Contract(
+        Base_metadata["output"]["abi"],
+        cur.contract_
+      );
 
       const metaverseId = await nftContract.methods.metaverseId().call();
       const metaverseSlug = metaversesJson
@@ -713,6 +285,8 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT }) => {
         .approve(PROTOCOL_CONTRACTS[chainId], NFT.payment.value)
         .send({ from: walletAddress });
     }
+
+    return true;
   } catch (e) {
     console.log(e);
     return false;
@@ -722,13 +296,15 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT }) => {
 const buyItem = async ({ web3, walletAddress, chainId, NFT }) => {
   try {
     const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_ABI,
+      NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
     );
 
     await protocolContract.methods
       .buyItem(NFT.contract_, NFT.tokenId, NFT.payment.value)
       .send({ from: walletAddress });
+
+    return true;
   } catch (e) {
     console.log(e);
     return false;
@@ -738,7 +314,7 @@ const buyItem = async ({ web3, walletAddress, chainId, NFT }) => {
 const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   try {
     const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_ABI,
+      NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
     );
 
@@ -760,6 +336,8 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
         NFT.payment.value
       )
       .send({ from: walletAddress });
+
+    return true;
   } catch (e) {
     console.log(e);
     return false;
