@@ -2,22 +2,108 @@ const axios = require("axios");
 const Web3 = require("web3");
 const { BigNumber } = require("ethers");
 
-const {
-  PROTOCOL_CONTRACTS,
-  metaversesJson,
-  ENDPOINTS,
-  GATEWAY,
-} = require("../../constants");
-
 const NFTMarketplace_metadata = require("../../public/contracts/NFTMarketplace_metadata.json");
 const ERC20_ABI = require("../../public/contracts/ERC20_ABI.json");
 const Base_metadata = require("../../public/contracts/Base_metadata.json");
 
-const {
-  validateMetaverseFilter,
-  validateTypeFilter,
-  validateSubtypeFilter,
-} = require("../../utils/inputValidation");
+const PROTOCOL_CONTRACTS = {
+  4: "0x36ACbdcBf366558AD8c6Be12F217Dc64f78d7B72",
+  80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
+  5: "0x469d74Af73694A3CC8d8573A1534E942040f1d82",
+};
+
+const metaversesJson = [
+  {
+    id: "0",
+    icon: "decentraland.svg",
+    name: "Decentraland",
+    slug: "decentraland",
+    price: 600,
+  },
+  {
+    id: "1",
+    icon: "sandbox.svg",
+    name: "The Sandbox",
+    slug: "sandbox",
+    price: 200,
+  },
+  {
+    id: "2",
+    icon: "somnium.svg",
+    name: "Somnium Space",
+    slug: "somnium_space",
+    price: 200,
+  },
+  {
+    id: "3",
+    icon: "cryptovoxels.svg",
+    name: "Cryptovoxels",
+    slug: "cryptovoxels",
+    price: 170.01,
+  },
+];
+
+const ENDPOINTS = {
+  4: process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT,
+  5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
+};
+
+const GATEWAY = "styleprotocol.mypinata.cloud";
+
+const validateMetaverseFilter = (metaverseFilter) => {
+  if (typeof metaverseFilter === "string") {
+    metaverseFilter = [metaverseFilter];
+  } else if (metaverseFilter.length === 0) {
+    metaverseFilter.push(null);
+  }
+
+  const availiableMetaverses = metaversesJson.map((m) => m.slug.toLowerCase());
+  if (metaverseFilter.length == 1 && metaverseFilter[0] == null) {
+  } else {
+    metaverseFilter = new Set(metaverseFilter.map((m) => m.toLowerCase()));
+    for (const m of metaverseFilter) {
+      if (!availiableMetaverses.includes(m)) {
+        return false;
+      }
+    }
+  }
+
+  return Array.from(metaverseFilter);
+};
+
+const validateTypeFilter = (typeFilter) => {
+  if (typeof typeFilter === "string") {
+    typeFilter = [typeFilter];
+  } else if (typeFilter.length === 0) {
+    typeFilter.push(null);
+  }
+
+  const availiableTypes = ["AVATAR", "WEARABLE", "MISC"];
+
+  if (typeFilter.length == 1 && typeFilter[0] == null) {
+  } else {
+    typeFilter = new Set(typeFilter.map((m) => m.toUpperCase()));
+    for (const m of typeFilter) {
+      if (!availiableTypes.includes(m)) {
+        return false;
+      }
+    }
+  }
+
+  return Array.from(typeFilter);
+};
+
+const validateSubtypeFilter = (subtypeFilter) => {
+  if (typeof subtypeFilter === "string") {
+    subtypeFilter = [subtypeFilter];
+  } else if (subtypeFilter.length === 0) {
+    subtypeFilter.push(null);
+  }
+
+  subtypeFilter = new Set(subtypeFilter);
+
+  return Array.from(subtypeFilter);
+};
 
 const getRequestedNFTs = async ({
   cursor = 0,
