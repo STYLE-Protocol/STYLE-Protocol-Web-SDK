@@ -6,6 +6,7 @@ const {
   PROTOCOL_CONTRACTS,
   metaversesJson,
   ENDPOINTS,
+  GATEWAY,
 } = require("../../constants");
 
 const NFTMarketplace_metadata = require("../../public/contracts/NFTMarketplace_metadata.json");
@@ -87,9 +88,7 @@ const getRequestedNFTs = async ({
     let result = await getNFTs(url);
 
     let resultGot = await Promise.all(
-      result.map((cur) =>
-        fetch(`https://stylexchange.mypinata.cloud/ipfs/${cur.ipfs_pin_hash}`)
-      )
+      result.map((cur) => fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`))
     );
     resultGot = await Promise.all(resultGot.map((cur) => cur.json()));
 
@@ -161,9 +160,7 @@ const getRequestedNFTs = async ({
       if (Number.parseInt(curStake?.numberOfDerivatives) > 0) {
         var ipfsUrl = cur.uri;
         if (ipfsUrl.slice(0, 4) === "ipfs") {
-          ipfsUrl = `https://stylexchange.mypinata.cloud/ipfs/${ipfsUrl.slice(
-            7
-          )}`;
+          ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
         }
         resExtras.push(fetch(ipfsUrl));
         allDataParsed.push(cur);
@@ -235,9 +232,7 @@ const getListedNFTs = async ({
 
         var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
         if (ipfsUrl.slice(0, 4) === "ipfs") {
-          ipfsUrl = `https://stylexchange.mypinata.cloud/ipfs/${ipfsUrl.slice(
-            7
-          )}`;
+          ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
         }
         const metadata = await (await fetch(ipfsUrl)).json();
 
