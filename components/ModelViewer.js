@@ -40,7 +40,7 @@ const Controls = () => {
     <MapControls ref={controlsRef} enableZoom={false} enableRotate={false} />
   );
 };
-const Scene = ({ model }) => {
+const Scene = ({ model, isEnlarged = false, onBase64Changed = () => {} }) => {
   useThree(({ camera }) => {
     camera.rotation.set(deg2rad(30), 0, 0);
   });
@@ -53,17 +53,21 @@ const Scene = ({ model }) => {
         position={[10, 10, 10]}
       />
 
-      <BBAnchor anchor={[1, 1, 1]} frustumCulled={false}>
-        <Bounds observe fit clip clone margin={1.4} damping={0}>
-          <ModelComponent model={model} />
-        </Bounds>
-        <Controls />
+      <BBAnchor anchor={[0, 0, 0]} frustumCulled={false}>
+        {/* <Bounds observe fit clip clone margin={1.2} damping={6}> */}
+        <ModelComponent
+          model={model}
+          isEnlarged={isEnlarged}
+          onBase64Changed={(base64) => {
+            onBase64Changed(base64);
+          }}
+        />
+        {/* </Bounds> */}
       </BBAnchor>
 
       <ambientLight intensity={0.3} />
       <pointLight intensity={0.5} position={[10, 10, 10]} />
       <directionalLight color="white" position={[0, 5, -5]} />
-      <OrbitControls makeDefault />
     </>
   );
 };
@@ -72,21 +76,39 @@ const ModelViewer = ({
   model,
   canvaStyles = {},
   headerModelFile,
-  isEnlarge,
+  isEnlarge = false,
+  onBase64Changed = () => {},
 }) => {
   if (!model) return null;
   return (
     model && (
       <div
         style={{
+          position: "relative",
           width: isEnlarge ? "50rem" : "18rem",
           height: isEnlarge ? "40rem" : "18rem",
           ...canvaStyles,
         }}
       >
         <Suspense fallback={null}>
-          <Canvas orthographic>
-            <Scene model={model} />
+          <Canvas
+            frameloop="demand"
+            flat
+            gl={{ preserveDrawingBuffer: true }}
+            orthographic
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+            resize={{ scroll: false }}
+          >
+            <Scene
+              model={model}
+              isEnlarged={isEnlarge}
+              onBase64Changed={(base64) => {
+                onBase64Changed(base64);
+              }}
+            />
           </Canvas>
         </Suspense>
       </div>
