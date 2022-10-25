@@ -9,12 +9,37 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "style_",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "minStyleNFTs_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "minStyleAssets_",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
 						"name": "stable_",
 						"type": "address"
 					},
 					{
 						"internalType": "address",
-						"name": "stylex_",
+						"name": "mana_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "weth_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "dclAdmin_",
 						"type": "address"
 					}
 				],
@@ -30,6 +55,21 @@
 					}
 				],
 				"name": "AlreadyListed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "AlreadyPayed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "DCLImproperStatusPayer",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "DerivativesDisallowed",
 				"type": "error"
 			},
 			{
@@ -68,6 +108,11 @@
 			{
 				"inputs": [],
 				"name": "ETHTransferFailed",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ImproperItemStatus",
 				"type": "error"
 			},
 			{
@@ -124,8 +169,24 @@
 				"type": "error"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "LowAmount",
+				"type": "error"
+			},
+			{
 				"inputs": [],
 				"name": "NoStakes",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotAdmin",
 				"type": "error"
 			},
 			{
@@ -136,6 +197,11 @@
 			{
 				"inputs": [],
 				"name": "NotContractOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotDCLLot",
 				"type": "error"
 			},
 			{
@@ -183,6 +249,11 @@
 					}
 				],
 				"name": "NotETHLisiting",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotEnoughtSTYLETokens",
 				"type": "error"
 			},
 			{
@@ -274,6 +345,32 @@
 					}
 				],
 				"name": "AddPaymentToken",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bytes",
+						"name": "adminSignature",
+						"type": "bytes"
+					}
+				],
+				"name": "DCLInit",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "contract_",
+						"type": "address"
+					}
+				],
+				"name": "GenerationMint",
 				"type": "event"
 			},
 			{
@@ -523,7 +620,7 @@
 						"type": "string"
 					}
 				],
-				"name": "Staking",
+				"name": "Staked",
 				"type": "event"
 			},
 			{
@@ -542,7 +639,7 @@
 						"type": "address"
 					}
 				],
-				"name": "Unstaking",
+				"name": "Unstaked",
 				"type": "event"
 			},
 			{
@@ -611,25 +708,103 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "environment",
-						"type": "address"
-					}
-				],
-				"name": "addEnvironment",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
+						"components": [
+							{
+								"internalType": "address",
+								"name": "redeemer",
+								"type": "address"
+							},
+							{
+								"components": [
+									{
+										"internalType": "address",
+										"name": "tokenAddress",
+										"type": "address"
+									},
+									{
+										"internalType": "uint256",
+										"name": "tokenId",
+										"type": "uint256"
+									},
+									{
+										"internalType": "uint256",
+										"name": "payment",
+										"type": "uint256"
+									},
+									{
+										"internalType": "address",
+										"name": "paymentToken",
+										"type": "address"
+									},
+									{
+										"internalType": "string",
+										"name": "uri",
+										"type": "string"
+									},
+									{
+										"internalType": "address",
+										"name": "bidder",
+										"type": "address"
+									},
+									{
+										"internalType": "address",
+										"name": "environment",
+										"type": "address"
+									},
+									{
+										"internalType": "uint96",
+										"name": "metaverseId",
+										"type": "uint96"
+									},
+									{
+										"internalType": "bytes",
+										"name": "signature",
+										"type": "bytes"
+									}
+								],
+								"internalType": "struct ILazyMintingStructs.NonmintedNFT",
+								"name": "nonmintedNFT",
+								"type": "tuple"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct INFTMarketplaceStructs.RequstedData[]",
+						"name": "requestedDataArr",
+						"type": "tuple[]"
+					},
 					{
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
+						"components": [
+							{
+								"internalType": "address",
+								"name": "contract_",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct INFTMarketplaceStructs.ListedData[]",
+						"name": "listedDataArr",
+						"type": "tuple[]"
 					}
 				],
-				"name": "addPaymentToken",
+				"name": "batchBuy",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -705,6 +880,161 @@
 					}
 				],
 				"name": "buyAndMint",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "redeemer",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "payment",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "paymentToken",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "environment",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct ILazyMintingStructs.NonmintedNFT",
+						"name": "nonmintedNFT",
+						"type": "tuple"
+					},
+					{
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "DCLSignature",
+						"type": "bytes"
+					}
+				],
+				"name": "buyDCL",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "payment",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "paymentToken",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "environment",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct ILazyMintingStructs.NonmintedNFT",
+						"name": "nonmintedNFT",
+						"type": "tuple"
+					},
+					{
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					}
+				],
+				"name": "buyDCLInit",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -806,26 +1136,16 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint256",
-						"name": "cursor",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "howMany",
-						"type": "uint256"
+						"internalType": "bytes",
+						"name": "adminSignature",
+						"type": "bytes"
 					}
 				],
-				"name": "getEnvironments",
+				"name": "getDCLLotInfo",
 				"outputs": [
 					{
-						"internalType": "address[]",
-						"name": "environments",
-						"type": "address[]"
-					},
-					{
 						"internalType": "uint256",
-						"name": "newCursor",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -970,35 +1290,6 @@
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "cursor",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "howMany",
-						"type": "uint256"
-					}
-				],
-				"name": "getPaymentTokens",
-				"outputs": [
-					{
-						"internalType": "address[]",
-						"name": "paymentTokens",
-						"type": "address[]"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newCursor",
-						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -1159,11 +1450,49 @@
 				"inputs": [
 					{
 						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getUsersDCLInitLots",
+				"outputs": [
+					{
+						"internalType": "bytes32[]",
+						"name": "dclInitLots",
+						"type": "bytes32[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
 						"name": "contract_",
 						"type": "address"
 					}
 				],
 				"name": "isDerivative",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "result",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "contract_",
+						"type": "address"
+					}
+				],
+				"name": "isGeneration",
 				"outputs": [
 					{
 						"internalType": "bool",
@@ -1253,6 +1582,62 @@
 			{
 				"inputs": [
 					{
+						"internalType": "string",
+						"name": "tokenURI",
+						"type": "string"
+					},
+					{
+						"internalType": "uint96",
+						"name": "numberOfDerivatives",
+						"type": "uint96"
+					},
+					{
+						"internalType": "string",
+						"name": "purpose",
+						"type": "string"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint16",
+								"name": "environmentRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "stakeOwnerRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint80",
+								"name": "tailorRoyaltyStable",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint16",
+								"name": "tailorRoyaltyPercent",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct IStakingStructs.Royalties",
+						"name": "royalties_",
+						"type": "tuple"
+					}
+				],
+				"name": "mintGenerationAndStake",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "clone",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "",
 						"type": "address"
@@ -1301,37 +1686,24 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "environment",
-						"type": "address"
-					}
-				],
-				"name": "removeEnvironment",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					}
-				],
-				"name": "removePaymentToken",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
 						"name": "bridgeRouter_",
 						"type": "address"
 					}
 				],
 				"name": "setBridgeRouter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "dclAdmin_",
+						"type": "address"
+					}
+				],
+				"name": "setDCLAdmin",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1359,24 +1731,31 @@
 						"type": "string"
 					},
 					{
-						"internalType": "uint16",
-						"name": "environmentRoyaltyPercent",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint16",
-						"name": "stakeOwnerRoyaltyPercent",
-						"type": "uint16"
-					},
-					{
-						"internalType": "uint80",
-						"name": "tailorRoyaltyStable",
-						"type": "uint80"
-					},
-					{
-						"internalType": "uint16",
-						"name": "tailorRoyaltyPercent",
-						"type": "uint16"
+						"components": [
+							{
+								"internalType": "uint16",
+								"name": "environmentRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "stakeOwnerRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint80",
+								"name": "tailorRoyaltyStable",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint16",
+								"name": "tailorRoyaltyPercent",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct IStakingStructs.Royalties",
+						"name": "royalties_",
+						"type": "tuple"
 					}
 				],
 				"name": "stake",
@@ -1438,24 +1817,57 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint16",
-						"name": "environmentRoyaltyPercent",
-						"type": "uint16"
-					},
+						"internalType": "uint256",
+						"name": "minStyleAssets_",
+						"type": "uint256"
+					}
+				],
+				"name": "updateMinStyleAssets",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
 					{
-						"internalType": "uint16",
-						"name": "stakeOwnerRoyaltyPercent",
-						"type": "uint16"
-					},
+						"internalType": "uint256",
+						"name": "minStyleNFTs_",
+						"type": "uint256"
+					}
+				],
+				"name": "updateMinStyleNFTs",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
 					{
-						"internalType": "uint80",
-						"name": "tailorRoyaltyStable",
-						"type": "uint80"
-					},
-					{
-						"internalType": "uint16",
-						"name": "tailorRoyaltyPercent",
-						"type": "uint16"
+						"components": [
+							{
+								"internalType": "uint16",
+								"name": "environmentRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "stakeOwnerRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint80",
+								"name": "tailorRoyaltyStable",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint16",
+								"name": "tailorRoyaltyPercent",
+								"type": "uint16"
+							}
+						],
+						"internalType": "struct IStakingStructs.Royalties",
+						"name": "royalties_",
+						"type": "tuple"
 					}
 				],
 				"name": "updateRoyalties",
@@ -1480,6 +1892,10 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
 			}
 		],
 		"devdoc": {
@@ -1489,18 +1905,6 @@
 					"details": "Add admin (only by contract owner).",
 					"params": {
 						"admin": "Address of admin."
-					}
-				},
-				"addEnvironment(address)": {
-					"details": "Add environment (only by contract owner).",
-					"params": {
-						"environment": "Address of environment."
-					}
-				},
-				"addPaymentToken(address)": {
-					"details": "Add payment token (only by contract owner).",
-					"params": {
-						"paymentToken": "Address of paymentToken."
 					}
 				},
 				"buyAndMint(address,(address,uint256,uint256,address,string,address,address,uint96,bytes),bytes,uint256)": {
@@ -1531,9 +1935,6 @@
 						"tokenId": "A tokenId of ERC721 to get info about."
 					}
 				},
-				"getEnvironments(uint256,uint256)": {
-					"details": "Get environments."
-				},
 				"getListing(address,uint256)": {
 					"details": "Get listing by tokenId.",
 					"params": {
@@ -1551,9 +1952,6 @@
 				},
 				"getOwner()": {
 					"details": "Get owner of the contract."
-				},
-				"getPaymentTokens(uint256,uint256)": {
-					"details": "Get payment tokens."
 				},
 				"getStakes(uint80,uint80)": {
 					"details": "Get all stakes.",
@@ -1590,19 +1988,7 @@
 						"admin": "Address of admin."
 					}
 				},
-				"removeEnvironment(address)": {
-					"details": "Remove environment (only by contract owner).",
-					"params": {
-						"environment": "Address of environment."
-					}
-				},
-				"removePaymentToken(address)": {
-					"details": "Remove payment token (only by contract owner).",
-					"params": {
-						"paymentToken": "Address of paymentToken."
-					}
-				},
-				"stake(address,uint256,uint96,string,uint16,uint16,uint80,uint16)": {
+				"stake(address,uint256,uint96,string,(uint16,uint16,uint80,uint16))": {
 					"details": "Stake a token.",
 					"params": {
 						"purpose": "Purpose of staking.",
@@ -1625,7 +2011,7 @@
 						"tokenId": "A tokenId of ERC721 to get info about."
 					}
 				},
-				"updateRoyalties(uint16,uint16,uint80,uint16)": {
+				"updateRoyalties((uint16,uint16,uint80,uint16))": {
 					"details": "Update royalties."
 				},
 				"withdraw(address,uint256)": {
@@ -1646,7 +2032,7 @@
 				"getTailor(address,uint256)": {
 					"notice": "Return tailor by tokenId."
 				},
-				"stake(address,uint256,uint96,string,uint16,uint16,uint80,uint16)": {
+				"stake(address,uint256,uint96,string,(uint16,uint16,uint80,uint16))": {
 					"notice": "The ERC721 have to be approved to this contract."
 				}
 			},
@@ -1664,7 +2050,7 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 200
+			"runs": 1000
 		},
 		"remappings": [],
 		"viaIR": true
@@ -1799,35 +2185,43 @@
 			]
 		},
 		"contracts/Bidding3.sol": {
-			"keccak256": "0xd9a44567805c6d32baa8bd13326a6a31b1526fb1d2708cf5bf7c4d2679b5ab5a",
+			"keccak256": "0x76e51d1512700500b7c4b6a99fe6a642986cc8b10876801ab752fed4ee6f4514",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e644c36e8cc88ce4361a0c8b1957818018b957812964ed7310532ff746427e06",
-				"dweb:/ipfs/Qma1th8hWQSe1KuppoYwWSWyMVhFiKTMgVZcKNNcPSmDBH"
+				"bzz-raw://9c65a15acd182facab0600ad38711b6677f898bbd8933ace567c0d7d2e28c5f5",
+				"dweb:/ipfs/QmceDGdqFUEZgjhf9vgs2Cushk26ZKhwgvgyTRMKvsd6iT"
+			]
+		},
+		"contracts/Generation.sol": {
+			"keccak256": "0xceda89d4bbd22db1a517aec75a73b5b9cfea2d99b2613ee3cf20899163267fb8",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://2d8737e43af7683d038ec623e6ba3d2083cb2655b14af85ce7eae9e4ddb1611e",
+				"dweb:/ipfs/QmUHuytMnRs4hcrqBAagzrMG1VHqNXkhb68UQ3zcCuCvYi"
 			]
 		},
 		"contracts/LazyMinting2.sol": {
-			"keccak256": "0xa8317fd0d82c77a577fc0cd6b719ffa50f96b8c2deb08467928c27d7adf8fcfa",
+			"keccak256": "0x878fd5ef4eafb3a6b44ae7be852b95c6fbf657bb7198b96ede132d5055d2e3b6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7b78d206516de64c9197f656bca9db1705cc3a4d33b777a2db4473b665c4ca4b",
-				"dweb:/ipfs/QmXwk9ap4w4vJCVmF1jkK7tN7nf23MmDbPbyhc1rK3MFqc"
+				"bzz-raw://e5a92755137b15799e3d1537ae784f0692eae28cf0ffe1da4a1eb60c42f9a829",
+				"dweb:/ipfs/QmX3WDWPr5LQoqRAbyWnb84fJwSXvS56w7ipypcEkdovZ2"
 			]
 		},
 		"contracts/NFTMarketplace.sol": {
-			"keccak256": "0x7d97767b9ad492c8815c7397730157afd49919dbe72e56ae3f595cddf998eb72",
+			"keccak256": "0x9d2da65ad7ec526c650eb782f5f4fed6a830e4ca426f0e8d5591f6d254313188",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dccfb915a0c0652b9afefdd5cdd1034925fb7d8fbcc1f5e17159d1a133d0f6cd",
-				"dweb:/ipfs/QmbjP69A5v7qsNzJEGT3gC6oJFtyqf2WgqZNH53o2duR6M"
+				"bzz-raw://b99c096c63a642f44053b1218c57dbbdd1d599a07e7182c8ed706a084e2d469e",
+				"dweb:/ipfs/QmaGDtJZA5yLU6WRNCYZ42b1GK8X5WXHQ3S3f3cFVmjvfc"
 			]
 		},
 		"contracts/Staking.sol": {
-			"keccak256": "0x7c785c582d060003f79ba7c3041d8e4934c684e577d6b41ce5f60cd14bc77d5a",
+			"keccak256": "0xa9ba8e776b891ba192612f31ce2466b5627ef8386552ae15f4cebe10d62c6172",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4eb2129014f04c02f0f11433e8396024992fc5d148429e58f0ea7df04e467465",
-				"dweb:/ipfs/QmWe5ejKPtYFNwdr3w3jtsN29VCVZ53w9fzC5hx9V5WdYa"
+				"bzz-raw://ce2fc06e2201ded4d4aa544be8ecb173ab8bc5d9691457dfa69942656843444e",
+				"dweb:/ipfs/QmPpktNmeh9UdHTgMJ1j7JqagQo9MB3ZUb1DmLSY4294Mx"
 			]
 		},
 		"contracts/erc721a/ERC721A.sol": {
@@ -1862,28 +2256,44 @@
 				"dweb:/ipfs/QmeXxJcQkoWyH9VNWQtqo1srrgqpyjwAqEdJRDzAFyrL8a"
 			]
 		},
-		"contracts/interfaces/ILazyMinting.sol": {
-			"keccak256": "0x6ce5e0d85e3e47ff08384ab10d353944207184118ac8be144955d56aafba7b99",
+		"contracts/interfaces/IGeneration.sol": {
+			"keccak256": "0x9d642722580df0b683e06cee092250be26580c56dde7f897e7af7beb875d9fa9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://10bf26b6bf42ec65be46cbf75708c7abe655aedbecb9f002a43b800476fa8a9f",
-				"dweb:/ipfs/QmSEAu5AUa83M6RPst5Bq3m49SpwDxa29gFAoN3EJ5TDks"
+				"bzz-raw://fa50e848f369d66a66bbfdfbd1d97725d7106a5082c1e7a8c468db1f7b93d00f",
+				"dweb:/ipfs/QmX5teWXTiSBiokMa8PNTJ3FpRx29dDiUauQC8yfkodqMb"
+			]
+		},
+		"contracts/interfaces/ILazyMinting.sol": {
+			"keccak256": "0xb4937a0828ce9a3cc91c7ca5b8051b9d6a4895b0311a6b08ce30d6ab8d13a366",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c59ef0bc070d718abd26d5106e2962b00b5801cca04be0372de24c1055c844bf",
+				"dweb:/ipfs/Qmb3JDt6LCQgsit5hEevPSJxtaXw1tkjcLx4R4FLY99uFK"
 			]
 		},
 		"contracts/interfaces/INFTMarketplace.sol": {
-			"keccak256": "0xa9b8ea4bd0d8414ae48957d2e683da9ba8b409f074e5f6ea80897c70554936a2",
+			"keccak256": "0x1d41fdf0796ad6fd13852b287979d89c790469728d6c8cd9394272c05b628050",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://64629f2f1e137253ed37273f52bbce84f3944790279b8cd0f7e6a5b50fbbaf86",
-				"dweb:/ipfs/QmV4KTkMZmPEJgpS68QRAJyMbXGNGFNzD1SZ9nQXbX1MN2"
+				"bzz-raw://afd46f9b6b8bcc34371068131bf1e24466b0588dcefb6cf622c1466043b4859a",
+				"dweb:/ipfs/QmdcJQCmy4ds5mUofyNNzCYvb7P8w6EQwfaKBigJYmJkEG"
 			]
 		},
 		"contracts/interfaces/IStaking.sol": {
-			"keccak256": "0x43def54c53f000fa869780900c198cf704ea8a6e3034c5ee88fcb2353dc36ba0",
+			"keccak256": "0xc2b9dcaa748af7b1abf552d34a820755b3b9a98b832380d03e513321b278c370",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fd67aedd3e4b662e962c74e81e8e7278a3ad95eb3d75e50acf5ede13eaebcb72",
-				"dweb:/ipfs/QmU2JuU7TMveUxAm1SbDhGMdeUhwic8ENSEitEUzqL17Ly"
+				"bzz-raw://5251f76b39d7efd27d240599cddc1c3936929b7eb65e5a9a9674e59a41422490",
+				"dweb:/ipfs/QmYPBr9bMkZWA65PQhj5Bg9qJERPY9r6SFFWLARWRc6tzY"
+			]
+		},
+		"contracts/interfaces/IWETH9.sol": {
+			"keccak256": "0xbd077cf9a91dd3cd17420baeb7b59c14ec84fec3fe5a4f0ad41757bc43fb76bf",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://999e7f9e731ae6e88b084d239b3bb5df84f699dc55384eedb2ddc027626dace7",
+				"dweb:/ipfs/QmXPbCCUorRLBq26PQUVU9CPDYcT5Hb9HCSTeJvTHHBGKG"
 			]
 		},
 		"contracts/interfaces/base/IBaseErrors.sol": {
@@ -1910,20 +2320,44 @@
 				"dweb:/ipfs/QmZgZnzPSohcMTASseET5JbdQuj3UzN6UZZitBDfUz7AtN"
 			]
 		},
-		"contracts/interfaces/lazyminting/ILazyMintingErrors.sol": {
-			"keccak256": "0x580202c3b2692819124c2499a2c7fef7773eb873e06e069c5b698b8401b546cd",
+		"contracts/interfaces/generation/IGenerationErrors.sol": {
+			"keccak256": "0x183f5f1300953b14429ac4e321a60e404db0c1e70a21863a3e1354f455a59275",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://5c04ae8c9e68845e6fc3ae9b13b6966ccb5c4e476d5b9fa5e763136f64958ce0",
-				"dweb:/ipfs/QmVksUe411HJMZ42L26Js2YZUxEVD3mTkx1Y39PzZLqQwW"
+				"bzz-raw://95f0359bf0853fdbe519bd24ae01bcc0472cb78132061a128d00ef36d6cb4c32",
+				"dweb:/ipfs/QmPVGHS7C6soZaoC7Po4zEtkZ4uQEjDhBMiwwiT2zMFbXc"
+			]
+		},
+		"contracts/interfaces/generation/IGenerationEvents.sol": {
+			"keccak256": "0x40384fdf8fb893da10cbfd1792f3402c08d4fe404929b50146712cd8bc82300d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://6a3e53d764a3f92c056191fa0c49911abf110614b70fa28861828235e7a79494",
+				"dweb:/ipfs/QmapyizRT2oVXExUPXgVfrqmfhNgiKEV5rw7wm9vu4uuWr"
+			]
+		},
+		"contracts/interfaces/generation/IGenerationStructs.sol": {
+			"keccak256": "0x1f214bd4ccb4963b9a7b5a8e42291d2b660d6fcd8e15bf4338d3885f2a1c876a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://50538d6acf128bd5c86f6e0f11e8c3f08642aebffb6c0e327f6f331e281e6d86",
+				"dweb:/ipfs/QmcxoZPcjhTXBngyeuLcWooYHMemqDPqUNPfNbYqmQxqEr"
+			]
+		},
+		"contracts/interfaces/lazyminting/ILazyMintingErrors.sol": {
+			"keccak256": "0x8ee6aa584a114acfdd13c412507a01425987c362735088d997a50c5b6cdde998",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8b42bf0b294aeecb72cdca37bae1e85f2cac115f177de3c71aac8745382a92e9",
+				"dweb:/ipfs/QmeRT8ezZyBYaGGcQVRZsoPcgBS9mmhxDfK7BuTNou4C9k"
 			]
 		},
 		"contracts/interfaces/lazyminting/ILazyMintingEvents.sol": {
-			"keccak256": "0x46a86ad96b7648cefdf9945c9fc6a359210d55dc1e1178a9cf1481ff8899fd17",
+			"keccak256": "0x5126a6f2e9b795df11f95ac5b766439739fa844dc46870975545406117de01e9",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8f2eca071e69e14ec06cc191d32a032d67601572b333dfb61271fecdceecbbb3",
-				"dweb:/ipfs/QmezK5fSitSw88gveGog2PuVJisgrJu68hs9Ei4pyQhAsp"
+				"bzz-raw://4b0154f9595e63fd4bb6869236db6a21ba8084dfa1f117541eae1389081fed8e",
+				"dweb:/ipfs/QmaX7UBXkWGiSXWRAAsu8ZzEiQ1KDdyPLJWsuExxuyqDHF"
 			]
 		},
 		"contracts/interfaces/lazyminting/ILazyMintingStructs.sol": {
@@ -1935,43 +2369,43 @@
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceErrors.sol": {
-			"keccak256": "0x0ccc263708f8efc74bfdce0782db7038b6283834fd693c6413a4aca24ccce1e2",
+			"keccak256": "0x1702a7d683f8d9bac5ad110244d107c7a3c77f8c5c3aacc2b475a906fd46d6d6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bec7eef50ca210c1bea0a2cfb0cc6186fbd243c8dd8bbb8a102ebd2e9571c80b",
-				"dweb:/ipfs/QmcPwN9dkLDQEBj5U5m6Hy2jLaYfqSwbptjpunU6VrGk2r"
+				"bzz-raw://c844335d5881e3067f72bcbddb3344838247e93a7a1e54088b711ce897b70f4e",
+				"dweb:/ipfs/QmZpMb86cqLqCsWuqmNgA1wskP3hRUeQF1keUt4q2Jtawr"
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceEvents.sol": {
-			"keccak256": "0x7f66aec499653f2359432b3bca974db70df37c5dd7c9207ce6dcfecf91d6ef2f",
+			"keccak256": "0x1974db3b28ea6343d97aa267b45b421fa250f0aff6ae27448af31f84122a5051",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://eb047d268fc1d1cd3a70162c858e33d246710e94f827e3b1bacd113122d2e23d",
-				"dweb:/ipfs/QmPuNJ5FRoeZcyLLEhRgLHeJ5gQSBRefnRZRDNq5dicZ2S"
+				"bzz-raw://a9011c1eb160ad590d394d42b9e8e293c5b230ea0ea8a6d7c7ac2d24c6d54c9d",
+				"dweb:/ipfs/QmUwp8dhBYpkox122uw1vQ1VCdENcKPQUw1btv5RKw2nNp"
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceStructs.sol": {
-			"keccak256": "0xa3a18f2cc9e15e5fb5c72d03616c87afe8e4e4000d160ffa0b1fab0cf0f7f883",
+			"keccak256": "0xd17813597e73d6168c7f9fb0c8a1b7b050652664429950bbfff510158549bece",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9d23f12d1b18fcba38ee8a12138f265f69563608ddc5f63d288bd20ff2d23ec7",
-				"dweb:/ipfs/QmeDESWXJxmHuM762WJ4EuhgnPPSh67hrWs3WiG6r969hn"
+				"bzz-raw://7644aa3227e9f85a5073fcdadbc4944c7726c958b84b7dfa58cf4d7a90746e09",
+				"dweb:/ipfs/QmWSkKAbo49powr7ag1FaqpsSXa6KE6pYkL1XLfjchbiNa"
 			]
 		},
 		"contracts/interfaces/staking/IStakingErrors.sol": {
-			"keccak256": "0x103dbc558492f4b80aaf3f171c7f24102b91ce1af6d1b6d737d6d9c389f52610",
+			"keccak256": "0x8671f6dbffe4e6852ff6f9a38df2ccbcd91a517bcb95d8e08a4a56bb7faae65c",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://55733d3e68d73aab80e6e6fa9a5ce823bf445c62052b589c6b383e170f169e7d",
-				"dweb:/ipfs/QmPJTjqLmyPKusobzfPkRQzFLtbm5Fts268TKH9gGDdiQj"
+				"bzz-raw://173c6d646d36420b4bb6c116a3aaec0dfe47428a11f04b0aee6e36462bbc79d6",
+				"dweb:/ipfs/QmWLBLCwEKwayCCi61hW5zNu13ii8XS9LdFzTWFsnHrjHP"
 			]
 		},
 		"contracts/interfaces/staking/IStakingEvents.sol": {
-			"keccak256": "0x08da6da56d82dea7e28391cf0f282c816859af7976b1ac61aa456d6de405dd70",
+			"keccak256": "0xd0fd06ff969dd12a5fa875a048105f37a70fb5c64e421710f2c5abf36d19f005",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e0186fb885c29e16600b47383b56806add12bfa5c2ae7afc5cba98cb5e9ca11a",
-				"dweb:/ipfs/QmYriRV5gWE1NLkYaQGke2ZtnyuAnbp3hMn7fYDvzku6ws"
+				"bzz-raw://02056104b307367cb815f63a6588ccd19134116964dfac93d20b9589976bb9d4",
+				"dweb:/ipfs/QmcbWDqXw8cQP6Jrqw8XyCu9bggfccbuVg3RSELofMTB4F"
 			]
 		},
 		"contracts/interfaces/staking/IStakingStructs.sol": {
@@ -2036,6 +2470,14 @@
 			"urls": [
 				"bzz-raw://a8cb8681076e765c214e0d51cac989325f6b98e315eaae06ee0cbd5a9f084763",
 				"dweb:/ipfs/QmNWGHi4zmjxQTYN3NMGnJd49jBT5dE4bxTdWEaDuJrC6N"
+			]
+		},
+		"solady/src/utils/LibString.sol": {
+			"keccak256": "0x1aeed89e393350c7b015f9e77dd360f64427e059442833bf6647f34a535e1b42",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://71de991154b5c4963fedfdd73b77eeb2f0a01ebdad2ca8cacfd354aea7467d70",
+				"dweb:/ipfs/QmPe4ttUtoApXsBunEbXmemhZTbNd1eXYr5evQEqNkHvcY"
 			]
 		}
 	},
