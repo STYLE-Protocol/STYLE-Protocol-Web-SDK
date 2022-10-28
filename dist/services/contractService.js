@@ -350,7 +350,7 @@ const getListedNFTs = async ({
   }
 };
 
-const approveERC20 = async ({ web3, walletAddress, chainId, NFT }) => {
+const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
   try {
     const tokenContract = new web3.eth.Contract(
       ERC20_ABI,
@@ -358,12 +358,12 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT }) => {
     );
 
     const allowance = await tokenContract.methods
-      .allowance(walletAddress, PROTOCOL_CONTRACTS[chainId])
+      .allowance(walletAddress, spender)
       .call();
 
     if (NFT.payment.value.gt(allowance)) {
       await tokenContract.methods
-        .approve(PROTOCOL_CONTRACTS[chainId], NFT.payment.value)
+        .approve(spender, NFT.payment.value)
         .send({ from: walletAddress });
     }
 

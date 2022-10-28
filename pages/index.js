@@ -23,7 +23,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 
-import { metaversesJson } from "../constants";
+import { metaversesJson, PROTOCOL_CONTRACTS } from "../constants";
 
 import { AppContext } from "../contexts/AppContext";
 
@@ -92,6 +92,7 @@ export default function Home() {
         walletAddress,
         chainId: chainId || 5,
         NFT,
+        spender: PROTOCOL_CONTRACTS[chainId || 5],
       });
 
       await buyAndMintItem({ web3, walletAddress, chainId: chainId || 5, NFT });
@@ -112,6 +113,7 @@ export default function Home() {
         walletAddress,
         chainId: chainId || 5,
         NFT,
+        spender: PROTOCOL_CONTRACTS[chainId || 5],
       });
 
       await buyItem({ web3, walletAddress, chainId: chainId || 5, NFT });
