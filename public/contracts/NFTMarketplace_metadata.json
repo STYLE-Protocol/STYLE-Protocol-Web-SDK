@@ -29,11 +29,6 @@
 					},
 					{
 						"internalType": "address",
-						"name": "mana_",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
 						"name": "weth_",
 						"type": "address"
 					},
@@ -954,87 +949,17 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "address",
+						"name": "initer",
+						"type": "address"
+					},
+					{
 						"internalType": "bytes",
 						"name": "DCLSignature",
 						"type": "bytes"
 					}
 				],
 				"name": "buyDCL",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "tokenAmount",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "token",
-						"type": "address"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "tokenAddress",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "tokenId",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "payment",
-								"type": "uint256"
-							},
-							{
-								"internalType": "address",
-								"name": "paymentToken",
-								"type": "address"
-							},
-							{
-								"internalType": "string",
-								"name": "uri",
-								"type": "string"
-							},
-							{
-								"internalType": "address",
-								"name": "bidder",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "environment",
-								"type": "address"
-							},
-							{
-								"internalType": "uint96",
-								"name": "metaverseId",
-								"type": "uint96"
-							},
-							{
-								"internalType": "bytes",
-								"name": "signature",
-								"type": "bytes"
-							}
-						],
-						"internalType": "struct ILazyMintingStructs.NonmintedNFT",
-						"name": "nonmintedNFT",
-						"type": "tuple"
-					},
-					{
-						"internalType": "bytes",
-						"name": "signature",
-						"type": "bytes"
-					}
-				],
-				"name": "buyDCLInit",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1136,17 +1061,17 @@
 			{
 				"inputs": [
 					{
-						"internalType": "bytes",
-						"name": "adminSignature",
-						"type": "bytes"
+						"internalType": "bytes32",
+						"name": "cutSignature",
+						"type": "bytes32"
 					}
 				],
 				"name": "getDCLLotInfo",
 				"outputs": [
 					{
-						"internalType": "uint256",
+						"internalType": "enum INFTMarketplaceStructs.DCLNFTStatus",
 						"name": "",
-						"type": "uint256"
+						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
@@ -1441,25 +1366,6 @@
 						"internalType": "address",
 						"name": "tailor",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					}
-				],
-				"name": "getUsersDCLInitLots",
-				"outputs": [
-					{
-						"internalType": "bytes32[]",
-						"name": "dclInitLots",
-						"type": "bytes32[]"
 					}
 				],
 				"stateMutability": "view",
@@ -1892,10 +1798,6 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
-			},
-			{
-				"stateMutability": "payable",
-				"type": "receive"
 			}
 		],
 		"devdoc": {
@@ -2201,19 +2103,19 @@
 			]
 		},
 		"contracts/LazyMinting2.sol": {
-			"keccak256": "0x878fd5ef4eafb3a6b44ae7be852b95c6fbf657bb7198b96ede132d5055d2e3b6",
+			"keccak256": "0xb038ba8c4e6044c0581837d8cd86440b2e4f63e09140cef02c635c2ae13d3bad",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e5a92755137b15799e3d1537ae784f0692eae28cf0ffe1da4a1eb60c42f9a829",
-				"dweb:/ipfs/QmX3WDWPr5LQoqRAbyWnb84fJwSXvS56w7ipypcEkdovZ2"
+				"bzz-raw://f48c689897d842ef0397ebeed51cd8c4c9d1bc871f50c1bf59c9a47634025b49",
+				"dweb:/ipfs/QmQJghdpiJV8H5Ni5xoiJPNj4WuB9u9o5EAPbjz7ZcFUp2"
 			]
 		},
 		"contracts/NFTMarketplace.sol": {
-			"keccak256": "0x9d2da65ad7ec526c650eb782f5f4fed6a830e4ca426f0e8d5591f6d254313188",
+			"keccak256": "0x20a2c19cdbb7e2fe14d8207a7a10dbf2630a4cae4d3fce373185c1af96476a07",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b99c096c63a642f44053b1218c57dbbdd1d599a07e7182c8ed706a084e2d469e",
-				"dweb:/ipfs/QmaGDtJZA5yLU6WRNCYZ42b1GK8X5WXHQ3S3f3cFVmjvfc"
+				"bzz-raw://597334e034d7a7f1bab2434b69c4d040845ea73e378fa55335b7f8375c4c810a",
+				"dweb:/ipfs/QmY9bCcJdy6xadD2L2otQGJk3aJxohrrGzuhtrnJgnFbYz"
 			]
 		},
 		"contracts/Staking.sol": {
@@ -2273,11 +2175,11 @@
 			]
 		},
 		"contracts/interfaces/INFTMarketplace.sol": {
-			"keccak256": "0x1d41fdf0796ad6fd13852b287979d89c790469728d6c8cd9394272c05b628050",
+			"keccak256": "0x87ff77914fbf5b033ead7d1caf7f2a0ca29337645f3d2f1e037e9de45fde60c4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://afd46f9b6b8bcc34371068131bf1e24466b0588dcefb6cf622c1466043b4859a",
-				"dweb:/ipfs/QmdcJQCmy4ds5mUofyNNzCYvb7P8w6EQwfaKBigJYmJkEG"
+				"bzz-raw://c15ebe7987a2d3cdc5d105a26a60dd433b4e2395a6f0d2be2e502c144eacf44f",
+				"dweb:/ipfs/QmUxNEVtijKbZqkbFShD6Z4MZQ6WbyiAARxvj7snpkft7z"
 			]
 		},
 		"contracts/interfaces/IStaking.sol": {
@@ -2385,11 +2287,11 @@
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceStructs.sol": {
-			"keccak256": "0xd17813597e73d6168c7f9fb0c8a1b7b050652664429950bbfff510158549bece",
+			"keccak256": "0x04a152bb0f397cadda82754fc895831a9a139a3f82d9bed2a28ad1db094129bc",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7644aa3227e9f85a5073fcdadbc4944c7726c958b84b7dfa58cf4d7a90746e09",
-				"dweb:/ipfs/QmWSkKAbo49powr7ag1FaqpsSXa6KE6pYkL1XLfjchbiNa"
+				"bzz-raw://453dadf55e078c64b8e77df0b222a905d5366c8c77d959161198efb7e08d7555",
+				"dweb:/ipfs/QmXoLm6KC8KzkVvPxu1NEMtkFdKFMCUMk573t56odoeP7V"
 			]
 		},
 		"contracts/interfaces/staking/IStakingErrors.sol": {
@@ -2473,11 +2375,11 @@
 			]
 		},
 		"solady/src/utils/LibString.sol": {
-			"keccak256": "0x1aeed89e393350c7b015f9e77dd360f64427e059442833bf6647f34a535e1b42",
+			"keccak256": "0x6fea6948f512d2cb8f852a7c8f76e502fc2374b561f31c6ea3f1699c5c1e49ae",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://71de991154b5c4963fedfdd73b77eeb2f0a01ebdad2ca8cacfd354aea7467d70",
-				"dweb:/ipfs/QmPe4ttUtoApXsBunEbXmemhZTbNd1eXYr5evQEqNkHvcY"
+				"bzz-raw://41f548798bef14d6f360f5eee5fdac72d8cb430b1db0f89bae4c4f2bdb45984c",
+				"dweb:/ipfs/QmRtmRr69wDukCZEcmbCNSut5zoP3Qrj6JLNxJfq7FsmmU"
 			]
 		}
 	},
