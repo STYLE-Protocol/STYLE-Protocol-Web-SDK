@@ -123,7 +123,7 @@ const getRequestedNFTs = async ({
       return [];
     }
 
-    const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINTS[chainId]));
+    const web3 = new Web3(ENDPOINTS[chainId]);
     const protocolContract = new web3.eth.Contract(
       NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
@@ -288,7 +288,7 @@ const getListedNFTs = async ({
   try {
     metaverseFilter = validateMetaverseFilter(metaverseFilter);
 
-    const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINTS[chainId]));
+    const web3 = new Web3(ENDPOINTS[chainId]);
 
     const protocolContract = new web3.eth.Contract(
       NFTMarketplace_metadata["output"]["abi"],
