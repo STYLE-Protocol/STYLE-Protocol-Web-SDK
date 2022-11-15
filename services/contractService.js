@@ -52,17 +52,15 @@ const getRequestedNFTs = async ({
         stake;
     });
 
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+      },
+    };
     const getNFTs = async (url) => {
-      var config = {
-        method: "get",
-        url: url,
-        headers: {
-          "Content-Type": "application/json",
-          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-        },
-      };
-      let resultTmp = await axios(config);
+      let resultTmp = await axios.get(url, (config = config));
       return resultTmp.data.rows;
     };
 

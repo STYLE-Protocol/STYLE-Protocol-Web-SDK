@@ -1,6 +1,6 @@
 {
   "name": "@style-protocol/sdk",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,21 +9,23 @@
     "export": "next export"
   },
   "dependencies": {
-    "next": "12.3.1",
+    "next": "12.3.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dots-loader": "1.1.4",
     "web3": "1.8.0",
     "axios": "0.27.2",
     "ethers": "5.7.1",
-    "@react-three/drei": "9.32.3",
-    "@react-three/fiber": "8.7.4",
+    "@react-three/drei": "9.34.3",
+    "@react-three/fiber": "8.8.10",
+    "react-virtualized": "9.22.3",
     "three": "0.144.0",
-    "@chakra-ui/icons": "2.0.10",
-    "@chakra-ui/react": "2.3.4",
-    "framer-motion": "7.4.0",
+    "@chakra-ui/icons": "2.0.11",
+    "@chakra-ui/react": "2.3.2",
+    "framer-motion": "7.5.3",
     "@emotion/react": "11.10.4",
-    "@emotion/styled": "11.10.4"
+    "@emotion/styled": "11.10.4",
+    "react-redux": "8.0.5"
   },
   "devDependencies": {
     "eslint": "8.24.0",

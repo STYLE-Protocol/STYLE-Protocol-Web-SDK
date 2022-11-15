@@ -12,34 +12,46 @@ const PROTOCOL_CONTRACTS = {
   5: "0x57c154b6496f1B5e93BB457e574F65050378e145",
 };
 
-const metaversesJson = [
+export const metaversesJson = [
   {
     id: "0",
     icon: "decentraland.svg",
     name: "Decentraland",
     slug: "decentraland",
     price: 600,
+    availabilityRange: 100000,
   },
+  // {
+  //   id: '1',
+  //   icon: 'sandbox.svg',
+  //   name: 'The Sandbox',
+  //   slug: 'sandbox',
+  //   price: 200,
+  //   availabilityRange: 1500,
+  // },
   {
     id: "1",
-    icon: "sandbox.svg",
-    name: "The Sandbox",
-    slug: "sandbox",
-    price: 200,
-  },
-  {
-    id: "2",
     icon: "somnium.svg",
     name: "Somnium Space",
     slug: "somnium_space",
     price: 200,
+    availabilityRange: 20,
   },
   {
-    id: "3",
+    id: "2",
     icon: "cryptovoxels.svg",
     name: "Cryptovoxels",
     slug: "cryptovoxels",
     price: 170.01,
+    availabilityRange: 1024,
+  },
+  {
+    id: "3",
+    icon: "monaverse.svg",
+    name: "Monaverse",
+    slug: "monaverse",
+    price: 199,
+    availabilityRange: 1024,
   },
 ];
 

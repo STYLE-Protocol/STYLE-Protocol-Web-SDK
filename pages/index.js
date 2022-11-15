@@ -61,6 +61,7 @@ export default function Home() {
       chainId: chainId_,
       metaverseFilter: metaverse_,
     });
+
     setRequestedNFTs(requestedNFTs_);
     setIsLoading(false);
   };

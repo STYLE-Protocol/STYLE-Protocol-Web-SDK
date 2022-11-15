@@ -1,4 +1,6 @@
 import { Text, Box, VStack, Flex, Button, Grid, Tag } from "@chakra-ui/react";
+import { useMemo } from "react";
+import { GATEWAY } from "../constants";
 
 import ModelViewer from "./ModelViewer";
 
@@ -9,6 +11,13 @@ const Card = ({
   onClickFunction,
   availiableDerivatives,
 }) => {
+  const animationURL = useMemo(() => {
+    if (animation_url.slice(0, 4) === "ipfs") {
+      return `https://${GATEWAY}/ipfs/${animation_url.slice(7)}`;
+    }
+    return animation_url;
+  });
+
   return (
     <VStack
       border={"solid"}
@@ -24,7 +33,7 @@ const Card = ({
       </Flex>
 
       <Box>
-        <ModelViewer model={animation_url}></ModelViewer>
+        <ModelViewer model={animationURL}></ModelViewer>
       </Box>
       <Flex justify={"flex-end"}>
         <Tag w={"fit-content"}>{availiableDerivatives} left</Tag>
