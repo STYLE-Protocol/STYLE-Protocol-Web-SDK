@@ -12,7 +12,7 @@ const PROTOCOL_CONTRACTS = {
   5: "0x57c154b6496f1B5e93BB457e574F65050378e145",
 };
 
-export const metaversesJson = [
+const metaversesJson = [
   {
     id: "0",
     icon: "decentraland.svg",
