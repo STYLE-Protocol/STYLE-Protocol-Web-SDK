@@ -291,77 +291,6 @@ const getRequestedNFTs = async ({
   }
 };
 
-const getListedNFTs = async ({
-  cursor = 0,
-  amount = 100,
-  chainId = 5,
-  metaverseFilter = [],
-}) => {
-  try {
-    metaverseFilter = validateMetaverseFilter(metaverseFilter);
-
-    const web3 = new Web3(ENDPOINTS[chainId]);
-
-    const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_metadata["output"]["abi"],
-      PROTOCOL_CONTRACTS[chainId]
-    );
-
-    const res = (
-      await protocolContract.methods.getListings(cursor, amount).call()
-    )[0];
-
-    var parsedData = [];
-    for (let cur of res) {
-      const nftContract = new web3.eth.Contract(
-        Base_metadata["output"]["abi"],
-        cur.contract_
-      );
-
-      const metaverseId = await nftContract.methods.metaverseId().call();
-      const metaverseSlug = metaversesJson
-        .filter((cur) => cur.id === `${metaverseId}`)[0]
-        .slug.toLowerCase();
-      if (
-        metaverseFilter[0] === "" ||
-        metaverseFilter.includes(metaverseSlug)
-      ) {
-        var data = { ...cur, metaverse: metaverseSlug };
-
-        var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
-        if (ipfsUrl.slice(0, 4) === "ipfs") {
-          ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
-        }
-        const metadata = await (await fetch(ipfsUrl)).json();
-
-        const tokenContract = new web3.eth.Contract(
-          ERC20_ABI,
-          data.paymentToken
-        );
-
-        const decimals = await tokenContract.methods.decimals().call();
-
-        data.payment = {
-          value: BigNumber.from(data.payment),
-          stringValue: `${Number.parseInt(data.payment) / 10 ** decimals}`,
-        };
-        data.paymentToken = {
-          address: data.paymentToken,
-          name: await tokenContract.methods.name().call(),
-          symbol: await tokenContract.methods.symbol().call(),
-        };
-
-        parsedData.push({ ...data, asset: metadata });
-      }
-    }
-
-    return parsedData;
-  } catch (e) {
-    console.log(e);
-    return [];
-  }
-};
-
 const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
   try {
     const tokenContract = new web3.eth.Contract(
@@ -438,7 +367,6 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
 };
 
 exports.getRequestedNFTs = getRequestedNFTs;
-exports.getListedNFTs = getListedNFTs;
 exports.approveERC20 = approveERC20;
 exports.buyItem = buyItem;
 exports.buyAndMintItem = buyAndMintItem;

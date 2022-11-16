@@ -190,71 +190,107 @@ const getRequestedNFTs = async ({
   }
 };
 
-const getListedNFTs = async ({
-  cursor = 0,
-  amount = 100,
+const getRequestedSingularNFTs = async ({
+  owner,
   chainId = 5,
   metaverseFilter = [],
+  typeFilter = [],
+  subtypeFilter = [],
 }) => {
   try {
     metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    typeFilter = validateTypeFilter(typeFilter);
+    subtypeFilter = validateSubtypeFilter(subtypeFilter);
+
+    if (metaverseFilter === false || typeFilter === false) {
+      console.log("improper filter");
+      return [];
+    }
 
     const web3 = new Web3(ENDPOINTS[chainId]);
-
     const protocolContract = new web3.eth.Contract(
       NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
     );
 
-    const res = (
-      await protocolContract.methods.getListings(cursor, amount).call()
-    )[0];
+    const getNFTs = async (url) => {
+      var config = {
+        method: "get",
+        url: url,
+        headers: {
+          "Content-Type": "application/json",
+          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+        },
+      };
+      let resultTmp = await axios(config);
+      return resultTmp.data.rows;
+    };
 
-    var parsedData = [];
-    for (let cur of res) {
-      const nftContract = new web3.eth.Contract(
-        Base_metadata["output"]["abi"],
-        cur.contract_
-      );
+    let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFTSingular&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}, "owner": {"value": "${owner.toLowerCase()}", "op": "eq"}`;
 
-      const metaverseId = await nftContract.methods.metaverseId().call();
-      const metaverseSlug = metaversesJson
-        .filter((cur) => cur.id === `${metaverseId}`)[0]
-        .slug.toLowerCase();
-      if (
-        metaverseFilter[0] === "" ||
-        metaverseFilter.includes(metaverseSlug)
-      ) {
-        var data = { ...cur, metaverse: metaverseSlug };
-
-        var ipfsUrl = await nftContract.methods.tokenURI(data.tokenId).call();
-        if (ipfsUrl.slice(0, 4) === "ipfs") {
-          ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
-        }
-        const metadata = await (await fetch(ipfsUrl)).json();
-
-        const tokenContract = new web3.eth.Contract(
-          ERC20_ABI,
-          data.paymentToken
-        );
-
-        const decimals = await tokenContract.methods.decimals().call();
-
-        data.payment = {
-          value: BigNumber.from(data.payment),
-          stringValue: `${Number.parseInt(data.payment) / 10 ** decimals}`,
-        };
-        data.paymentToken = {
-          address: data.paymentToken,
-          name: await tokenContract.methods.name().call(),
-          symbol: await tokenContract.methods.symbol().call(),
-        };
-
-        parsedData.push({ ...data, asset: metadata });
-      }
+    if (metaverseFilter[0] != null) {
+      url += `, "metaverse": {"value": "${metaverseFilter.join(
+        "|"
+      )}", "op": "regexp"}`;
+    }
+    if (typeFilter[0] != null) {
+      url += `, "type": {"value": "${typeFilter.join("|")}", "op": "regexp"}`;
+    }
+    if (subtypeFilter[0] != null) {
+      url += `, "subtype": {"value": "${subtypeFilter.join(
+        "|"
+      )}", "op": "regexp"}`;
     }
 
-    return parsedData;
+    url += "}";
+
+    let result = await getNFTs(url);
+
+    let resultGot = await Promise.all(
+      result.map((cur) => fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`))
+    );
+    resultGot = await Promise.all(resultGot.map((cur) => cur.json()));
+
+    resultGot = resultGot.map((cur, index) => {
+      return {
+        ...cur,
+        cid: result[index].ipfs_pin_hash,
+      };
+    });
+
+    const signsProceeded = await protocolContract.methods
+      .getIfSignsProceeded(
+        resultGot.map((cur) => Web3.utils.keccak256(cur.adminSignature))
+      )
+      .call();
+
+    const resultGotNew = resultGot.filter((cur, index) => {
+      return signsProceeded[index] === false;
+    });
+
+    let resExtras = [];
+    let allDataParsed = [];
+    resultGotNew.forEach((cur) => {
+      var ipfsUrl = cur.uri;
+      if (ipfsUrl.slice(0, 4) === "ipfs") {
+        ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
+      }
+      resExtras.push(fetch(ipfsUrl));
+      allDataParsed.push(cur);
+    });
+
+    resExtras = await Promise.all(resExtras);
+    resExtras = await Promise.all(resExtras.map((cur) => cur.json()));
+
+    allDataParsed = allDataParsed.map((data, index) => {
+      return {
+        ...data,
+        asset: resExtras[index],
+      };
+    });
+
+    return allDataParsed;
   } catch (e) {
     console.log(e);
     return [];
@@ -336,10 +372,4 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   }
 };
 
-export {
-  getRequestedNFTs,
-  getListedNFTs,
-  approveERC20,
-  buyItem,
-  buyAndMintItem,
-};
+export { getRequestedNFTs, approveERC20, buyItem, buyAndMintItem };
