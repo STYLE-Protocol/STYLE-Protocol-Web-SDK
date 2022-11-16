@@ -351,6 +351,7 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
           uri: NFT.uri,
           bidder: NFT.bidder,
           environment: NFT.environment,
+          modelId: NFT.modelId,
           metaverseId: NFT.metaverseId,
           signature: NFT.signature,
         },
