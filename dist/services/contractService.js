@@ -8,7 +8,7 @@ const Base_metadata = require("../../public/contracts/Base_metadata.json");
 
 const PROTOCOL_CONTRACTS = {
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
-  5: "0xDb8B508AfA4E2E8875cC9cA3D5E210591d2fACF8",
+  5: "0xd8EF1f796719f13151A1489433a606C71ead0337",
 };
 
 const metaversesJson = [
@@ -421,24 +421,6 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
   }
 };
 
-const buyItem = async ({ web3, walletAddress, chainId, NFT }) => {
-  try {
-    const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_metadata["output"]["abi"],
-      PROTOCOL_CONTRACTS[chainId]
-    );
-
-    await protocolContract.methods
-      .buyItem(NFT.contract_, NFT.tokenId, NFT.payment.value)
-      .send({ from: walletAddress });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   try {
     const protocolContract = new web3.eth.Contract(
@@ -475,5 +457,4 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
 exports.getRequestedNFTs = getRequestedNFTs;
 exports.getRequestedSingularNFTs = getRequestedSingularNFTs;
 exports.approveERC20 = approveERC20;
-exports.buyItem = buyItem;
 exports.buyAndMintItem = buyAndMintItem;

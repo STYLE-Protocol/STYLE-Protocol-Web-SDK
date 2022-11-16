@@ -321,24 +321,6 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
   }
 };
 
-const buyItem = async ({ web3, walletAddress, chainId, NFT }) => {
-  try {
-    const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_metadata["output"]["abi"],
-      PROTOCOL_CONTRACTS[chainId]
-    );
-
-    await protocolContract.methods
-      .buyItem(NFT.contract_, NFT.tokenId, NFT.payment.value)
-      .send({ from: walletAddress });
-
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-};
-
 const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   try {
     const protocolContract = new web3.eth.Contract(
@@ -376,6 +358,5 @@ export {
   getRequestedNFTs,
   getRequestedSingularNFTs,
   approveERC20,
-  buyItem,
   buyAndMintItem,
 };

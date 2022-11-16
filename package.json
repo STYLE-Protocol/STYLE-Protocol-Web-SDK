@@ -1,6 +1,6 @@
 {
   "name": "@style-protocol/sdk",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
