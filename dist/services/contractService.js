@@ -365,8 +365,20 @@ const getRequestedSingularNFTs = async ({
       )
       .call();
 
+    const stakesSingular = (
+      await protocolContract.methods.getStakesSingular(0, 250).call()
+    )[0];
+
     const resultGotNew = resultGot.filter((cur, index) => {
-      return signsProceeded[index] === false;
+      return (
+        signsProceeded[index] === false &&
+        stakesSingular.find(
+          (curStake) =>
+            curStake.tokenAddress.toLowerCase() ===
+              cur.tokenAddress.toLowerCase() &&
+            Number(curStake.tokenId) === Number(cur.tokenId)
+        ) !== undefined
+      );
     });
 
     let resExtras = [];
