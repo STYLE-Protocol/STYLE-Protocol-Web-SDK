@@ -7,9 +7,8 @@ const ERC20_ABI = require("../../public/contracts/ERC20_ABI.json");
 const Base_metadata = require("../../public/contracts/Base_metadata.json");
 
 const PROTOCOL_CONTRACTS = {
-  4: "0x36ACbdcBf366558AD8c6Be12F217Dc64f78d7B72",
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
-  5: "0x57c154b6496f1B5e93BB457e574F65050378e145",
+  5: "0xDb8B508AfA4E2E8875cC9cA3D5E210591d2fACF8",
 };
 
 const metaversesJson = [
@@ -291,6 +290,113 @@ const getRequestedNFTs = async ({
   }
 };
 
+const getRequestedSingularNFTs = async ({
+  owner,
+  chainId = 5,
+  metaverseFilter = [],
+  typeFilter = [],
+  subtypeFilter = [],
+}) => {
+  try {
+    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    typeFilter = validateTypeFilter(typeFilter);
+    subtypeFilter = validateSubtypeFilter(subtypeFilter);
+
+    if (metaverseFilter === false || typeFilter === false) {
+      console.log("improper filter");
+      return [];
+    }
+
+    const web3 = new Web3(ENDPOINTS[chainId]);
+    const protocolContract = new web3.eth.Contract(
+      NFTMarketplace_metadata["output"]["abi"],
+      PROTOCOL_CONTRACTS[chainId]
+    );
+
+    const getNFTs = async (url) => {
+      var config = {
+        method: "get",
+        url: url,
+        headers: {
+          "Content-Type": "application/json",
+          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+        },
+      };
+      let resultTmp = await axios(config);
+      return resultTmp.data.rows;
+    };
+
+    let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFTSingular&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}, "owner": {"value": "${owner.toLowerCase()}", "op": "eq"}`;
+
+    if (metaverseFilter[0] != null) {
+      url += `, "metaverse": {"value": "${metaverseFilter.join(
+        "|"
+      )}", "op": "regexp"}`;
+    }
+    if (typeFilter[0] != null) {
+      url += `, "type": {"value": "${typeFilter.join("|")}", "op": "regexp"}`;
+    }
+    if (subtypeFilter[0] != null) {
+      url += `, "subtype": {"value": "${subtypeFilter.join(
+        "|"
+      )}", "op": "regexp"}`;
+    }
+
+    url += "}";
+
+    let result = await getNFTs(url);
+
+    let resultGot = await Promise.all(
+      result.map((cur) => fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`))
+    );
+    resultGot = await Promise.all(resultGot.map((cur) => cur.json()));
+
+    resultGot = resultGot.map((cur, index) => {
+      return {
+        ...cur,
+        cid: result[index].ipfs_pin_hash,
+      };
+    });
+
+    const signsProceeded = await protocolContract.methods
+      .getIfSignsProceeded(
+        resultGot.map((cur) => Web3.utils.keccak256(cur.adminSignature))
+      )
+      .call();
+
+    const resultGotNew = resultGot.filter((cur, index) => {
+      return signsProceeded[index] === false;
+    });
+
+    let resExtras = [];
+    let allDataParsed = [];
+    resultGotNew.forEach((cur) => {
+      var ipfsUrl = cur.uri;
+      if (ipfsUrl.slice(0, 4) === "ipfs") {
+        ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
+      }
+      resExtras.push(fetch(ipfsUrl));
+      allDataParsed.push(cur);
+    });
+
+    resExtras = await Promise.all(resExtras);
+    resExtras = await Promise.all(resExtras.map((cur) => cur.json()));
+
+    allDataParsed = allDataParsed.map((data, index) => {
+      return {
+        ...data,
+        asset: resExtras[index],
+      };
+    });
+
+    return allDataParsed;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
+};
+
 const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
   try {
     const tokenContract = new web3.eth.Contract(
@@ -367,6 +473,7 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
 };
 
 exports.getRequestedNFTs = getRequestedNFTs;
+exports.getRequestedSingularNFTs = getRequestedSingularNFTs;
 exports.approveERC20 = approveERC20;
 exports.buyItem = buyItem;
 exports.buyAndMintItem = buyAndMintItem;

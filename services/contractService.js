@@ -372,4 +372,10 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   }
 };
 
-export { getRequestedNFTs, approveERC20, buyItem, buyAndMintItem };
+export {
+  getRequestedNFTs,
+  getRequestedSingularNFTs,
+  approveERC20,
+  buyItem,
+  buyAndMintItem,
+};
