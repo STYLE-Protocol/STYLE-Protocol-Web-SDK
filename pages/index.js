@@ -4,10 +4,10 @@ import { useContext, useEffect, useState } from "react";
 
 import {
   getRequestedNFTs,
-  getListedNFTs,
   approveERC20,
   buyItem,
   buyAndMintItem,
+  getRequestedSingularNFTs,
 } from "../services/contractService";
 
 import Card from "../components/Card";
@@ -39,7 +39,6 @@ export default function Home() {
   } = useContext(AppContext);
 
   const [requestedNFTs, setRequestedNFTs] = useState([]);
-  const [listedNFTs, setListedNFTs] = useState([]);
   const [metaverseFilter, setMetaverseFilter] = useState([]);
 
   const allProperties = {
@@ -66,22 +65,8 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  const fetchListedNFTs = async (cursor, amount, chainId_, metaverse_) => {
-    setIsLoading(true);
-    setListedNFTs([]);
-    const listedNFTs_ = await getListedNFTs({
-      cursor,
-      amount,
-      chainId: chainId_,
-      metaverseFilter: metaverse_,
-    });
-    setListedNFTs(listedNFTs_);
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     fetchRequestedNFTs(0, 100, chainId || 5, metaverseFilter);
-    fetchListedNFTs(0, 100, chainId || 5, metaverseFilter);
   }, [chainId, metaverseFilter]);
 
   const onBuyAndMint = async (NFT) => {
@@ -101,27 +86,6 @@ export default function Home() {
       fetchRequestedNFTs(0, 100, chainId || 5, metaverseFilter);
     } catch (error) {
       console.log("buyAndMintError", error);
-    }
-    setIsLoading(false);
-  };
-
-  const onBuy = async (NFT) => {
-    setIsLoading(true);
-    try {
-      await preBuy();
-      await approveERC20({
-        web3,
-        walletAddress,
-        chainId: chainId || 5,
-        NFT,
-        spender: PROTOCOL_CONTRACTS[chainId || 5],
-      });
-
-      await buyItem({ web3, walletAddress, chainId: chainId || 5, NFT });
-
-      fetchListedNFTs(0, 100, chainId || 5, metaverseFilter);
-    } catch (error) {
-      console.log("buyError", error);
     }
     setIsLoading(false);
   };
@@ -164,17 +128,6 @@ export default function Home() {
           <Center w={"100%"}>
             {!isLoading ? (
               <Wrap>
-                {listedNFTs.map((NFT, key) => (
-                  <Box key={key}>
-                    <Card
-                      name={NFT.asset.name}
-                      animation_url={NFT.asset.animation_url}
-                      properties={{ Metaverse: NFT.metaverse }}
-                      onClickFunction={() => onBuy(NFT)}
-                      availiableDerivatives={1}
-                    />
-                  </Box>
-                ))}
                 {requestedNFTs.map((NFT, key) => (
                   <Box key={key}>
                     <Card
@@ -190,7 +143,7 @@ export default function Home() {
                     />
                   </Box>
                 ))}
-                {listedNFTs.length === 0 && requestedNFTs.length === 0 && (
+                {requestedNFTs.length === 0 && (
                   <Text fontSize={"1.15rem"} fontWeight={"600"}>
                     No items to buy.
                   </Text>

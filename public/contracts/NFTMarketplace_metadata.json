@@ -13,22 +13,12 @@
 						"type": "address"
 					},
 					{
-						"internalType": "uint256",
-						"name": "minStyleNFTs_",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "minStyleAssets_",
-						"type": "uint256"
-					},
-					{
 						"internalType": "address",
 						"name": "stable_",
 						"type": "address"
 					},
 					{
-						"internalType": "address",
+						"internalType": "address payable",
 						"name": "weth_",
 						"type": "address"
 					},
@@ -42,24 +32,8 @@
 				"type": "constructor"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "AlreadyListed",
-				"type": "error"
-			},
-			{
 				"inputs": [],
-				"name": "AlreadyPayed",
-				"type": "error"
-			},
-			{
-				"inputs": [],
-				"name": "DCLImproperStatusPayer",
+				"name": "DCLLot",
 				"type": "error"
 			},
 			{
@@ -79,35 +53,18 @@
 				"type": "error"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "environment",
-						"type": "address"
-					}
-				],
-				"name": "DisallowedEnvironment",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					}
-				],
-				"name": "DisallowedPaymentToken",
-				"type": "error"
-			},
-			{
 				"inputs": [],
-				"name": "ETHTransferFailed",
+				"name": "DisallowedModelId",
 				"type": "error"
 			},
 			{
 				"inputs": [],
 				"name": "ImproperItemStatus",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ImproperMetaverseIds",
 				"type": "error"
 			},
 			{
@@ -148,6 +105,22 @@
 				"type": "error"
 			},
 			{
+				"inputs": [],
+				"name": "ImproperTailorFee",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "fee",
+						"type": "uint256"
+					}
+				],
+				"name": "InsufficientFunds",
+				"type": "error"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -164,19 +137,13 @@
 				"type": "error"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "LowAmount",
+				"inputs": [],
+				"name": "MetaverseIdAlreadyClaimed",
 				"type": "error"
 			},
 			{
 				"inputs": [],
-				"name": "NoStakes",
+				"name": "NoSuchListing",
 				"type": "error"
 			},
 			{
@@ -205,61 +172,8 @@
 				"type": "error"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "payment",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					}
-				],
-				"name": "NotERC20Lisiting",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "payment",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					}
-				],
-				"name": "NotETHLisiting",
-				"type": "error"
-			},
-			{
 				"inputs": [],
 				"name": "NotEnoughtSTYLETokens",
-				"type": "error"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "NotListed",
 				"type": "error"
 			},
 			{
@@ -285,67 +199,8 @@
 			},
 			{
 				"inputs": [],
-				"name": "Reentrancy",
-				"type": "error"
-			},
-			{
-				"inputs": [],
 				"name": "SameERC1155AlreadyStaked",
 				"type": "error"
-			},
-			{
-				"inputs": [],
-				"name": "TooLowPrice",
-				"type": "error"
-			},
-			{
-				"inputs": [],
-				"name": "TransferFailed",
-				"type": "error"
-			},
-			{
-				"inputs": [],
-				"name": "isZeroAddress",
-				"type": "error"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "admin",
-						"type": "address"
-					}
-				],
-				"name": "AddAdmin",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "environment",
-						"type": "address"
-					}
-				],
-				"name": "AddEnvironment",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					}
-				],
-				"name": "AddPaymentToken",
-				"type": "event"
 			},
 			{
 				"anonymous": false,
@@ -378,31 +233,6 @@
 				"inputs": [
 					{
 						"indexed": true,
-						"internalType": "address",
-						"name": "buyer",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "ItemBuy",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
 						"internalType": "bytes",
 						"name": "signature",
 						"type": "bytes"
@@ -416,7 +246,7 @@
 					{
 						"indexed": false,
 						"internalType": "address",
-						"name": "contract_",
+						"name": "tokenAddress",
 						"type": "address"
 					},
 					{
@@ -440,67 +270,36 @@
 				"inputs": [
 					{
 						"indexed": true,
-						"internalType": "address",
-						"name": "seller",
-						"type": "address"
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
 					},
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "contract_",
+						"name": "redeemer",
 						"type": "address"
 					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "ItemCancel",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
 					{
 						"indexed": false,
 						"internalType": "address",
-						"name": "seller",
+						"name": "tokenAddress",
 						"type": "address"
 					},
 					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
-					},
-					{
-						"indexed": true,
+						"indexed": false,
 						"internalType": "uint256",
 						"name": "tokenId",
 						"type": "uint256"
 					},
 					{
-						"indexed": false,
-						"internalType": "uint256",
-						"name": "payment",
-						"type": "uint256"
-					},
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					},
-					{
 						"indexed": true,
-						"internalType": "address",
-						"name": "environment",
-						"type": "address"
+						"internalType": "uint96",
+						"name": "metaverseId",
+						"type": "uint96"
 					}
 				],
-				"name": "ItemList",
+				"name": "ItemClaimSingular",
 				"type": "event"
 			},
 			{
@@ -576,45 +375,6 @@
 				"inputs": [
 					{
 						"indexed": true,
-						"internalType": "address",
-						"name": "admin",
-						"type": "address"
-					}
-				],
-				"name": "RemoveAdmin",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "environment",
-						"type": "address"
-					}
-				],
-				"name": "RemoveEnvironment",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					}
-				],
-				"name": "RemovePaymentToken",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
 						"internalType": "uint256",
 						"name": "tokenId",
 						"type": "uint256"
@@ -624,12 +384,6 @@
 						"internalType": "address",
 						"name": "tokenAddress",
 						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "string",
-						"name": "purpose",
-						"type": "string"
 					}
 				],
 				"name": "Staked",
@@ -655,56 +409,6 @@
 				"type": "event"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "uint16",
-						"name": "environmentRoyaltyPercent",
-						"type": "uint16"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint16",
-						"name": "stakeOwnerRoyaltyPercent",
-						"type": "uint16"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint80",
-						"name": "tailorRoyaltyStable",
-						"type": "uint80"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint16",
-						"name": "tailorRoyaltyPercent",
-						"type": "uint16"
-					}
-				],
-				"name": "UpdateRoyalties",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "token",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
-				"name": "Withdraw",
-				"type": "event"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -722,17 +426,17 @@
 					{
 						"components": [
 							{
+								"internalType": "uint256",
+								"name": "amount",
+								"type": "uint256"
+							},
+							{
 								"internalType": "address",
 								"name": "redeemer",
 								"type": "address"
 							},
 							{
 								"components": [
-									{
-										"internalType": "address",
-										"name": "tokenAddress",
-										"type": "address"
-									},
 									{
 										"internalType": "uint256",
 										"name": "tokenId",
@@ -745,13 +449,23 @@
 									},
 									{
 										"internalType": "address",
+										"name": "tokenAddress",
+										"type": "address"
+									},
+									{
+										"internalType": "uint96",
+										"name": "metaverseId",
+										"type": "uint96"
+									},
+									{
+										"internalType": "address",
 										"name": "paymentToken",
 										"type": "address"
 									},
 									{
-										"internalType": "string",
-										"name": "uri",
-										"type": "string"
+										"internalType": "uint88",
+										"name": "modelId",
+										"type": "uint88"
 									},
 									{
 										"internalType": "address",
@@ -764,9 +478,9 @@
 										"type": "address"
 									},
 									{
-										"internalType": "uint96",
-										"name": "metaverseId",
-										"type": "uint96"
+										"internalType": "string",
+										"name": "uri",
+										"type": "string"
 									},
 									{
 										"internalType": "bytes",
@@ -782,37 +496,10 @@
 								"internalType": "bytes",
 								"name": "signature",
 								"type": "bytes"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
 							}
 						],
 						"internalType": "struct INFTMarketplaceStructs.RequstedData[]",
 						"name": "requestedDataArr",
-						"type": "tuple[]"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "contract_",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "tokenId",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "amount",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct INFTMarketplaceStructs.ListedData[]",
-						"name": "listedDataArr",
 						"type": "tuple[]"
 					}
 				],
@@ -831,11 +518,6 @@
 					{
 						"components": [
 							{
-								"internalType": "address",
-								"name": "tokenAddress",
-								"type": "address"
-							},
-							{
 								"internalType": "uint256",
 								"name": "tokenId",
 								"type": "uint256"
@@ -847,13 +529,23 @@
 							},
 							{
 								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "address",
 								"name": "paymentToken",
 								"type": "address"
 							},
 							{
-								"internalType": "string",
-								"name": "uri",
-								"type": "string"
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
 							},
 							{
 								"internalType": "address",
@@ -866,9 +558,9 @@
 								"type": "address"
 							},
 							{
-								"internalType": "uint96",
-								"name": "metaverseId",
-								"type": "uint96"
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
 							},
 							{
 								"internalType": "bytes",
@@ -906,11 +598,6 @@
 					{
 						"components": [
 							{
-								"internalType": "address",
-								"name": "tokenAddress",
-								"type": "address"
-							},
-							{
 								"internalType": "uint256",
 								"name": "tokenId",
 								"type": "uint256"
@@ -922,13 +609,23 @@
 							},
 							{
 								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "address",
 								"name": "paymentToken",
 								"type": "address"
 							},
 							{
-								"internalType": "string",
-								"name": "uri",
-								"type": "string"
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
 							},
 							{
 								"internalType": "address",
@@ -941,9 +638,9 @@
 								"type": "address"
 							},
 							{
-								"internalType": "uint96",
-								"name": "metaverseId",
-								"type": "uint96"
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
 							},
 							{
 								"internalType": "bytes",
@@ -966,11 +663,6 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "address",
-						"name": "initer",
-						"type": "address"
-					},
-					{
 						"internalType": "bytes",
 						"name": "DCLSignature",
 						"type": "bytes"
@@ -984,22 +676,54 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct ILazyMintingStructs.NonmintedNFTSingular",
+						"name": "nonmintedNFT",
+						"type": "tuple"
 					},
 					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
 					}
 				],
-				"name": "buyItem",
+				"name": "claimSingularNFT",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1007,17 +731,59 @@
 			{
 				"inputs": [
 					{
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct ILazyMintingStructs.NonmintedNFTSingular",
+						"name": "nonmintedNFT",
+						"type": "tuple"
 					},
 					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					},
+					{
+						"internalType": "bytes",
+						"name": "DCLSignature",
+						"type": "bytes"
 					}
 				],
-				"name": "cancelListing",
+				"name": "claimSingularNFTDCL",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1055,7 +821,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "contract_",
+						"name": "tokenAddress",
 						"type": "address"
 					},
 					{
@@ -1102,147 +868,36 @@
 			{
 				"inputs": [
 					{
+						"internalType": "bytes32[]",
+						"name": "cutSignatures",
+						"type": "bytes32[]"
+					}
+				],
+				"name": "getIfSignsProceeded",
+				"outputs": [
+					{
+						"internalType": "bool[]",
+						"name": "result",
+						"type": "bool[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes32",
 						"name": "cutSignature",
 						"type": "bytes32"
 					}
 				],
-				"name": "getDCLLotInfo",
+				"name": "getLotInfo",
 				"outputs": [
 					{
-						"internalType": "enum INFTMarketplaceStructs.DCLNFTStatus",
+						"internalType": "bool",
 						"name": "",
-						"type": "uint8"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "getListing",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "uint256",
-								"name": "tokenId",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "payment",
-								"type": "uint256"
-							},
-							{
-								"internalType": "address",
-								"name": "seller",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "contract_",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "paymentToken",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "environment",
-								"type": "address"
-							}
-						],
-						"internalType": "struct INFTMarketplaceStructs.Listing",
-						"name": "listing",
-						"type": "tuple"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "cursor",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "howMany",
-						"type": "uint256"
-					}
-				],
-				"name": "getListings",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "uint256",
-								"name": "tokenId",
-								"type": "uint256"
-							},
-							{
-								"internalType": "uint256",
-								"name": "payment",
-								"type": "uint256"
-							},
-							{
-								"internalType": "address",
-								"name": "seller",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "contract_",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "paymentToken",
-								"type": "address"
-							},
-							{
-								"internalType": "address",
-								"name": "environment",
-								"type": "address"
-							}
-						],
-						"internalType": "struct INFTMarketplaceStructs.Listing[]",
-						"name": "listings",
-						"type": "tuple[]"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newCursor",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getNumberOfStakeCalls",
-				"outputs": [
-					{
-						"internalType": "uint80",
-						"name": "numberOfStakeCalls",
-						"type": "uint80"
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -1299,14 +954,14 @@
 								"type": "address"
 							},
 							{
-								"internalType": "enum IStakingStructs.StakeStatus",
-								"name": "status",
-								"type": "uint8"
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
 							},
 							{
-								"internalType": "string",
-								"name": "purpose",
-								"type": "string"
+								"internalType": "bool",
+								"name": "isERC1155",
+								"type": "bool"
 							}
 						],
 						"internalType": "struct IStakingStructs.Stake",
@@ -1320,14 +975,75 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint80",
-						"name": "cursor",
-						"type": "uint80"
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
 					},
 					{
-						"internalType": "uint80",
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					}
+				],
+				"name": "getStakeSingular",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tailorFee",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "bool",
+								"name": "isERC1155",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "stakeOwner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96[]",
+								"name": "metaverseIds",
+								"type": "uint96[]"
+							}
+						],
+						"internalType": "struct IStakingStructs.StakeSingular",
+						"name": "",
+						"type": "tuple"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "cursor",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "howMany",
-						"type": "uint80"
+						"type": "uint256"
 					}
 				],
 				"name": "getStakes",
@@ -1355,14 +1071,14 @@
 								"type": "address"
 							},
 							{
-								"internalType": "enum IStakingStructs.StakeStatus",
-								"name": "status",
-								"type": "uint8"
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
 							},
 							{
-								"internalType": "string",
-								"name": "purpose",
-								"type": "string"
+								"internalType": "bool",
+								"name": "isERC1155",
+								"type": "bool"
 							}
 						],
 						"internalType": "struct IStakingStructs.Stake[]",
@@ -1370,9 +1086,9 @@
 						"type": "tuple[]"
 					},
 					{
-						"internalType": "uint80",
+						"internalType": "uint256",
 						"name": "newCursor",
-						"type": "uint80"
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -1381,14 +1097,14 @@
 			{
 				"inputs": [
 					{
-						"internalType": "uint80",
+						"internalType": "uint256",
 						"name": "cursor",
-						"type": "uint80"
+						"type": "uint256"
 					},
 					{
-						"internalType": "uint80",
+						"internalType": "uint256",
 						"name": "howMany",
-						"type": "uint80"
+						"type": "uint256"
 					},
 					{
 						"internalType": "address",
@@ -1421,14 +1137,14 @@
 								"type": "address"
 							},
 							{
-								"internalType": "enum IStakingStructs.StakeStatus",
-								"name": "status",
-								"type": "uint8"
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
 							},
 							{
-								"internalType": "string",
-								"name": "purpose",
-								"type": "string"
+								"internalType": "bool",
+								"name": "isERC1155",
+								"type": "bool"
 							}
 						],
 						"internalType": "struct IStakingStructs.Stake[]",
@@ -1436,9 +1152,146 @@
 						"type": "tuple[]"
 					},
 					{
-						"internalType": "uint80",
+						"internalType": "uint256",
 						"name": "newCursor",
-						"type": "uint80"
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "cursor",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "howMany",
+						"type": "uint256"
+					}
+				],
+				"name": "getStakesSingular",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tailorFee",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "bool",
+								"name": "isERC1155",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "stakeOwner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96[]",
+								"name": "metaverseIds",
+								"type": "uint96[]"
+							}
+						],
+						"internalType": "struct IStakingStructs.StakeSingular[]",
+						"name": "stakes",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newCursor",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "cursor",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "howMany",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "getStakesSingularByOwner",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "tailorFee",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "bool",
+								"name": "isERC1155",
+								"type": "bool"
+							},
+							{
+								"internalType": "address",
+								"name": "stakeOwner",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96[]",
+								"name": "metaverseIds",
+								"type": "uint96[]"
+							}
+						],
+						"internalType": "struct IStakingStructs.StakeSingular[]",
+						"name": "stakes",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newCursor",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -1448,7 +1301,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "contract_",
+						"name": "tokenAddress",
 						"type": "address"
 					},
 					{
@@ -1472,7 +1325,7 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "contract_",
+						"name": "tokenAddress",
 						"type": "address"
 					}
 				],
@@ -1493,30 +1346,6 @@
 						"internalType": "address",
 						"name": "tokenAddress",
 						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					}
-				],
-				"name": "isERC1155Staked",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
 					}
 				],
 				"name": "isGeneration",
@@ -1528,39 +1357,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "payment",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "paymentToken",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "environment",
-						"type": "address"
-					}
-				],
-				"name": "listItem",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -1584,6 +1380,11 @@
 						"internalType": "uint96",
 						"name": "metaverseId",
 						"type": "uint96"
+					},
+					{
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
 					},
 					{
 						"internalType": "string",
@@ -1614,14 +1415,14 @@
 						"type": "string"
 					},
 					{
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
+					},
+					{
 						"internalType": "uint96",
 						"name": "numberOfDerivatives",
 						"type": "uint96"
-					},
-					{
-						"internalType": "string",
-						"name": "purpose",
-						"type": "string"
 					},
 					{
 						"components": [
@@ -1660,6 +1461,50 @@
 					}
 				],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "tokenURI",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tailorFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
+					},
+					{
+						"internalType": "uint96[]",
+						"name": "metaverseIds",
+						"type": "uint96[]"
+					},
+					{
+						"internalType": "address payable",
+						"name": "paymentToken",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "paymentAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "mintGenerationAndStakeSingular",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "clone",
+						"type": "address"
+					}
+				],
+				"stateMutability": "payable",
 				"type": "function"
 			},
 			{
@@ -1791,19 +1636,6 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "bridgeRouter_",
-						"type": "address"
-					}
-				],
-				"name": "setBridgeRouter",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
 						"name": "dclAdmin_",
 						"type": "address"
 					}
@@ -1826,14 +1658,14 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
+					},
+					{
 						"internalType": "uint96",
 						"name": "numberOfDerivatives",
 						"type": "uint96"
-					},
-					{
-						"internalType": "string",
-						"name": "purpose",
-						"type": "string"
 					},
 					{
 						"components": [
@@ -1864,7 +1696,7 @@
 					},
 					{
 						"internalType": "bool",
-						"name": "isERC721",
+						"name": "isERC1155",
 						"type": "bool"
 					}
 				],
@@ -1886,9 +1718,52 @@
 						"type": "uint256"
 					},
 					{
+						"internalType": "uint256",
+						"name": "tailorFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
+					},
+					{
+						"internalType": "uint96[]",
+						"name": "metaverseIds",
+						"type": "uint96[]"
+					},
+					{
 						"internalType": "bool",
-						"name": "isERC721",
+						"name": "isERC1155",
 						"type": "bool"
+					},
+					{
+						"internalType": "address payable",
+						"name": "paymentToken",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "paymentAmount",
+						"type": "uint256"
+					}
+				],
+				"name": "stakeSingular",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
 					}
 				],
 				"name": "unstake",
@@ -1900,57 +1775,11 @@
 				"inputs": [
 					{
 						"internalType": "address",
-						"name": "contract_",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "tokenId",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "newPayment",
-						"type": "uint256"
-					},
-					{
-						"internalType": "address",
-						"name": "newPaymentToken",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "newEnvironment",
+						"name": "bridgeRouter_",
 						"type": "address"
 					}
 				],
-				"name": "updateListing",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "minStyleAssets_",
-						"type": "uint256"
-					}
-				],
-				"name": "updateMinStyleAssets",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "minStyleNFTs_",
-						"type": "uint256"
-					}
-				],
-				"name": "updateMinStyleNFTs",
+				"name": "updateBridgeRouter",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -1961,31 +1790,124 @@
 						"components": [
 							{
 								"internalType": "uint16",
-								"name": "environmentRoyaltyPercent",
+								"name": "minEnvironmentRoyaltyPercent",
 								"type": "uint16"
 							},
 							{
 								"internalType": "uint16",
-								"name": "stakeOwnerRoyaltyPercent",
+								"name": "maxEnvironmentRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "minStakeOwnerRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "maxStakeOwnerRoyaltyPercent",
 								"type": "uint16"
 							},
 							{
 								"internalType": "uint80",
-								"name": "tailorRoyaltyStable",
+								"name": "minTailorRoyaltyStable",
+								"type": "uint80"
+							},
+							{
+								"internalType": "uint80",
+								"name": "maxTailorRoyaltyStable",
 								"type": "uint80"
 							},
 							{
 								"internalType": "uint16",
-								"name": "tailorRoyaltyPercent",
+								"name": "minTailorRoyaltyPercent",
+								"type": "uint16"
+							},
+							{
+								"internalType": "uint16",
+								"name": "maxTailorRoyaltyPercent",
 								"type": "uint16"
 							}
 						],
-						"internalType": "struct IStakingStructs.Royalties",
-						"name": "royalties_",
+						"internalType": "struct IStakingStructs.FeesLimits",
+						"name": "feesLimits_",
 						"type": "tuple"
 					}
 				],
-				"name": "updateRoyalties",
+				"name": "updateFeesLimits",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "minTailorFee",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "maxTailorFee",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct IStakingStructs.FeesLimitsSingular",
+						"name": "feesLimitsSingular_",
+						"type": "tuple"
+					}
+				],
+				"name": "updateFeesLimitsSingular",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint96",
+						"name": "metaverseId",
+						"type": "uint96"
+					},
+					{
+						"internalType": "uint256",
+						"name": "fee",
+						"type": "uint256"
+					}
+				],
+				"name": "updateMetaverseFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "minStyleNFTs",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "minStyleAssets",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct IStakingStructs.StyleLimits",
+						"name": "styleLimits_",
+						"type": "tuple"
+					}
+				],
+				"name": "updateStyleLimits",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -2018,24 +1940,11 @@
 						"admin": "Address of admin."
 					}
 				},
-				"buyAndMint(address,(address,uint256,uint256,address,string,address,address,uint96,bytes),bytes,uint256)": {
+				"buyAndMint(address,(uint256,uint256,address,uint96,address,uint88,address,address,string,bytes),bytes,uint256)": {
 					"details": "Buy item with eth and mint it.",
 					"params": {
 						"nonmintedNFT": "NonmintedNFT to buy and mint.",
 						"signature": "Signature for nonmintedNFT by creator of the item."
-					}
-				},
-				"buyItem(address,uint256,uint256)": {
-					"details": "Buy item.",
-					"params": {
-						"amount": "Amount of payment tokens to transfer (optional for eth buy).",
-						"tokenId": "A tokenId of ERC721 to buy."
-					}
-				},
-				"cancelListing(address,uint256)": {
-					"details": "Cancel listing.",
-					"params": {
-						"tokenId": "A tokenId of ERC721 to cancel listing of."
 					}
 				},
 				"getAdmins(uint256,uint256)": {
@@ -2046,53 +1955,31 @@
 						"tokenId": "A tokenId of ERC721 to get info about."
 					}
 				},
-				"getListing(address,uint256)": {
-					"details": "Get listing by tokenId.",
-					"params": {
-						"tokenId": "A tokenId of ERC721 to get info about."
-					}
-				},
-				"getListings(uint256,uint256)": {
-					"details": "Get all listings."
-				},
-				"getNumberOfStakeCalls()": {
-					"details": "Get number of stake calls",
-					"returns": {
-						"numberOfStakeCalls": "numberOfStakeCalls"
-					}
-				},
 				"getOwner()": {
 					"details": "Get owner of the contract."
 				},
 				"getStake(address,uint256)": {
 					"details": "Get stake."
 				},
-				"getStakes(uint80,uint80)": {
+				"getStakeSingular(address,uint256)": {
+					"details": "Get stake Singular."
+				},
+				"getStakes(uint256,uint256)": {
 					"details": "Get all stakes.",
 					"returns": {
 						"newCursor": "for subsequental calls",
 						"stakes": "stakes"
 					}
 				},
+				"getStakesSingular(uint256,uint256)": {
+					"details": "Get all stakes Singular.",
+					"returns": {
+						"newCursor": "for subsequental calls",
+						"stakes": "Singular"
+					}
+				},
 				"getTailor(address,uint256)": {
 					"params": {
-						"tokenId": "A tokenId of ERC721 to get info about."
-					}
-				},
-				"isDerivative(address)": {
-					"details": "Determine if the contract is the derivative.",
-					"params": {
-						"contract_": "A contract_ to get info about."
-					}
-				},
-				"isERC1155Staked(address,uint256)": {
-					"details": "Determine if such ERC1155 is staked."
-				},
-				"listItem(address,uint256,uint256,address,address)": {
-					"details": "List item.",
-					"params": {
-						"payment": "Setted price at paymentTokens.",
-						"paymentToken": "Address of paymentToken.",
 						"tokenId": "A tokenId of ERC721 to get info about."
 					}
 				},
@@ -2102,31 +1989,35 @@
 						"admin": "Address of admin."
 					}
 				},
-				"stake(address,uint256,uint96,string,(uint16,uint16,uint80,uint16),bool)": {
+				"stake(address,uint256,uint88,uint96,(uint16,uint16,uint80,uint16),bool)": {
 					"details": "Stake a token.",
 					"params": {
-						"purpose": "Purpose of staking.",
 						"tokenAddress": "Address of ERC721 collection.",
 						"tokenId": "The tokenId of ERC721 to stake."
 					}
 				},
-				"unstake(address,uint256,bool)": {
+				"stakeSingular(address,uint256,uint256,uint88,uint96[],bool,address,uint256)": {
+					"details": "Stake Singular a token.",
+					"params": {
+						"tokenAddress": "Address of ERC721 collection.",
+						"tokenId": "The tokenId of ERC721 to stake."
+					}
+				},
+				"unstake(address,uint256)": {
 					"details": "Unstake a token.",
 					"params": {
 						"tokenAddress": "Address of ERC721 collection.",
 						"tokenId": "The tokenId of ERC721 to unstake."
 					}
 				},
-				"updateListing(address,uint256,uint256,address,address)": {
-					"details": "Update listing.",
-					"params": {
-						"newPayment": "New setted price at paymentTokens.",
-						"newPaymentToken": "New address of paymentToken.",
-						"tokenId": "A tokenId of ERC721 to get info about."
-					}
+				"updateFeesLimits((uint16,uint16,uint16,uint16,uint80,uint80,uint16,uint16))": {
+					"details": "Update fees limits."
 				},
-				"updateRoyalties((uint16,uint16,uint80,uint16))": {
-					"details": "Update royalties."
+				"updateFeesLimitsSingular(uint88,(uint256,uint256))": {
+					"details": "Update fees limits singular."
+				},
+				"updateMetaverseFee(uint96,uint256)": {
+					"details": "Update metaverses' fees."
 				},
 				"withdraw(address,uint256)": {
 					"details": "Withdraw tokens from contract (only by contract owner).",
@@ -2146,7 +2037,10 @@
 				"getTailor(address,uint256)": {
 					"notice": "Return tailor by tokenId."
 				},
-				"stake(address,uint256,uint96,string,(uint16,uint16,uint80,uint16),bool)": {
+				"stake(address,uint256,uint88,uint96,(uint16,uint16,uint80,uint16),bool)": {
+					"notice": "The ERC721 have to be approved to this contract."
+				},
+				"stakeSingular(address,uint256,uint256,uint88,uint96[],bool,address,uint256)": {
 					"notice": "The ERC721 have to be approved to this contract."
 				}
 			},
@@ -2164,36 +2058,12 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 1000
+			"runs": 200
 		},
 		"remappings": [],
 		"viaIR": true
 	},
 	"sources": {
-		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
-			"keccak256": "0x0203dcadc5737d9ef2c211d6fa15d18ebc3b30dfa51903b64870b01a062b0b4e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://6eb2fd1e9894dbe778f4b8131adecebe570689e63cf892f4e21257bfe1252497",
-				"dweb:/ipfs/QmXgUGNfZvrn6N2miv3nooSs7Jm34A41qz94fu2GtDFcx8"
-			]
-		},
-		"@openzeppelin/contracts-upgradeable/utils/AddressUpgradeable.sol": {
-			"keccak256": "0x611aa3f23e59cfdd1863c536776407b3e33d695152a266fa7cfb34440a29a8a3",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://9b4b2110b7f2b3eb32951bc08046fa90feccffa594e1176cb91cdfb0e94726b4",
-				"dweb:/ipfs/QmSxLwYjicf9zWFuieRc8WQwE4FisA1Um5jp1iSa731TGt"
-			]
-		},
-		"@openzeppelin/contracts/proxy/Clones.sol": {
-			"keccak256": "0xae614c6b103b743c62e9544632f7ef4fc8950de4e9c783d2e765a3b86701dda3",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://1840012075b9b05caa02da1b16d2d2662b2c383feb3169c8159fd8deb4840f5c",
-				"dweb:/ipfs/QmPj63a7JH3aAqVj1wvkuGEdth7s9f33vK26A5aE9k23S4"
-			]
-		},
 		"@openzeppelin/contracts/utils/Strings.sol": {
 			"keccak256": "0xaf159a8b1923ad2a26d516089bceca9bdeaeacd04be50983ea00ba63070f08a3",
 			"license": "MIT",
@@ -2226,14 +2096,6 @@
 				"dweb:/ipfs/QmbDhvpoZJN1KntxUUxkYV89RPTwqVBiyHBkvVh4QHSveo"
 			]
 		},
-		"@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol": {
-			"keccak256": "0xfe6113d518466cd6652c85b111e01f33eb62157f49ae5ed7d5a3947a2044adb1",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://1c42b9e6f5902ac38dd43e25750939baa7e0c1425dc75afd717c4412731065d5",
-				"dweb:/ipfs/QmWaoacnzsucTvBME2o7YgZBZMhaHv7fkj83htHMVWJKWh"
-			]
-		},
 		"@uniswap/v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol": {
 			"keccak256": "0x3f485fb1a44e8fbeadefb5da07d66edab3cfe809f0ac4074b1e54e3eb3c4cf69",
 			"license": "GPL-2.0-or-later",
@@ -2242,100 +2104,52 @@
 				"dweb:/ipfs/QmVDZfJJ89UUCE1hMyzqpkZAtQ8jUsBgZNE5AMRG7RzRFS"
 			]
 		},
-		"@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolActions.sol": {
-			"keccak256": "0x9453dd0e7442188667d01d9b65de3f1e14e9511ff3e303179a15f6fc267f7634",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://982f4328f956c3e60e67501e759eb292ac487f76460c774c50e9ae4fcc92aae5",
-				"dweb:/ipfs/QmRnzEDsaqtd9PJEVcgQi7p5aV5pMSvRUoGZJAdwFUJxgZ"
-			]
-		},
-		"@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolDerivedState.sol": {
-			"keccak256": "0xe603ac5b17ecdee73ba2b27efdf386c257a19c14206e87eee77e2017b742d9e5",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://8febc9bdb399a4d94bb89f5377732652e2400e4a8dee808201ade6848f9004e7",
-				"dweb:/ipfs/QmaKDqYYFU4d2W2iN77aDHptfbFmYZRrMYXHeGpJmM8C1c"
-			]
-		},
-		"@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolEvents.sol": {
-			"keccak256": "0x8071514d0fe5d17d6fbd31c191cdfb703031c24e0ece3621d88ab10e871375cd",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://d0b571930cc7488b1d546a7e9cea7c52d8b3c4e207da657ed0e0db7343b8cd03",
-				"dweb:/ipfs/QmaGK6vVwB95QSTR1XMYvrh7ivYAYZxi3fD7v6VMA4jZ39"
-			]
-		},
-		"@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolImmutables.sol": {
-			"keccak256": "0xf6e5d2cd1139c4c276bdbc8e1d2b256e456c866a91f1b868da265c6d2685c3f7",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://b99c8c9ae8e27ee6559e5866bea82cbc9ffc8247f8d15b7422a4deb287d4d047",
-				"dweb:/ipfs/QmfL8gaqt3ffAnm6nVj5ksuNpLygXuL3xq5VBqrkwC2JJ3"
-			]
-		},
-		"@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolOwnerActions.sol": {
-			"keccak256": "0x759b78a2918af9e99e246dc3af084f654e48ef32bb4e4cb8a966aa3dcaece235",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://64144fb96e1c7fdba87305acadb98a198d26a3d46c097cb3a666e567f6f29735",
-				"dweb:/ipfs/QmUnWVwN9FKB9uV5Pr8YfLpWZnYM2DENnRMaadZ492JS9u"
-			]
-		},
-		"@uniswap/v3-core/contracts/interfaces/pool/IUniswapV3PoolState.sol": {
-			"keccak256": "0x852dc1f5df7dcf7f11e7bb3eed79f0cea72ad4b25f6a9d2c35aafb48925fd49f",
-			"license": "GPL-2.0-or-later",
-			"urls": [
-				"bzz-raw://ed63907c38ff36b0e22bc9ffc53e791ea74f0d4f0e7c257fdfb5aaf8825b1f0f",
-				"dweb:/ipfs/QmSQrckghEjs6HVsA5GVgpNpZWvTXMY5eQLF7cN6deFeEg"
-			]
-		},
 		"contracts/Base.sol": {
-			"keccak256": "0x52b57bf9ca120debb20769b0cd4f1d7bfc068437c7651fed4296428548f6545c",
+			"keccak256": "0x372f835e81b2f8d5d1dc9e255fc24927f95475295d3e1471e7094501ec0ff1db",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8fb29f9e3e040320f443f8189a34e7be2ecc40e8e121f338f534cedd42435490",
-				"dweb:/ipfs/QmSdzjLMKgsnG335opzD5PyaBhrA3kUzNxM6npfb3JCwJh"
+				"bzz-raw://e9add882db2524ce6b1e8d33a01a98646aa41bccd78eb7518a2d125a8e4a4c2c",
+				"dweb:/ipfs/QmefhD2pELfHuPH2czP1hN595DdV63upvtnq5bfzgwvpat"
 			]
 		},
 		"contracts/Bidding3.sol": {
-			"keccak256": "0xb38545b8c7a6119d224c171223e0203f8b05d5aeb27455e3fc1bb06725e29ea1",
+			"keccak256": "0x1a3da57a23b64deb00c4bbe6fd78de65d7604dbab37cdf182b314538e860bc45",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bf10f59592b19c7c3502345f25f63ad9a3aa24a05fb1f89ec26f17cf35b7876a",
-				"dweb:/ipfs/QmYoKUcXcX4ZoQdJhxQKYicyZ9w2xZtAxNno5QAfQDphkw"
+				"bzz-raw://2304377989819388c21b01bab5a58175ac749bfd00764f73debf5d3c963bbea1",
+				"dweb:/ipfs/QmUFTQsw8xvwcZbjHLNcPLiECfiVe1tmgqYQsSoGHKxKto"
 			]
 		},
 		"contracts/Generation.sol": {
-			"keccak256": "0x542b17b303dd60a8b9f71b89fcdd3746394833963e335c4bffce43db89f29afd",
+			"keccak256": "0xc9238f44df9d169c0212804a253dde82a921e563a1d6e6951a3b8a78fc7a1ef1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://67884d04b488bbf5c2b7e2fddb32317ae27bb46e712b79b831df0a6c7d27612e",
-				"dweb:/ipfs/QmVp1m6zh26mDckNtLj5JFUFxHUy4zX3eigNDRtoMkFH7D"
+				"bzz-raw://a992aba896b7689792f4baf954a295e06fb0a2315850b3d86f72c552b738e917",
+				"dweb:/ipfs/QmYYGnZvxjCj8hHsRRbPgi8i3Qd7Sjy7LQkXeFai1wnVUv"
 			]
 		},
 		"contracts/LazyMinting2.sol": {
-			"keccak256": "0x83d3c33961c98ee5f657129bc0fa41d0ace964f43ec206e933e59b848ec09dee",
+			"keccak256": "0x0942c4f207e3b85315b8071370cd84b8b2f8599e9582b879dcf4ea3ba7640e2f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://1eef64c8ee80113b4d5ab05aaeca68ad9f0aefcd7314e87cd07a77504d242850",
-				"dweb:/ipfs/QmeWd2imBQQhsCyCUYanR9Evhu9LZHxh86P1ju5u21TMjQ"
+				"bzz-raw://0bc72252b6825be9ac9e15435de4340226740eb1e285085c24f92672fe9a1695",
+				"dweb:/ipfs/QmYt1qeaqEcvH59aSpswZzUGm27MrkYTH4J3qyGruxy1KJ"
 			]
 		},
 		"contracts/NFTMarketplace.sol": {
-			"keccak256": "0xb4180ddf3cfa93391314c30919bd27f80b80a985afcf9a228f7aa07a979998ec",
+			"keccak256": "0xb75f8e126007468a74de324980465f42310a987084d729f641cbf4b212241680",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a08dae78d2a386bfeb2b2b54700f1ffa9b896f3f632db178a5648d506ab9ef38",
-				"dweb:/ipfs/QmQjp91YtHo6RCpyGrXxQcF76oLC3aPVVcVtgo6qkgQgt1"
+				"bzz-raw://32693ce7f5e55b02ae85713c0b19bfc71b68c052703267cc97abaa0f092db2c7",
+				"dweb:/ipfs/QmRkw25ipsMgAFRGrdbAUtSRBsk2u1WvfG7biDgr1CRFFu"
 			]
 		},
 		"contracts/Staking.sol": {
-			"keccak256": "0xd1f547824107950dd619cb275a013e1fe7517dd28130f9589806bf8d9fbf1955",
+			"keccak256": "0x2d9d940e8dc58c3a07a5a62cc071af6f2b19e3bcb9dd31e054603cf0798bcd01",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b1e32029468a36d9bb297938410cb4edd910988fb82b6b142c357389daf985f7",
-				"dweb:/ipfs/QmZbdU8hsFmuJQgMnKwtCH1orhoGF8VuxPX8Hn88y8oQ61"
+				"bzz-raw://ea8408b6a15531b63cb17e7110cb45da0f9ef7baa7f8bfa142dc319109b6cc00",
+				"dweb:/ipfs/QmQNzm5fQxDmqzLZjmsKdLx26jUwDLpYnXm2gxX7wW482o"
 			]
 		},
 		"contracts/erc721a/ERC721A.sol": {
@@ -2355,11 +2169,11 @@
 			]
 		},
 		"contracts/interfaces/IBase.sol": {
-			"keccak256": "0x55cb79eaa11b2018c433b9b7ceee552f6d57316c0d45220e4532811d9db33597",
+			"keccak256": "0x56b741e244a7675f72a4eba2c3e6671293ddc65b3b9d636bb7880a4c6beafd53",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://693f575cae9cb7ecbeb9ef53ac3c079a18076d0470f4efe53d5305f13b2c3f1b",
-				"dweb:/ipfs/QmUWjbVvk4Bm4SvfjzzyyvrwS7n6SR4HkGmRttBXmSm6Mf"
+				"bzz-raw://b5086de57b1796f074ba2b69983d248d0cbc0bf302a95a21f8715a6e86572384",
+				"dweb:/ipfs/QmYT5QHfqcM2GGAHBpkxRd2oUj33vQy7S69bUEaPemWmBE"
 			]
 		},
 		"contracts/interfaces/IGeneration.sol": {
@@ -2371,43 +2185,35 @@
 			]
 		},
 		"contracts/interfaces/ILazyMinting.sol": {
-			"keccak256": "0xe8a827eaa0e7ac8c82b133799db5dbfa7505ced6c366c64ceb9767f4e7606092",
+			"keccak256": "0xd7ee984b4b9bb34b5ccfd33e9345993da65aeac2fc78edccbb9b4639f6a02478",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7de42d0e1ce102f0fb5cddad47dac86cd567adc3fa743ce4258ea1e3ec4edc9c",
-				"dweb:/ipfs/QmdyAEk1h9WhoFjko8wKcy9GFVXDMioyLergPoYQqqupNc"
+				"bzz-raw://5ace89f5404fa1a1a945677a1c2bcdd67a88c9d71e967d9596ad693270629d6a",
+				"dweb:/ipfs/QmcJKwahwqoELjUNKbT2BBiYyzhfBUDWmXQr5wPWBtuDxg"
 			]
 		},
 		"contracts/interfaces/INFTMarketplace.sol": {
-			"keccak256": "0x5503d4e2c2308b9b3a37be4e300c79e6384d5237cee59152c9517413c9a47c6f",
+			"keccak256": "0x5a897fc7392effdb0a377d3ff9be55dda6baed887d758e4869e5ed3b8178074a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://eda67b731763e5034ba9e21a0f0212eda8a43b09689557b1a0291a277e8f3e86",
-				"dweb:/ipfs/QmTBuUtqSMUKygoqepPUbtFDjFpShyxiomjCojhJAuDy2e"
+				"bzz-raw://1b9c6ce1e911894001a2acfaf0a1a118bed2de03bccfba03128cc7b2906b18d3",
+				"dweb:/ipfs/QmQjCMMUAiEvVYa8K6HuionZiHN1WJ3hiZ9UHio7mDVtKU"
 			]
 		},
 		"contracts/interfaces/IStaking.sol": {
-			"keccak256": "0xc39a5d7777192faf5379d3265b2a1a82896b745dd2790cce2a876b340e272400",
+			"keccak256": "0xb5cba2a415f44081acb78edbd11dbf0ae223de3fc794c9fb4cb27c8c203cde0a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ea9993afca794a75ed24e058b1ae8853e9662ec03b0a08e1ceb7c040570686fa",
-				"dweb:/ipfs/QmT48Ebuw7kaioi3MPK6VhebEcavKvXY3paDGvG2DFs1Gj"
-			]
-		},
-		"contracts/interfaces/IWETH9.sol": {
-			"keccak256": "0xbd077cf9a91dd3cd17420baeb7b59c14ec84fec3fe5a4f0ad41757bc43fb76bf",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://999e7f9e731ae6e88b084d239b3bb5df84f699dc55384eedb2ddc027626dace7",
-				"dweb:/ipfs/QmXPbCCUorRLBq26PQUVU9CPDYcT5Hb9HCSTeJvTHHBGKG"
+				"bzz-raw://dffc1c65f2569a044a28f8c9479a77214958ec41d622ac715eaf83f169d005db",
+				"dweb:/ipfs/QmR9ogPEbWLeH8yN3BbBDWRLNzS5GvtPwLPwnbu9H7F4aP"
 			]
 		},
 		"contracts/interfaces/base/IBaseErrors.sol": {
-			"keccak256": "0xcba7a5c3df98f9dfbf53cc3208f1ec51624f1ef00df9e0d05a8ab2bf5115e1af",
+			"keccak256": "0x079575f97b6d40ab9556915d097a8984615d287c7e8b053adcc4fb3cb467a7ca",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://651cbb794605024939f59471f4ebde13d90abfc99a580868f623395a6bb6a1d3",
-				"dweb:/ipfs/QmPXYv5i5Zq3ESG9zEgLXSp3nH1uHsgA2digqrPqiwfGEd"
+				"bzz-raw://2011c2eb445799b4847313a37fab137ad2b4180b692fe70513b9882e2cc9ff88",
+				"dweb:/ipfs/QmRyqf7rzkxiPoa1tvvFbre8Eg7q3VwWQWPYKyfj4v5ewQ"
 			]
 		},
 		"contracts/interfaces/base/IBaseEvents.sol": {
@@ -2459,83 +2265,75 @@
 			]
 		},
 		"contracts/interfaces/lazyminting/ILazyMintingEvents.sol": {
-			"keccak256": "0x5126a6f2e9b795df11f95ac5b766439739fa844dc46870975545406117de01e9",
+			"keccak256": "0x41c471151981b33b421167cbfd49d9223650d1107e1dcb7b0b2f3166e110e71e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4b0154f9595e63fd4bb6869236db6a21ba8084dfa1f117541eae1389081fed8e",
-				"dweb:/ipfs/QmaX7UBXkWGiSXWRAAsu8ZzEiQ1KDdyPLJWsuExxuyqDHF"
+				"bzz-raw://9eb9a05b4ec4e498bb96b3c85f2e76e0098eec5cc195987f3996b12076860dbd",
+				"dweb:/ipfs/QmT6L7wPSiBAsDNiwu8XHa7NaziC2qvin6tPXvN33uGyNz"
 			]
 		},
 		"contracts/interfaces/lazyminting/ILazyMintingStructs.sol": {
-			"keccak256": "0xa9aea54eac9816c070fa680e216bb7d3fb868bcd3881107fd2372d06dae8fe23",
+			"keccak256": "0xdf2ed7332746d56b441944d64a248540b9db5c681f3b95c39606ea5293b16a23",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a16783b012db4235d87cf5e11acef2f5cb51e6e068b69ecd57ed0ff5d5899e2b",
-				"dweb:/ipfs/QmRUkbt3ZNzdXCsDh973u7NWQrmsCmYUs4dCZJuA8tYNrk"
+				"bzz-raw://f7144b987c4201b9470ebbb94a8e1e4f86a4c73f7b7f387c0887cd673d3d16c1",
+				"dweb:/ipfs/QmfX2yxGwfeV6eh67LBc4JzYx9enTb3XBxocEiag33L4KF"
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceErrors.sol": {
-			"keccak256": "0x1702a7d683f8d9bac5ad110244d107c7a3c77f8c5c3aacc2b475a906fd46d6d6",
+			"keccak256": "0xa77dc9c08fa49438629bd8c9b098be7ed5e7b0523e7e5335860a162d3b445c90",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://c844335d5881e3067f72bcbddb3344838247e93a7a1e54088b711ce897b70f4e",
-				"dweb:/ipfs/QmZpMb86cqLqCsWuqmNgA1wskP3hRUeQF1keUt4q2Jtawr"
+				"bzz-raw://b6a669be83ceb46fbd66810626b55615608f7815a7adaadcf8a1b3c4e1d49d1d",
+				"dweb:/ipfs/QmcxkT7yvCytgfTkmx2Ewc43TRnnsbu56GiJpdNVMUaTsk"
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceEvents.sol": {
-			"keccak256": "0xc07bfc0730570476b7e55b61d8c7552f723ffc834b7af7e9d3aa16907eedd362",
+			"keccak256": "0x1cb875bea92b7eb10bc2327abcd1ca333f209bd17c334481147fe4e2e7934b5d",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://f5c7e2fa13cac5b50a2c2c7b002a8a66fe36f5bf8ede5bca0b9296959ba7c614",
-				"dweb:/ipfs/QmPcEXNeLjb4LFN7DFWDSNRc9CrKWNZMfTFXew4oHqo4yf"
+				"bzz-raw://1542832dda33ae6df66a2153ee1fed027cb8d13e3041c33d0f258f162663ca84",
+				"dweb:/ipfs/QmT8Vb37YbFTAhaK1XKrazP5jyeoikCrPLZQ16rzFkKYDW"
 			]
 		},
 		"contracts/interfaces/nftmarketplace/INFTMarketplaceStructs.sol": {
-			"keccak256": "0x04a152bb0f397cadda82754fc895831a9a139a3f82d9bed2a28ad1db094129bc",
+			"keccak256": "0xd9ccb146a989b30ca3fb1f5d10c7f38fcd659d821c0b2f4467fe914560839ab6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://453dadf55e078c64b8e77df0b222a905d5366c8c77d959161198efb7e08d7555",
-				"dweb:/ipfs/QmXoLm6KC8KzkVvPxu1NEMtkFdKFMCUMk573t56odoeP7V"
+				"bzz-raw://f6b752125329305e3200791772fc16331716fc458d7ec1f09bbc997c427e995e",
+				"dweb:/ipfs/QmYnhpiNHWmnfk9ufC6sDtv3NuFtkAa7rXm86ps9L2heQB"
 			]
 		},
 		"contracts/interfaces/staking/IStakingErrors.sol": {
-			"keccak256": "0xaba3397175c764ed853c8c03a0908c12155535981ae877241a74636e247b9721",
+			"keccak256": "0x268a11849a7975b509e12e4d5557a046fec8e5f4c328d32cef38099da849fc0e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://67991085b02fce09e576ed8654e8abcb9a3d6a6203f4e29ad1f0e412dd65b30d",
-				"dweb:/ipfs/QmVHdh8W9WRk47Ppi91Z6ypgp3EuGn1ZWdiQW7fsfALYBq"
+				"bzz-raw://07282d576b0d002da0d6b7b523b71ad371eaabf48bf2099dbda8f24d46649670",
+				"dweb:/ipfs/QmavaCQH2jbaZd85DCVVV8qyrsBQ5vapHchXZACb6LyAmZ"
 			]
 		},
 		"contracts/interfaces/staking/IStakingEvents.sol": {
-			"keccak256": "0xd0fd06ff969dd12a5fa875a048105f37a70fb5c64e421710f2c5abf36d19f005",
+			"keccak256": "0xdaeaac445bad20c35d8b87dbbfdd16499273a9bba72606cb1a947410c2595b60",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://02056104b307367cb815f63a6588ccd19134116964dfac93d20b9589976bb9d4",
-				"dweb:/ipfs/QmcbWDqXw8cQP6Jrqw8XyCu9bggfccbuVg3RSELofMTB4F"
+				"bzz-raw://b1c716c266f68d2fdff8510d8a05e1ef725c81d536609212a26e565f4ba50415",
+				"dweb:/ipfs/QmNPgfGWYj1mMzqsciHCuKdEhpcUUSwqoy6Rd9Luj7TYfi"
 			]
 		},
 		"contracts/interfaces/staking/IStakingStructs.sol": {
-			"keccak256": "0x675bae4dfa261dc6595ef6191a0758fc7a861df80228a8fdd9321138b1275aa8",
+			"keccak256": "0x42ae1ca57af1fb0cd233a6689e7fc7d3a9b6e2d10a31d8481b93ac1c19f26b1e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://dca10c52e359e9481be9388966931d5434d0014828bf9405b794d2dea3724189",
-				"dweb:/ipfs/QmXjZp3a1j8i9na81fW1PyqwjipnMvqnoA4imPhDaU5tJt"
+				"bzz-raw://4489115ab51773a93111573d6a13fcddbe2f0dcf3c661f63ff048ee77776c3fa",
+				"dweb:/ipfs/QmZjNqu2UZz5n3oxQatgnaNsUrBhnDWwG7DL1oHT2Vd6Mh"
 			]
 		},
-		"contracts/libraries/ERC20.sol": {
-			"keccak256": "0xc634a0d8334aa0754badd92a0ca133d8422679704995973326b348dab41290d2",
-			"license": "AGPL-3.0-only",
+		"contracts/libraries/Initializable.sol": {
+			"keccak256": "0x86c97c7db518da2a09a728258b331d56ff81212da22d435a0cf8fcaedcb920d1",
+			"license": "MIT",
 			"urls": [
-				"bzz-raw://680967b17439fcbbde3d18f5e0d0c7f2540e0258c454c86504e10f24850f7940",
-				"dweb:/ipfs/QmP9aTw8UTNSWYUkY9w3nFG1Mct3v2ti6tVpu5BUaWaUKw"
-			]
-		},
-		"contracts/libraries/FixedPointMathLib.sol": {
-			"keccak256": "0x4c130af14e262eda78f2e19f8f2e9e6556ab79527faca04914625f2edb75f19e",
-			"license": "AGPL-3.0-only",
-			"urls": [
-				"bzz-raw://e75d3242a2efc2663fb8931c26ab0340dead1b9e1a621a82fe279fb6171af33e",
-				"dweb:/ipfs/QmX66NvofDaHwCb47novU2FsDZU5ucwFUgJeDDE4T5SoJA"
+				"bzz-raw://b0fbdae584c25f6f72948c1f5f0567b56311060e9485b401bf50b29e54a2db71",
+				"dweb:/ipfs/QmPNqjitw8KziKGcm28t7MP8qJX6icfbrnDLyLQc4L6eJW"
 			]
 		},
 		"contracts/libraries/PoolAddress.sol": {
@@ -2544,22 +2342,6 @@
 			"urls": [
 				"bzz-raw://f03f62509b2ef41f23859700d5ab1780d4e378115de66e13df1522f506f462e7",
 				"dweb:/ipfs/QmUberjTnJaZcYiZVju9erqqtRpGxQoVdJKCczLvRSpJ3E"
-			]
-		},
-		"contracts/libraries/ReentrancyGuard.sol": {
-			"keccak256": "0x4dd1073a7d66c3a87ae2805bd2bfbb6c73df38e4391976dc69d0db2e3e2ee31e",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://082ffd69f1df3d453b77f85973f6628a22e58984baa993fbd088cc1c94bf8a05",
-				"dweb:/ipfs/QmfTyQ2iGcChT7RHF7JSaCLemdXztJDiM7nd4HfWjs4bpp"
-			]
-		},
-		"hardhat/console.sol": {
-			"keccak256": "0x60b0215121bf25612a6739fb2f1ec35f31ee82e4a8216c032c8243d904ab3aa9",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://6e29880d33dd479bb046ba306993d26ccb779a4b1d94a046cb3567f22948bb4d",
-				"dweb:/ipfs/QmfTY1qzPt5C63Wc7y6JqfZr5899NRvXYdCpyLzR5FXQic"
 			]
 		},
 		"lib/solmate/src/tokens/ERC1155.sol": {
@@ -2586,12 +2368,52 @@
 				"dweb:/ipfs/Qme78aYYrvYs9ynnuMjzs8sFjPZQaZTDxWvD68gqkA77Vv"
 			]
 		},
+		"lib/solmate/src/tokens/WETH.sol": {
+			"keccak256": "0x343cf5f6b643864c5728fa9bf057c5708052402b22c5662decce94f5febff514",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://dc3722cf992cc13ff0728660432092d8ae6851f500b24c0aa474c45f2e8c3f2d",
+				"dweb:/ipfs/QmVq7veVaBKKdm4AKQiuCXMPGHPuCcPksm7LNuA2ihpN9U"
+			]
+		},
+		"lib/solmate/src/utils/FixedPointMathLib.sol": {
+			"keccak256": "0x157e337325356197f974201588e5df25b4baa4b88658d282aea485065b8281e4",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://f5760fa604fcf341273055d1f13f4e4c39e9c6d6b7e50aa30babd577499a9d8c",
+				"dweb:/ipfs/QmcUi9MF2QT57qUk8hoJF41RzMCjm2YokU7uxEpqTJW2H1"
+			]
+		},
+		"lib/solmate/src/utils/ReentrancyGuard.sol": {
+			"keccak256": "0xb282dd78aa7375d6b200b9a5d8dd214b2e5df1004f8217a4b4c2b07f0c5bfd01",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://5fca62eb8d3dbd2b3b7e4bb051f6da16f4d0ff9cee61c39cebb80f031f6a8800",
+				"dweb:/ipfs/QmbrsXPK91iBFwHKwJs2HLRud2KzMoBDRiWYMUtyV5H57j"
+			]
+		},
 		"lib/solmate/src/utils/SafeTransferLib.sol": {
 			"keccak256": "0x90e8b1854e59583fb75be7713a9cb038014cbbd2da14024aba316f9676f11da1",
 			"license": "AGPL-3.0-only",
 			"urls": [
 				"bzz-raw://003db2b4d38fef5b6eab1738f8d67ebb00af496cea0d020067aed66310086d81",
 				"dweb:/ipfs/QmdFbox7ewFXUybptPR6vu7ZuHPKK3jZ1PfAJsfeBFhAaz"
+			]
+		},
+		"solady/src/utils/ECDSA.sol": {
+			"keccak256": "0x2b27db399017306663dd21599aaa82dfd8caca559b1c5e4bda4eb435983ae511",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c4556b607236e1fef21b47f0cce49bd3ec7dd9c1feb3bec9b1405130515bb904",
+				"dweb:/ipfs/Qmbwa2Eext85sbxjfik27chhDWXwZmng8i9mLoPzunkuNX"
+			]
+		},
+		"solady/src/utils/LibClone.sol": {
+			"keccak256": "0x90c68c527f54164e04fe7908246628c96c4d353050efc41910d41033f6ef196b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3d2327176fca279f135c0e4387b07ffaf8a340f28de130960e572557afcc640f",
+				"dweb:/ipfs/QmPgSb3nFCgybvN4VCw64JLeKVmQYAyiFXARo6oQRi2vxk"
 			]
 		},
 		"solady/src/utils/LibString.sol": {
