@@ -8,7 +8,7 @@ const Base_metadata = require("../../public/contracts/Base_metadata.json");
 
 const PROTOCOL_CONTRACTS = {
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
-  5: "0xD794A25e85868c188B30EE52711Ea8E76be6E9Bb",
+  5: "0xee9b84d5C65aea42967f7977Bdd464C99789918b",
 };
 
 const metaversesJson = [
