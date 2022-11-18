@@ -2129,27 +2129,27 @@
 			]
 		},
 		"contracts/LazyMinting2.sol": {
-			"keccak256": "0x0942c4f207e3b85315b8071370cd84b8b2f8599e9582b879dcf4ea3ba7640e2f",
+			"keccak256": "0x73075cdd849afa579194659cff345f2d35240d7f1e00b2cb60bd52085d7bbc0f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://0bc72252b6825be9ac9e15435de4340226740eb1e285085c24f92672fe9a1695",
-				"dweb:/ipfs/QmYt1qeaqEcvH59aSpswZzUGm27MrkYTH4J3qyGruxy1KJ"
+				"bzz-raw://a90f2a9ed4e2b97729c14ace84c6a35f1a8d19699fbcc6d72ab927ffe96ab538",
+				"dweb:/ipfs/QmYPW5mckMPbzrdHf6javnkxf6k2hSRxu4y8tfw47rucLN"
 			]
 		},
 		"contracts/NFTMarketplace.sol": {
-			"keccak256": "0xb75f8e126007468a74de324980465f42310a987084d729f641cbf4b212241680",
+			"keccak256": "0x207ad70c1036562eef12f83dd7089dc793f4521ec71d2e25cddd8c8deb139161",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://32693ce7f5e55b02ae85713c0b19bfc71b68c052703267cc97abaa0f092db2c7",
-				"dweb:/ipfs/QmRkw25ipsMgAFRGrdbAUtSRBsk2u1WvfG7biDgr1CRFFu"
+				"bzz-raw://8fbe9545bdda4e623f87face313d2f579a05fd40120e302d972a2afc535bf5c4",
+				"dweb:/ipfs/QmNgVSXZ4UzparTFYXv8BezRYXtipuRKWYYMauH6nBwbpH"
 			]
 		},
 		"contracts/Staking.sol": {
-			"keccak256": "0x2d9d940e8dc58c3a07a5a62cc071af6f2b19e3bcb9dd31e054603cf0798bcd01",
+			"keccak256": "0x7065563f77c8e4dc6e5e6f3330a7193226f0726d9003698811d1a4f5cb6fb584",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ea8408b6a15531b63cb17e7110cb45da0f9ef7baa7f8bfa142dc319109b6cc00",
-				"dweb:/ipfs/QmQNzm5fQxDmqzLZjmsKdLx26jUwDLpYnXm2gxX7wW482o"
+				"bzz-raw://f066a75584df726731a6997dcc596394438928409ca91e5eb855a0585f39b671",
+				"dweb:/ipfs/Qmd1VvA7KNvdN62DAi9H1Y5ZZeRHjJL9XpkjwPQEVc9HKe"
 			]
 		},
 		"contracts/erc721a/ERC721A.sol": {
