@@ -1,6 +1,6 @@
 export const PROTOCOL_CONTRACTS = {
   80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
-  5: "0xee9b84d5C65aea42967f7977Bdd464C99789918b",
+  5: "0x87148553f8D5c32Ec2358Ab1f3b2eF9C3bBd0f6D",
 };
 
 export const metaversesJson = [
