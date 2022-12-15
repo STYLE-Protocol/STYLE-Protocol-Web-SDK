@@ -11,6 +11,12 @@ import {
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { ModelContext } from "../contexts/ModelContext";
 
+import voxelTriangulation from "voxel-triangulation";
+import { flatten } from "ramda";
+import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
+import { readVox } from "../utils/vox/readVox";
+import zeros from "zeros";
+
 const Model = ({
   model,
   isEnlarged = false,
@@ -47,6 +53,72 @@ const Model = ({
   const loadModel = async (model) => {
     try {
       onLoadingStarted();
+      try {
+        const MAX_VALUE_OF_A_BYTE = 255;
+
+        const voxContent = await fetch(model).then((resp) =>
+          resp.arrayBuffer()
+        );
+        const u8intArrayContent = new Uint8Array(voxContent);
+
+        let vox = readVox(u8intArrayContent);
+
+        let voxelData = vox.XYZI[0].values || vox.xyzi?.values;
+        let size = vox.SIZE[0] || vox.size;
+        let rgba = vox.RGBA[0].values || vox.rgba?.values;
+
+        let componentizedColores = rgba.map((c) => [c.r, c.g, c.b]);
+        let voxels = zeros([size.x, size.y, size.z]);
+
+        voxelData.forEach(({ x, y, z, i }) => voxels.set(x, y, z, i));
+
+        voxels = voxels.transpose(1, 2, 0);
+
+        let { vertices, normals, indices, voxelValues } =
+          voxelTriangulation(voxels);
+
+        let normalizedColors = componentizedColores.map((color) =>
+          color.map((c) => c / MAX_VALUE_OF_A_BYTE)
+        );
+
+        let gammaCorrectedColors = normalizedColors.map((color) =>
+          color.map((c) => Math.pow(c, 2.2))
+        );
+
+        let alignedColors = [[0, 0, 0], ...gammaCorrectedColors];
+        let flattenedColors = flatten(voxelValues.map((v) => alignedColors[v]));
+
+        let geometry = new THREE.BufferGeometry();
+
+        geometry.setAttribute(
+          "position",
+          new THREE.BufferAttribute(new Float32Array(vertices), 3)
+        );
+        geometry.setAttribute(
+          "normal",
+          new THREE.BufferAttribute(new Float32Array(normals), 3)
+        );
+        geometry.setAttribute(
+          "color",
+          new THREE.BufferAttribute(new Float32Array(flattenedColors), 3)
+        );
+        geometry.setIndex(
+          new THREE.BufferAttribute(new Uint32Array(indices), 1)
+        );
+
+        let material = new THREE.MeshStandardMaterial({
+          roughness: 1.0,
+          metalness: 0.0,
+        });
+        let mesh = new THREE.Mesh(geometry, material);
+        let exporter = new GLTFExporter();
+        const json = await exporter.parseAsync(mesh);
+
+        let string = JSON.stringify(json);
+        let blob = new Blob([string], { type: "text/plain" });
+        model = URL.createObjectURL(blob);
+      } catch {}
+
       let loadedData = await loader.loadAsync(model);
       let threeDScene = loadedData.scene;
       let anims = loadedData.animations;
@@ -63,6 +135,7 @@ const Model = ({
       }
       onLoadingEnd();
     } catch (error) {
+      console.log(error);
       onErrorOccured();
       onLoadingEnd();
     }

@@ -173,6 +173,7 @@ const ModelViewer = ({
             position: "relative",
             width: isEnlarge ? "50rem" : "18rem",
             height: isEnlarge ? "40rem" : "18rem",
+            overflow: "hidden",
             ...canvaStyles,
           }}
         >

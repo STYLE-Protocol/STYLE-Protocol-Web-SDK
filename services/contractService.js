@@ -85,105 +85,65 @@ const getRequestedNFTs = async ({
     let result = await getNFTs(url);
 
     let resultGot = await Promise.all(
-      result.map((cur) => fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`))
-    );
-    resultGot = await Promise.all(resultGot.map((cur) => cur.json()));
+      result.map(async (cur) => {
+        let res = await fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`);
+        res = await res.json();
 
-    const decimals = [];
-    for (let cur of resultGot) {
-      try {
-        decimals.push(
-          await new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
-            .decimals()
-            .call()
+        const curStake =
+          stakesData[
+            `${res.tokenAddress.toLowerCase()}|${BigNumber.from(
+              res.tokenId
+            ).toNumber()}`
+          ];
+
+        const numberOfDerivatives = Number.parseInt(
+          curStake?.numberOfDerivatives
         );
-      } catch (e) {
-        decimals.push(null);
-      }
-    }
-
-    const resultGotNew = [];
-    for (let i = 0; i < resultGot.length; i++) {
-      try {
-        if (decimals[i] !== null) {
-          resultGotNew.push({
-            ...resultGot[i],
-            payment: {
-              value: BigNumber.from(resultGot[i].payment),
-              stringValue: `${
-                Number.parseInt(resultGot[i].payment) / 10 ** decimals[i]
-              }`,
-            },
-          });
+        if (!numberOfDerivatives || numberOfDerivatives === 0) {
+          return null;
         }
-      } catch (e) {}
-    }
 
-    const values = await Promise.all([
-      Promise.all(
-        resultGotNew.map((cur) => {
-          return new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
-            .name()
-            .call();
-        })
-      ),
-      Promise.all(
-        resultGotNew.map((cur) => {
-          return new web3.eth.Contract(ERC20_ABI, cur.paymentToken).methods
-            .symbol()
-            .call();
-        })
-      ),
-    ]);
+        const paymentTokenContract = new web3.eth.Contract(
+          ERC20_ABI,
+          res.paymentToken
+        );
+        let decimals;
+        try {
+          decimals = await paymentTokenContract.methods.decimals().call();
+        } catch {
+          return null;
+        }
 
-    for (let i = 0; i < resultGotNew.length; i++) {
-      resultGotNew[i].paymentToken = {
-        address: resultGotNew[i].paymentToken,
-        name: values[0][i],
-        symbol: values[1][i],
-      };
-    }
+        res.numberOfDerivatives = numberOfDerivatives;
+        res.cid = cur.ipfs_pin_hash;
 
-    let resExtras = [];
-    let allDataParsed = [];
-    resultGotNew.forEach((cur) => {
-      const curStake =
-        stakesData[
-          `${cur.tokenAddress.toLowerCase()}|${BigNumber.from(
-            cur.tokenId
-          ).toNumber()}`
-        ];
+        res.payment = {
+          value: BigNumber.from(res.payment),
+          stringValue: `${Number.parseInt(res.payment) / 10 ** decimals}`,
+        };
 
-      if (Number.parseInt(curStake?.numberOfDerivatives) > 0) {
-        var ipfsUrl = cur.uri;
+        res.paymentToken = {
+          address: res.paymentToken,
+          name: await paymentTokenContract.methods.name().call(),
+          symbol: await paymentTokenContract.methods.symbol().call(),
+        };
+
+        var ipfsUrl = res.uri;
         if (ipfsUrl.slice(0, 4) === "ipfs") {
           ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
         }
-        resExtras.push(fetch(ipfsUrl));
-        allDataParsed.push(cur);
-      }
-    });
 
-    resExtras = await Promise.all(resExtras);
-    resExtras = await Promise.all(resExtras.map((cur) => cur.json()));
+        let extra = await fetch(ipfsUrl);
+        extra = await extra.json();
 
-    allDataParsed = allDataParsed.map((data, index) => {
-      const curStake =
-        stakesData[
-          `${data.tokenAddress.toLowerCase()}|${BigNumber.from(
-            data.tokenId
-          ).toNumber()}`
-        ];
+        res.asset = extra;
 
-      return {
-        ...data,
-        asset: resExtras[index],
-        cid: result[index].ipfs_pin_hash,
-        numberOfDerivatives: Number.parseInt(curStake.numberOfDerivatives),
-      };
-    });
+        return res;
+      })
+    );
 
-    return allDataParsed;
+    const res = resultGot.filter((cur) => cur !== null);
+    return res;
   } catch (e) {
     console.log(e);
     return [];

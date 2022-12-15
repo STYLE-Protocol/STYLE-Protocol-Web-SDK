@@ -153,6 +153,19 @@
 				"type": "event"
 			},
 			{
+				"inputs": [],
+				"name": "DOMAIN_SEPARATOR",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -428,7 +441,11 @@
 		},
 		"userdoc": {
 			"kind": "user",
-			"methods": {},
+			"methods": {
+				"DOMAIN_SEPARATOR()": {
+					"notice": "----------------------------------------------------------------------- EIP-712 Logic -----------------------------------------------------------------------"
+				}
+			},
 			"version": 1
 		}
 	},
@@ -466,19 +483,19 @@
 			]
 		},
 		"contracts/CustomEIP712.sol": {
-			"keccak256": "0xb1c44752033a760fa8a400852a164710b5ef0c620edcdf0561a18e8b716f9a93",
+			"keccak256": "0x28a882d5c70c6d7ff0ffb75552a54d657b50b07817698b402a05dc9e1c0a4664",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fe09e77b466cfca56292a21c82ad63b5a3439e77274f538822b382c9e2e19760",
-				"dweb:/ipfs/QmRK7oHY5xCuqUMfAKaQpPAKiZ1WdYVPHsXtjcfKu26exy"
+				"bzz-raw://25c1e8c4bc0b27f3c2ccd4a298c9b723339e8b132db75ef76014d20068a56b01",
+				"dweb:/ipfs/QmZBJjL3CLk9NUUSjBpqu7g3oU6dm8ZUfrdSgGkvdF6GUM"
 			]
 		},
 		"contracts/DCLConnector.sol": {
-			"keccak256": "0xecadde08a75e6939e34bf3abda374b56294d2cd1a7a43c0630cd7ae9e04ee460",
+			"keccak256": "0x9242ef85083a5dbc6d47a7fc8b04fa69f4ead651c034b2f56e7c334218be324e",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://76d134bc46d4e87da401531b1d5c71b7bbec3d7c2200caa2ea83904af9d5465f",
-				"dweb:/ipfs/QmUz85TPJH7gQHGNiY78zvAir6P2RR8h86pQaZCLLdU5B4"
+				"bzz-raw://cf73cae0be9481bb6e53400ec3d9bedae93170ed8f83368728e79ba38b98fbf3",
+				"dweb:/ipfs/QmVbKYtcpiZkhKg2eRXKBvSZFPqQwj947se3vyt4TaPAh2"
 			]
 		},
 		"contracts/interfaces/IDCLConnector.sol": {

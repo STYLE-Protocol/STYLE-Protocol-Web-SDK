@@ -316,6 +316,11 @@
 						"type": "uint96"
 					},
 					{
+						"internalType": "uint88",
+						"name": "modelId_",
+						"type": "uint88"
+					},
+					{
 						"internalType": "address",
 						"name": "sourceTokenAddress_",
 						"type": "address"
@@ -361,7 +366,7 @@
 				"outputs": [
 					{
 						"internalType": "uint96",
-						"name": "metaverseId_",
+						"name": "",
 						"type": "uint96"
 					}
 				],
@@ -388,6 +393,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "modelId",
+				"outputs": [
+					{
+						"internalType": "uint88",
+						"name": "",
+						"type": "uint88"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "name",
 				"outputs": [
 					{
@@ -405,7 +423,7 @@
 				"outputs": [
 					{
 						"internalType": "uint256",
-						"name": "nextTokenId_",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -506,12 +524,12 @@
 				"outputs": [
 					{
 						"internalType": "address",
-						"name": "sourceTokenAddress_",
+						"name": "",
 						"type": "address"
 					},
 					{
 						"internalType": "uint256",
-						"name": "sourceTokenId_",
+						"name": "",
 						"type": "uint256"
 					}
 				],
@@ -562,7 +580,7 @@
 				"outputs": [
 					{
 						"internalType": "string",
-						"name": "_tokenURI",
+						"name": "",
 						"type": "string"
 					}
 				],
@@ -621,7 +639,7 @@
 				"getApproved(uint256)": {
 					"details": "Returns the account approved for `tokenId` token. Requirements: - `tokenId` must exist."
 				},
-				"initialize(string,string,address,uint96,address,uint256)": {
+				"initialize(string,string,address,uint96,uint88,address,uint256)": {
 					"details": "Initialization."
 				},
 				"isApprovedForAll(address,address)": {
@@ -636,6 +654,9 @@
 						"_tokenURI": "Token's url to metadata.",
 						"to": "Mint to whom."
 					}
+				},
+				"modelId()": {
+					"details": "Return modelId."
 				},
 				"name()": {
 					"details": "Returns the token collection name."
@@ -760,18 +781,18 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 1
+			"runs": 200
 		},
 		"remappings": [],
 		"viaIR": true
 	},
 	"sources": {
 		"contracts/Base.sol": {
-			"keccak256": "0x31b57e888705983b71056b842a799d3d9f3cafd9bb7cbc923cd54465c120692c",
+			"keccak256": "0xdf21b403ea5fa892b34950c9da7fb6ed1b9f16000d38edde719eef6b8aa5a9c4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3f349318cba0e6fb2ec6ad7a620596371b881ba97a9cedb8779e3e453960eb6a",
-				"dweb:/ipfs/QmQHwUW6adkQ77Ubj3pG4MTtwCocSb9tiiBtDcMeeoxUiM"
+				"bzz-raw://05851bf5e0d205dfff54de203b519d5cd70879f536d6bd8e3f5c20c1af38b782",
+				"dweb:/ipfs/QmfKSVmvW1oKnSpzMBLsbiqfnqYStd7JijuzuYTN9HZezR"
 			]
 		},
 		"contracts/erc721a/ERC721A.sol": {
@@ -791,11 +812,11 @@
 			]
 		},
 		"contracts/interfaces/IBase.sol": {
-			"keccak256": "0x55cb79eaa11b2018c433b9b7ceee552f6d57316c0d45220e4532811d9db33597",
+			"keccak256": "0x56b741e244a7675f72a4eba2c3e6671293ddc65b3b9d636bb7880a4c6beafd53",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://693f575cae9cb7ecbeb9ef53ac3c079a18076d0470f4efe53d5305f13b2c3f1b",
-				"dweb:/ipfs/QmUWjbVvk4Bm4SvfjzzyyvrwS7n6SR4HkGmRttBXmSm6Mf"
+				"bzz-raw://b5086de57b1796f074ba2b69983d248d0cbc0bf302a95a21f8715a6e86572384",
+				"dweb:/ipfs/QmYT5QHfqcM2GGAHBpkxRd2oUj33vQy7S69bUEaPemWmBE"
 			]
 		},
 		"contracts/interfaces/base/IBaseErrors.sol": {
