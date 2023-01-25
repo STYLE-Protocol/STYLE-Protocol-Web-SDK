@@ -1,21 +1,17 @@
 /* eslint-disable react/no-unknown-property */
-import * as THREE from "three";
-import { useContext, useEffect, useRef, useState } from "react";
+import { Center, OrbitControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import {
-  Center,
-  OrbitControls,
-  useAnimations,
-  useBounds,
-} from "@react-three/drei";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { ModelContext } from "../contexts/ModelContext";
+import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
-import voxelTriangulation from "voxel-triangulation";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
 import { flatten } from "ramda";
 import { GLTFExporter } from "three/examples/jsm/exporters/GLTFExporter";
-import { readVox } from "../utils/vox/readVox";
+import voxelTriangulation from "voxel-triangulation";
 import zeros from "zeros";
+import { readVox } from "../utils/vox/readVox";
 
 const Model = ({
   model,
@@ -24,10 +20,17 @@ const Model = ({
   onErrorOccured = () => {},
   onLoadingStarted = () => {},
   onLoadingEnd = () => {},
+  isVoxels = false,
+  isDcl = false,
 }) => {
   const [mdl, set] = useState();
   const [animations, setAnimations] = useState([]);
-  const loader = new GLTFLoader();
+  const loaderGLTF = new GLTFLoader();
+
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath("./draco/");
+  loaderGLTF.setDRACOLoader(dracoLoader);
+
   const modelRef = useRef(null);
   const actions = useRef();
   let controls = useRef();
@@ -37,6 +40,7 @@ const Model = ({
     size: { width, height },
     gl,
     scene,
+    viewport,
   } = useThree();
   const [mixer] = useState(() => new THREE.AnimationMixer());
   useFrame((state, delta) => {
@@ -48,19 +52,17 @@ const Model = ({
     }
   });
 
-  const viewport = useThree((state) => state.viewport);
-
   const loadModel = async (model) => {
     try {
       onLoadingStarted();
-      try {
+
+      let rotation = -Math.PI;
+      if (isVoxels) {
         const MAX_VALUE_OF_A_BYTE = 255;
 
-        const voxContent = await fetch(model).then((resp) =>
-          resp.arrayBuffer()
-        );
+        let voxContent = await fetch(model);
+        voxContent = await voxContent.arrayBuffer();
         const u8intArrayContent = new Uint8Array(voxContent);
-
         let vox = readVox(u8intArrayContent);
 
         let voxelData = vox.XYZI[0].values || vox.xyzi?.values;
@@ -117,10 +119,13 @@ const Model = ({
         let string = JSON.stringify(json);
         let blob = new Blob([string], { type: "text/plain" });
         model = URL.createObjectURL(blob);
-      } catch {}
 
-      let loadedData = await loader.loadAsync(model);
+        rotation += Math.PI / 2;
+      }
+
+      let loadedData = await loaderGLTF.loadAsync(model);
       let threeDScene = loadedData.scene;
+      threeDScene.rotation.y = rotation;
       let anims = loadedData.animations;
       threeDScene.traverse(function (obj) {
         obj.frustumCulled = false;
@@ -150,31 +155,31 @@ const Model = ({
     if (mdl && modelRef.current !== null) {
       try {
         onLoadingStarted();
-        const aabb = new THREE.Box3().setFromObject(modelRef.current);
-        camera.zoom = Math.min(
-          width / (aabb.max.x - aabb.min.x),
-          height / (aabb.max.y - aabb.min.y)
-        );
+        const aabb = new THREE.Box3().setFromObject(modelRef.current, true);
+        const size = aabb.getSize(new THREE.Vector3());
+        const center = aabb.getCenter(new THREE.Vector3(0, 0, 0));
+        const zoomFactor = Math.min(width / size.x, height / size.y);
+        camera.zoom = zoomFactor;
         const canvas = gl.domElement;
         camera.aspect = canvas.clientWidth / canvas.clientHeight;
-        camera.near = 1;
-        camera.far = 1000;
-        if (isEnlarged) {
-          camera.position.y = height - 10;
-          camera.position.x = canvas.clientWidth / 2;
-        } else {
-          camera.position.y = -1;
-          camera.position.x = canvas.clientWidth / 2;
-        }
-
-        camera.lookAt(0, 0, 0);
-        if (camera.zoom > 4000) {
-          camera.zoom = height / 2;
+        // camera.position.x -= zoomFactor * center.x;
+        // camera.position.y -= zoomFactor * center.y;
+        // camera.position.z -= zoomFactor * center.z;
+        // camera.fov = 35;
+        // camera.near = 0.1;
+        // camera.far = 1000;
+        camera.lookAt(center);
+        if (isDcl) {
+          camera.zoom = Math.min((zoomFactor / 3) * size.length());
+          if (isEnlarged) {
+            camera.zoom = Math.min((zoomFactor / 3) * size.length() - 50);
+          }
+          modelRef.current.position.set(center.x, center.y - 0.9, center.z);
         }
         camera.updateProjectionMatrix();
         gl.render(scene, camera, null, false);
-        const screenshot = gl.domElement.toDataURL("image/png");
-        onBase64Changed(screenshot);
+        // const screenshot = gl.domElement.toDataURL("image/png");
+        // onBase64Changed(screenshot);
         onLoadingEnd();
       } catch (error) {
         onLoadingEnd();
@@ -217,22 +222,25 @@ const Model = ({
         onEnd={() => {
           if (mdl && modelRef.current) {
             gl.render(scene, camera, null, false);
-            const screenshot = gl.domElement.toDataURL("image/png");
-            onBase64Changed(screenshot);
+            // const screenshot = gl.domElement.toDataURL("image/png");
+            // onBase64Changed(screenshot);
           }
         }}
       />
-      <Center>
+
+      <Center position={[0, isDcl ? (isEnlarged ? 0 : -0.9) : 0, 0]}>
         <group
           ref={modelRef}
-          // position={[0, 0, 0]}
-          rotation={[0, Math.PI / 3, 0]}
+          position={[0, 0, 0]}
+          rotation={[0, isDcl ? Math.PI / 1 : 0, 0]}
+          // rotation={[0, Math.PI / 3, 0]}
           // rotation={[Math.PI / 2, 0, 0]}
           // getWorldScale
           dispose={null}
         >
           <primitive
             ref={modelRef}
+            position={[0, 0, 0]}
             name="Object_0"
             object={mdl}
             scale={Math.min(

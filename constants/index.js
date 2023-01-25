@@ -52,3 +52,6 @@ export const ENDPOINTS = {
 };
 
 export const GATEWAY = "styleprotocol.mypinata.cloud";
+
+export const DEFAULT_IMAGE = "/assets/images/default_nft.svg";
+export const DEFAULT_IMAGE_3D = "/assets/images/derivative.png";
