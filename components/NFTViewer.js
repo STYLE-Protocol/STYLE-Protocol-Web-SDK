@@ -112,17 +112,16 @@ const NFTViewerBasement = ({
   isDcl = false,
   ...rest
 }) => {
+  const { loading, setLoading, error, setError } = useContext(NFTViewerContext);
+
+  useEffect(() => {
+    if (!hovered) {
+      setLoading(false);
+      setError(false);
+    }
+  }, [hovered]);
+
   if (is3D) {
-    const { loading, setLoading, error, setError } =
-      useContext(NFTViewerContext);
-
-    useEffect(() => {
-      if (!hovered) {
-        setLoading(false);
-        setError(false);
-      }
-    }, [hovered]);
-
     return (
       <Box display={"contents"}>
         <div
