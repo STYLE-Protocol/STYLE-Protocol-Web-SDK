@@ -1,0 +1,599 @@
+{
+	"compiler": {
+		"version": "0.8.17+commit.8df45f5f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "chainId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "verifyingContract",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "stable_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "mana_",
+						"type": "address"
+					},
+					{
+						"internalType": "address payable",
+						"name": "wmatic_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "dclAdmin_",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "AlreadyPayed",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "DisallowedAdmin",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "ImproperSignature",
+				"type": "error"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"name": "LowAmount",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotContractOwner",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotDCLLot",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "AddAdmin",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "uri",
+						"type": "string"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "tokenAddress",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint88",
+						"name": "modelId",
+						"type": "uint88"
+					}
+				],
+				"name": "DCLInit",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "RemoveAdmin",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "DOMAIN_SEPARATOR",
+				"outputs": [
+					{
+						"internalType": "bytes32",
+						"name": "",
+						"type": "bytes32"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "addAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address payable",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "uint256",
+								"name": "payment",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "address",
+								"name": "paymentToken",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "environment",
+								"type": "address"
+							},
+							{
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct ILazyMintingStructs.NonmintedNFT",
+						"name": "nonmintedNFT",
+						"type": "tuple"
+					},
+					{
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					}
+				],
+				"name": "buyDCLInit",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "tokenAmount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address payable",
+						"name": "token",
+						"type": "address"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint256",
+								"name": "tokenId",
+								"type": "uint256"
+							},
+							{
+								"internalType": "address",
+								"name": "tokenAddress",
+								"type": "address"
+							},
+							{
+								"internalType": "uint96",
+								"name": "metaverseId",
+								"type": "uint96"
+							},
+							{
+								"internalType": "address",
+								"name": "bidder",
+								"type": "address"
+							},
+							{
+								"internalType": "uint88",
+								"name": "modelId",
+								"type": "uint88"
+							},
+							{
+								"internalType": "string",
+								"name": "uri",
+								"type": "string"
+							},
+							{
+								"internalType": "bytes",
+								"name": "signature",
+								"type": "bytes"
+							}
+						],
+						"internalType": "struct ILazyMintingStructs.NonmintedNFTSingular",
+						"name": "nonmintedNFT",
+						"type": "tuple"
+					},
+					{
+						"internalType": "bytes",
+						"name": "signature",
+						"type": "bytes"
+					}
+				],
+				"name": "buyDCLInitSingular",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "cursor",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "howMany",
+						"type": "uint256"
+					}
+				],
+				"name": "getAdmins",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "admins",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "newCursor",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bytes32",
+						"name": "cutSignature",
+						"type": "bytes32"
+					}
+				],
+				"name": "getDCLLotInfo",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"name": "getUsersDCLInitLots",
+				"outputs": [
+					{
+						"internalType": "bytes32[]",
+						"name": "dclInitLots",
+						"type": "bytes32[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					}
+				],
+				"name": "removeAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "dclAdmin_",
+						"type": "address"
+					}
+				],
+				"name": "setDCLAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "DCLFee_",
+						"type": "uint256"
+					}
+				],
+				"name": "updateDCLFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"stateMutability": "payable",
+				"type": "receive"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"DOMAIN_SEPARATOR()": {
+					"notice": "----------------------------------------------------------------------- EIP-712 Logic -----------------------------------------------------------------------"
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/DCLConnector.sol": "DCLConnector"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": [],
+		"viaIR": true
+	},
+	"sources": {
+		"@uniswap/swap-router-contracts/contracts/interfaces/IV3SwapRouter.sol": {
+			"keccak256": "0xa2300af2b82af292216a8f3f301a86e65463655fff9fb791515e3fd2ccf4a14c",
+			"license": "GPL-2.0-or-later",
+			"urls": [
+				"bzz-raw://a0a9bece58527fb5c1773d86666c7a71884a78f413e230dfa8c8a7f8ea564ef9",
+				"dweb:/ipfs/QmbDhvpoZJN1KntxUUxkYV89RPTwqVBiyHBkvVh4QHSveo"
+			]
+		},
+		"@uniswap/v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol": {
+			"keccak256": "0x3f485fb1a44e8fbeadefb5da07d66edab3cfe809f0ac4074b1e54e3eb3c4cf69",
+			"license": "GPL-2.0-or-later",
+			"urls": [
+				"bzz-raw://095ce0626b41318c772b3ebf19d548282607f6a8f3d6c41c13edfbd5370c8652",
+				"dweb:/ipfs/QmVDZfJJ89UUCE1hMyzqpkZAtQ8jUsBgZNE5AMRG7RzRFS"
+			]
+		},
+		"contracts/CustomEIP712.sol": {
+			"keccak256": "0x28a882d5c70c6d7ff0ffb75552a54d657b50b07817698b402a05dc9e1c0a4664",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://25c1e8c4bc0b27f3c2ccd4a298c9b723339e8b132db75ef76014d20068a56b01",
+				"dweb:/ipfs/QmZBJjL3CLk9NUUSjBpqu7g3oU6dm8ZUfrdSgGkvdF6GUM"
+			]
+		},
+		"contracts/DCLConnector.sol": {
+			"keccak256": "0x9242ef85083a5dbc6d47a7fc8b04fa69f4ead651c034b2f56e7c334218be324e",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://cf73cae0be9481bb6e53400ec3d9bedae93170ed8f83368728e79ba38b98fbf3",
+				"dweb:/ipfs/QmVbKYtcpiZkhKg2eRXKBvSZFPqQwj947se3vyt4TaPAh2"
+			]
+		},
+		"contracts/interfaces/IDCLConnector.sol": {
+			"keccak256": "0xbae577501dc115f25106e80c44953a1e843085250b6b15ad8bc792820ac3112b",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4e870d0c3b15b051a515a63d6887d9d872271f9a74167a316f055f79a3a4a974",
+				"dweb:/ipfs/QmQMZzNioW3EdoYcqSPTJahxd3Z5Bzq6Nb5ycm5dUXdtar"
+			]
+		},
+		"contracts/interfaces/dclconnector/IDCLConnectorErrors.sol": {
+			"keccak256": "0x14aadd7b79dec6bd318ca282ef15f0d9b595d390b3a27f0709f1de5a2a475603",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8918f3c3ae7979693a99da68fc41c5ea5d1bb7beda0fb0f380fdc63122c55a12",
+				"dweb:/ipfs/QmaVzb26fzDzigREzpHzAD5ASgZhv81d3Mp88SGsMhAFxF"
+			]
+		},
+		"contracts/interfaces/dclconnector/IDCLConnectorEvents.sol": {
+			"keccak256": "0x92d903b803174f92981b0a915bf4e07a3726405ba23befbfb9ba6a34a856c914",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://01bf30597c465ec8e35806c83836854502d5afa4f03da51bb145b9f6b3267106",
+				"dweb:/ipfs/QmUhyyEgMZcy72E8Wq8mFw9xvDg2tz5yWiNr4Fksn5YtwA"
+			]
+		},
+		"contracts/interfaces/dclconnector/IDCLConnectorStructs.sol": {
+			"keccak256": "0xd16f30c5fec2c0f7d717f26bdb03aac884c14d5833e2359f1084c45a74523a63",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://61ed9627d521d4753c71af7cb27324d8bd7799449547e9edb13aae8af9e1d026",
+				"dweb:/ipfs/QmPLnAm2M4B3tKzjz7qAzJ9m2Csc2KFJQYfwPpFV457ef6"
+			]
+		},
+		"contracts/interfaces/lazyminting/ILazyMintingStructs.sol": {
+			"keccak256": "0xdf2ed7332746d56b441944d64a248540b9db5c681f3b95c39606ea5293b16a23",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f7144b987c4201b9470ebbb94a8e1e4f86a4c73f7b7f387c0887cd673d3d16c1",
+				"dweb:/ipfs/QmfX2yxGwfeV6eh67LBc4JzYx9enTb3XBxocEiag33L4KF"
+			]
+		},
+		"contracts/libraries/PoolAddress.sol": {
+			"keccak256": "0x0abbe017a7ba60e54626de16e07518a69f8ddcd4c8216259858b9658f365105d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://f03f62509b2ef41f23859700d5ab1780d4e378115de66e13df1522f506f462e7",
+				"dweb:/ipfs/QmUberjTnJaZcYiZVju9erqqtRpGxQoVdJKCczLvRSpJ3E"
+			]
+		},
+		"lib/solmate/src/tokens/ERC20.sol": {
+			"keccak256": "0xc911296ba625483b47aeab1857b3175b61fa8b957907dd3d3228adc8c93c4c7e",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://937ba0b5e5d149b932f0458875ff887da73844cbc43eca29465af3e4a6c6bf1f",
+				"dweb:/ipfs/Qmbw3BLVsLLrdg6stfTAYFiThz6jNYwiBcAf36srJWrsi9"
+			]
+		},
+		"lib/solmate/src/tokens/WETH.sol": {
+			"keccak256": "0x343cf5f6b643864c5728fa9bf057c5708052402b22c5662decce94f5febff514",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://dc3722cf992cc13ff0728660432092d8ae6851f500b24c0aa474c45f2e8c3f2d",
+				"dweb:/ipfs/QmVq7veVaBKKdm4AKQiuCXMPGHPuCcPksm7LNuA2ihpN9U"
+			]
+		},
+		"lib/solmate/src/utils/FixedPointMathLib.sol": {
+			"keccak256": "0x157e337325356197f974201588e5df25b4baa4b88658d282aea485065b8281e4",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://f5760fa604fcf341273055d1f13f4e4c39e9c6d6b7e50aa30babd577499a9d8c",
+				"dweb:/ipfs/QmcUi9MF2QT57qUk8hoJF41RzMCjm2YokU7uxEpqTJW2H1"
+			]
+		},
+		"lib/solmate/src/utils/ReentrancyGuard.sol": {
+			"keccak256": "0xb282dd78aa7375d6b200b9a5d8dd214b2e5df1004f8217a4b4c2b07f0c5bfd01",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://5fca62eb8d3dbd2b3b7e4bb051f6da16f4d0ff9cee61c39cebb80f031f6a8800",
+				"dweb:/ipfs/QmbrsXPK91iBFwHKwJs2HLRud2KzMoBDRiWYMUtyV5H57j"
+			]
+		},
+		"lib/solmate/src/utils/SafeTransferLib.sol": {
+			"keccak256": "0x90e8b1854e59583fb75be7713a9cb038014cbbd2da14024aba316f9676f11da1",
+			"license": "AGPL-3.0-only",
+			"urls": [
+				"bzz-raw://003db2b4d38fef5b6eab1738f8d67ebb00af496cea0d020067aed66310086d81",
+				"dweb:/ipfs/QmdFbox7ewFXUybptPR6vu7ZuHPKK3jZ1PfAJsfeBFhAaz"
+			]
+		},
+		"solady/src/utils/ECDSA.sol": {
+			"keccak256": "0x2b27db399017306663dd21599aaa82dfd8caca559b1c5e4bda4eb435983ae511",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c4556b607236e1fef21b47f0cce49bd3ec7dd9c1feb3bec9b1405130515bb904",
+				"dweb:/ipfs/Qmbwa2Eext85sbxjfik27chhDWXwZmng8i9mLoPzunkuNX"
+			]
+		}
+	},
+	"version": 1
+}
