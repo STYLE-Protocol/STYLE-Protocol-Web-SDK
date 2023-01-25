@@ -1,33 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unknown-property */
-import * as THREE from "three";
-import React, {
-  Suspense,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Text, VStack } from "@chakra-ui/react";
+import { BBAnchor, Html, MapControls, useProgress } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Html, useProgress } from "@react-three/drei";
-import {
-  BBAnchor,
-  Bounds,
-  MapControls,
-  OrbitControls,
-  Stage,
-  useBounds,
-} from "@react-three/drei";
 import dynamic from "next/dynamic";
-import {
-  Center,
-  Flex,
-  Progress,
-  Spinner,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { ModelContext, ModelProvider } from "../contexts/ModelContext";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { ModelProvider } from "../../contexts/ModelContext";
 
 const deg2rad = (degrees) => degrees * (Math.PI / 180);
 
@@ -60,13 +38,15 @@ const Scene = ({
   isEnlarged = false,
   onBase64Changed = () => {},
   onErrorOccured = () => {},
+  isVoxels = false,
+  isDcl = false,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { progress } = useProgress();
-  useThree(({ camera }) => {
-    camera.rotation.set(deg2rad(30), 0, 0);
-  });
+  // useThree(({ camera }) => {
+  //   camera.rotation.set(deg2rad(30), 0, 0);
+  // });
   return (
     <>
       <spotLight
@@ -93,6 +73,8 @@ const Scene = ({
           onLoadingEnd={() => {
             setLoading(false);
           }}
+          isVoxels={isVoxels}
+          isDcl={isDcl}
         />
         {/* </Bounds> */}
         {loading && !error && (
@@ -163,6 +145,8 @@ const ModelViewer = ({
   headerModelFile,
   isEnlarge = false,
   onBase64Changed = () => {},
+  isVoxels = false,
+  isDcl = false,
 }) => {
   if (!model) return null;
   return (
@@ -195,6 +179,8 @@ const ModelViewer = ({
                 onBase64Changed={(base64) => {
                   onBase64Changed(base64);
                 }}
+                isVoxels={isVoxels}
+                isDcl={isDcl}
               />
             </Suspense>
           </Canvas>

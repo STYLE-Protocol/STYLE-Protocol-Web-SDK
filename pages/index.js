@@ -102,6 +102,8 @@ export default function Home() {
     }
   };
 
+  const viewFormat = "grid";
+
   return (
     <div>
       <Head>
@@ -131,14 +133,34 @@ export default function Home() {
               </Box>
             ))}
           </VStack>
-          <Center w={"100%"}>
+          <Flex w={"100%"} justify={"center"}>
             {!isLoading ? (
-              <Wrap>
-                {requestedNFTs.map((NFT, key) => (
-                  <Box key={key}>
+              <Flex mt="2rem" w="full" flexWrap="wrap">
+                {requestedNFTs.map((NFT, index) => (
+                  <Flex
+                    key={index}
+                    boxSizing="border-box"
+                    p="1rem"
+                    w={
+                      viewFormat !== "mosaic"
+                        ? viewFormat === "window"
+                          ? ["full", "full", "50%", "33.33%", "25%"]
+                          : ["full", "full", "33.33%", "25%", "20%"]
+                        : [
+                            "full",
+                            "full",
+                            "50%",
+                            "33.33%",
+                            "33.33%",
+                            "25%",
+                            "25%",
+                          ]
+                    }
+                  >
                     <Card
                       name={NFT.asset.name}
                       animation_url={NFT.asset.animation_url}
+                      image_url={NFT.asset.image}
                       properties={{
                         Metaverse: metaversesJson
                           .filter((cur) => cur.id === `${NFT.metaverseId}`)[0]
@@ -146,21 +168,22 @@ export default function Home() {
                       }}
                       onClickFunction={() => onBuyAndMint(NFT)}
                       availiableDerivatives={NFT.numberOfDerivatives}
+                      viewFormat={viewFormat}
                     />
-                  </Box>
+                  </Flex>
                 ))}
                 {requestedNFTs.length === 0 && (
                   <Text fontSize={"1.15rem"} fontWeight={"600"}>
                     No items to buy.
                   </Text>
                 )}
-              </Wrap>
+              </Flex>
             ) : (
               <Center>
                 <Spinner size={"lg"} />
               </Center>
             )}
-          </Center>
+          </Flex>
         </Flex>
       </Box>
 
