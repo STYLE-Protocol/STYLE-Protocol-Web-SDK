@@ -49,7 +49,7 @@ const Card = ({
   const HOVER_DELAY = 500;
 
   return (
-    <Box w="full">
+    <Box w="full" color="black">
       <Box
         // className={styles.nft_card}
         boxShadow="0 0 5px #000000 !important"
@@ -63,7 +63,7 @@ const Card = ({
         <Box>
           <Flex direction={"column"} w="full" p="1rem" pb="0">
             <Flex justify={"center"}>
-              <Text fontWeight={"bold"} fontSize={"1.25rem"}>
+              <Text fontWeight={"bold"} fontSize={"1.25rem"} color="black">
                 {name}
               </Text>
             </Flex>
@@ -115,10 +115,12 @@ const Card = ({
               <Tag w={"fit-content"}>{availiableDerivatives} left</Tag>
             </Flex>
             <Grid gap={"0.5rem"}>
-              <Box fontWeight={"700"}>Properties:</Box>
+              <Box fontWeight={"700"} color="black">
+                Properties:
+              </Box>
               <VStack align={"stretch"}>
                 {Object.keys(properties).map((property, index) => (
-                  <Text key={index}>
+                  <Text key={index} color="black">
                     {property}: {properties[property]}
                   </Text>
                 ))}
@@ -126,7 +128,7 @@ const Card = ({
             </Grid>
 
             <Flex>
-              <Button w={"100%"} onClick={onClickFunction}>
+              <Button w={"100%"} onClick={onClickFunction} color="black">
                 Buy
               </Button>
             </Flex>
