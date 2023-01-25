@@ -1,18 +1,24 @@
-import "../styles/globals.css";
-import {
-  ChakraProvider,
-  ThemeProvider,
-  ColorModeProvider,
-} from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppProvider } from "../contexts/AppContext";
+import "../styles/globals.css";
+import styles from "../styles/globals.css";
+
+const config = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+
+const customTheme = extendTheme({ config, styles });
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ChakraProvider>
-      <AppProvider>
-        <Component {...pageProps} />
-      </AppProvider>
-    </ChakraProvider>
+    <>
+      <ChakraProvider theme={customTheme}>
+        <AppProvider>
+          <Component {...pageProps} />
+        </AppProvider>
+      </ChakraProvider>
+    </>
   );
 }
 
