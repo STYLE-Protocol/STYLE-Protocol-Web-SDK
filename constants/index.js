@@ -44,10 +44,17 @@ export const metaversesJson = [
     price: 199,
     availabilityRange: 1024,
   },
+  {
+    id: "4",
+    icon: "fabwelt.svg",
+    name: "Fabwelt",
+    slug: "fabwelt",
+    price: 199,
+    availabilityRange: 1024,
+  },
 ];
 
 export const ENDPOINTS = {
-  4: process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT,
   5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
 };
 

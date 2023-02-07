@@ -52,10 +52,17 @@ const metaversesJson = [
     price: 199,
     availabilityRange: 1024,
   },
+  {
+    id: "4",
+    icon: "fabwelt.svg",
+    name: "Fabwelt",
+    slug: "fabwelt",
+    price: 199,
+    availabilityRange: 1024,
+  },
 ];
 
 const ENDPOINTS = {
-  4: process.env.NEXT_PUBLIC_RINKEBY_ENDPOINT,
   5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
 };
 
@@ -273,20 +280,6 @@ const getRequestedSingularNFTs = async ({
       PROTOCOL_CONTRACTS[chainId]
     );
 
-    const getNFTs = async (url) => {
-      var config = {
-        method: "get",
-        url: url,
-        headers: {
-          "Content-Type": "application/json",
-          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-          pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-        },
-      };
-      let resultTmp = await axios(config);
-      return resultTmp.data.rows;
-    };
-
     let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFTSingular&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}, "owner": {"value": "${owner.toLowerCase()}", "op": "eq"}`;
 
     if (metaverseFilter[0] != null) {
@@ -305,7 +298,16 @@ const getRequestedSingularNFTs = async ({
 
     url += "}";
 
-    let result = await getNFTs(url);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+      },
+    };
+
+    let resultTmp = await axios.get(url, config);
+    let result = resultTmp.data.rows;
 
     let resultGot = await Promise.all(
       result.map((cur) => fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`))

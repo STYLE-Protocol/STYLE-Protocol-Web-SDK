@@ -52,18 +52,6 @@ const getRequestedNFTs = async ({
         stake;
     });
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-      },
-    };
-    const getNFTs = async (url) => {
-      let resultTmp = await axios.get(url, (config = config));
-      return resultTmp.data.rows;
-    };
-
     let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}`;
 
     if (metaverseFilter[0] != null) {
@@ -82,7 +70,16 @@ const getRequestedNFTs = async ({
 
     url += "}";
 
-    let result = await getNFTs(url);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
+        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
+      },
+    };
+
+    let resultTmp = await axios.get(url, config);
+    let result = resultTmp.data.rows;
 
     let resultGot = await Promise.all(
       result.map(async (cur) => {
