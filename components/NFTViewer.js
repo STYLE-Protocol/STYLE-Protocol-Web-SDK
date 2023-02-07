@@ -23,8 +23,7 @@ const SceneCustom = ({
   onErrorOccured = () => {},
   src,
   canvaStyles = {},
-  isVoxels = false,
-  isDcl = false,
+  metaverseId = 0,
   ...rest
 }) => {
   const { loading, setLoading, error, setError, setProgressState } =
@@ -66,8 +65,7 @@ const SceneCustom = ({
             setLoading(false);
           }}
           style={(loading || error) && { display: "none" }}
-          isVoxels={isVoxels}
-          isDcl={isDcl}
+          metaverseId={metaverseId}
         />
       </BBAnchor>
 
@@ -108,8 +106,7 @@ const NFTViewerBasement = ({
   src,
   fallback = DEFAULT_IMAGE,
   is3D = false,
-  isVoxels = false,
-  isDcl = false,
+  metaverseId = 0,
   ...rest
 }) => {
   const { loading, setLoading, error, setError } = useContext(NFTViewerContext);
@@ -169,8 +166,7 @@ const NFTViewerBasement = ({
                   objectFit="cover"
                   h="full"
                   rounded="md"
-                  isVoxels={isVoxels}
-                  isDcl={isDcl}
+                  metaverseId={metaverseId}
                 />
               </Suspense>
             </Canvas>
@@ -205,8 +201,7 @@ const NFTViewer = ({
   src,
   fallback = DEFAULT_IMAGE,
   is3D = false,
-  isVoxels = false,
-  isDcl = false,
+  metaverseId = 0,
   ...rest
 }) => {
   return (
@@ -221,8 +216,7 @@ const NFTViewer = ({
         src={src}
         fallback={fallback}
         is3D={is3D}
-        isDcl={isDcl}
-        isVoxels={isVoxels}
+        metaverseId={metaverseId}
         {...rest}
       />
     </NFTViewerProvider>

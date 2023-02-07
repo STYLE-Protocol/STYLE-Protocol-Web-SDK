@@ -107,8 +107,7 @@ const Card = ({
                 fallback={DEFAULT_IMAGE}
                 src={imageUrl}
                 alt={name || ""}
-                isVoxels={[2].includes(metaverseId)}
-                isDcl={[0].includes(metaverseId)}
+                metaverseId={metaverseId}
               />
             </Flex>
             <Flex justify={"flex-end"}>

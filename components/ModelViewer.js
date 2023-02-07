@@ -38,8 +38,7 @@ const Scene = ({
   isEnlarged = false,
   onBase64Changed = () => {},
   onErrorOccured = () => {},
-  isVoxels = false,
-  isDcl = false,
+  metaverseId = 1,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -73,8 +72,7 @@ const Scene = ({
           onLoadingEnd={() => {
             setLoading(false);
           }}
-          isVoxels={isVoxels}
-          isDcl={isDcl}
+          metaverseId={metaverseId}
         />
         {/* </Bounds> */}
         {loading && !error && (
@@ -145,8 +143,7 @@ const ModelViewer = ({
   headerModelFile,
   isEnlarge = false,
   onBase64Changed = () => {},
-  isVoxels = false,
-  isDcl = false,
+  metaverseId = 0,
 }) => {
   if (!model) return null;
   return (
@@ -179,8 +176,7 @@ const ModelViewer = ({
                 onBase64Changed={(base64) => {
                   onBase64Changed(base64);
                 }}
-                isVoxels={isVoxels}
-                isDcl={isDcl}
+                metaverseId={metaverseId}
               />
             </Suspense>
           </Canvas>

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 import { flatten } from "ramda";
@@ -20,12 +21,12 @@ const Model = ({
   onErrorOccured = () => {},
   onLoadingStarted = () => {},
   onLoadingEnd = () => {},
-  isVoxels = false,
-  isDcl = false,
+  metaverseId = 0,
 }) => {
   const [mdl, set] = useState();
   const [animations, setAnimations] = useState([]);
   const loaderGLTF = new GLTFLoader();
+  const fbxLoader = new FBXLoader();
 
   const dracoLoader = new DRACOLoader();
   dracoLoader.setDecoderPath("./draco/");
@@ -55,9 +56,12 @@ const Model = ({
   const loadModel = async (model) => {
     try {
       onLoadingStarted();
+      let loadedData;
+      let threeDScene;
+      let anims;
 
       let rotation = -Math.PI;
-      if (isVoxels) {
+      if (metaverseId === 2) {
         const MAX_VALUE_OF_A_BYTE = 255;
 
         let voxContent = await fetch(model);
@@ -123,13 +127,23 @@ const Model = ({
         rotation += Math.PI / 2;
       }
 
-      let loadedData = await loaderGLTF.loadAsync(model);
-      let threeDScene = loadedData.scene;
-      threeDScene.rotation.y = rotation;
-      let anims = loadedData.animations;
+      if (metaverseId === 4) {
+        loadedData = await fbxLoader.loadAsync(model);
+        loadedData.scale.set(0.01, 0.01, 0.01);
+        threeDScene = new THREE.Scene();
+        threeDScene.add(loadedData);
+      } else {
+        loadedData = await loaderGLTF.loadAsync(model);
+        threeDScene = loadedData.scene;
+        threeDScene.rotation.y = rotation;
+      }
+
       threeDScene.traverse(function (obj) {
         obj.frustumCulled = false;
       });
+
+      anims = loadedData.animations;
+
       // bounds.refresh(modelRef.current)
       // bounds.clip()
       // bounds.fit()
@@ -166,10 +180,10 @@ const Model = ({
         // camera.position.y -= zoomFactor * center.y;
         // camera.position.z -= zoomFactor * center.z;
         // camera.fov = 35;
-        // camera.near = 0.1;
-        // camera.far = 1000;
+        camera.near = 0.1;
+        camera.far = 2000;
         camera.lookAt(center);
-        if (isDcl) {
+        if (metaverseId === 0) {
           camera.zoom = Math.min((zoomFactor / 3) * size.length());
           if (isEnlarged) {
             camera.zoom = Math.min((zoomFactor / 3) * size.length() - 50);
@@ -228,11 +242,13 @@ const Model = ({
         }}
       />
 
-      <Center position={[0, isDcl ? (isEnlarged ? 0 : -0.9) : 0, 0]}>
+      <Center
+        position={[0, metaverseId === 0 ? (isEnlarged ? 0 : -0.9) : 0, 0]}
+      >
         <group
           ref={modelRef}
           position={[0, 0, 0]}
-          rotation={[0, isDcl ? Math.PI / 1 : 0, 0]}
+          rotation={[0, metaverseId === 0 ? Math.PI / 1 : 0, 0]}
           // rotation={[0, Math.PI / 3, 0]}
           // rotation={[Math.PI / 2, 0, 0]}
           // getWorldScale
