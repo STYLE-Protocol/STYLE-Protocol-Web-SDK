@@ -1,4 +1,4 @@
-const { STORAGE_MESSAGE, STORAGE_PREFIX } = require("../constants");
+const { STORAGE_MESSAGE, STORAGE_PREFIX } = require("../../constants");
 
 const getUserProof = async ({ web3, walletAddress, cached = true }) => {
   let userProof = {};
@@ -39,11 +39,15 @@ const getUserProof = async ({ web3, walletAddress, cached = true }) => {
 };
 
 const getParsedURI = ({ uri, userProof }) => {
-  const splitted = uri.split("/");
-  const before = splitted.slice(0, splitted.length - 1).join("/");
-  const modelName = splitted[splitted.length - 1];
+  if (uri.startsWith("https")) {
+    const splitted = uri.split("/");
+    const before = splitted.slice(0, splitted.length - 1).join("/");
+    const modelName = splitted[splitted.length - 1];
 
-  return `${before}/${userProof.signature}/${userProof.walletAddress}/${modelName}`;
+    return `${before}/${userProof.signature}/${userProof.walletAddress}/${modelName}`;
+  }
+
+  return uri;
 };
 
 exports.getUserProof = getUserProof;
