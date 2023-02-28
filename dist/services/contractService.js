@@ -290,21 +290,18 @@ const getRequestedSingularNFTs = async ({
   }
 };
 
-const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
+const approveERC20Ethers = async ({ signer, walletAddress, NFT, spender }) => {
   try {
-    const tokenContract = new web3.eth.Contract(
+    const tokenContract = new Contract(
+      NFT.paymentToken.address,
       ERC20_ABI,
-      NFT.paymentToken.address
+      signer
     );
 
-    const allowance = await tokenContract.methods
-      .allowance(walletAddress, spender)
-      .call();
+    const allowance = await tokenContract.allowance(walletAddress, spender);
 
     if (NFT.payment.value.gt(allowance)) {
-      await tokenContract.methods
-        .approve(spender, NFT.payment.value)
-        .send({ from: walletAddress });
+      await tokenContract.approve(spender, NFT.payment.value);
     }
 
     return true;
@@ -348,7 +345,47 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   }
 };
 
+const buyAndMintItemEthers = async ({
+  signer,
+  walletAddress,
+  chainId,
+  NFT,
+}) => {
+  try {
+    const protocolContract = new Contract(
+      PROTOCOL_CONTRACTS[chainId],
+      NFTMarketplace_metadata["output"]["abi"],
+      signer
+    );
+
+    await protocolContract.buyAndMint(
+      walletAddress,
+      {
+        tokenAddress: NFT.tokenAddress,
+        tokenId: NFT.tokenId,
+        payment: NFT.payment.value,
+        paymentToken: NFT.paymentToken.address,
+        uri: NFT.uri,
+        bidder: NFT.bidder,
+        environment: NFT.environment,
+        modelId: NFT.modelId,
+        metaverseId: NFT.metaverseId,
+        signature: NFT.signature,
+      },
+      NFT.adminSignature,
+      NFT.payment.value
+    );
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 exports.getRequestedNFTs = getRequestedNFTs;
 exports.getRequestedSingularNFTs = getRequestedSingularNFTs;
 exports.approveERC20 = approveERC20;
+exports.approveERC20Ethers = approveERC20Ethers;
 exports.buyAndMintItem = buyAndMintItem;
+exports.buyAndMintItemEthers = buyAndMintItemEthers;

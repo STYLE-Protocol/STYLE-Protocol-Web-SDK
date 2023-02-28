@@ -18,6 +18,8 @@ const {
   validateSubtypeFilter,
 } = require("../utils/inputValidation");
 
+const { Contract } = require("ethers");
+
 const getRequestedNFTs = async ({
   cursor = 0,
   amount = 100,
@@ -188,7 +190,7 @@ const getRequestedSingularNFTs = async ({
   }
 };
 
-const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
+const approveERC20 = async ({ web3, walletAddress, NFT, spender }) => {
   try {
     const tokenContract = new web3.eth.Contract(
       ERC20_ABI,
@@ -203,6 +205,27 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
       await tokenContract.methods
         .approve(spender, NFT.payment.value)
         .send({ from: walletAddress });
+    }
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+const approveERC20Ethers = async ({ signer, walletAddress, NFT, spender }) => {
+  try {
+    const tokenContract = new Contract(
+      NFT.paymentToken.address,
+      ERC20_ABI,
+      signer
+    );
+
+    const allowance = await tokenContract.allowance(walletAddress, spender);
+
+    if (NFT.payment.value.gt(allowance)) {
+      await tokenContract.approve(spender, NFT.payment.value);
     }
 
     return true;
@@ -246,9 +269,49 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   }
 };
 
+const buyAndMintItemEthers = async ({
+  signer,
+  walletAddress,
+  chainId,
+  NFT,
+}) => {
+  try {
+    const protocolContract = new Contract(
+      PROTOCOL_CONTRACTS[chainId],
+      NFTMarketplace_metadata["output"]["abi"],
+      signer
+    );
+
+    await protocolContract.buyAndMint(
+      walletAddress,
+      {
+        tokenAddress: NFT.tokenAddress,
+        tokenId: NFT.tokenId,
+        payment: NFT.payment.value,
+        paymentToken: NFT.paymentToken.address,
+        uri: NFT.uri,
+        bidder: NFT.bidder,
+        environment: NFT.environment,
+        modelId: NFT.modelId,
+        metaverseId: NFT.metaverseId,
+        signature: NFT.signature,
+      },
+      NFT.adminSignature,
+      NFT.payment.value
+    );
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 export {
   getRequestedNFTs,
   getRequestedSingularNFTs,
   approveERC20,
+  approveERC20Ethers,
   buyAndMintItem,
+  buyAndMintItemEthers,
 };

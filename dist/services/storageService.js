@@ -51,5 +51,40 @@ const getParsedURI = ({ uri, userProof }) => {
   return uri;
 };
 
+const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
+  let userProof = {};
+  const label = `${STORAGE_PREFIX}${walletAddress.toLowerCase()}`;
+
+  if (!!cached) {
+    const tmp = localStorage.getItem(label);
+    if (!!tmp) {
+      userProof = await JSON.parse(tmp);
+    }
+  }
+
+  if (
+    !userProof.signature ||
+    utils.verifyMessage(STORAGE_MESSAGE, userProof.signature).toLowerCase() !==
+      walletAddress
+  ) {
+    if (!!cached) {
+      localStorage.removeItem(label);
+    }
+
+    const signature = await signer.signMessage(STORAGE_MESSAGE);
+    userProof = {
+      signature: signature,
+      walletAddress: walletAddress,
+    };
+  }
+
+  if (!!cached) {
+    localStorage.setItem(label, JSON.stringify(userProof));
+  }
+
+  return userProof;
+};
+
 exports.getUserProof = getUserProof;
+exports.getUserProofEthers = getUserProofEthers;
 exports.getParsedURI = getParsedURI;

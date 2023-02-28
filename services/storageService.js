@@ -1,3 +1,5 @@
+const { utils } = require("ethers");
+
 const { STORAGE_MESSAGE, STORAGE_PREFIX } = require("../constants");
 
 const getUserProof = async ({ web3, walletAddress, cached = true }) => {
@@ -13,9 +15,8 @@ const getUserProof = async ({ web3, walletAddress, cached = true }) => {
 
   if (
     !userProof.signature ||
-    web3.eth.accounts
-      .recover(STORAGE_MESSAGE, userProof.signature)
-      .toLowerCase() !== walletAddress
+    utils.verifyMessage(STORAGE_MESSAGE, userProof.signature).toLowerCase() !==
+      walletAddress
   ) {
     if (!!cached) {
       localStorage.removeItem(label);
@@ -25,6 +26,40 @@ const getUserProof = async ({ web3, walletAddress, cached = true }) => {
       STORAGE_MESSAGE,
       walletAddress
     );
+    userProof = {
+      signature: signature,
+      walletAddress: walletAddress,
+    };
+  }
+
+  if (!!cached) {
+    localStorage.setItem(label, JSON.stringify(userProof));
+  }
+
+  return userProof;
+};
+
+const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
+  let userProof = {};
+  const label = `${STORAGE_PREFIX}${walletAddress.toLowerCase()}`;
+
+  if (!!cached) {
+    const tmp = localStorage.getItem(label);
+    if (!!tmp) {
+      userProof = await JSON.parse(tmp);
+    }
+  }
+
+  if (
+    !userProof.signature ||
+    utils.verifyMessage(STORAGE_MESSAGE, userProof.signature).toLowerCase() !==
+      walletAddress
+  ) {
+    if (!!cached) {
+      localStorage.removeItem(label);
+    }
+
+    const signature = await signer.signMessage(STORAGE_MESSAGE);
     userProof = {
       signature: signature,
       walletAddress: walletAddress,
@@ -50,4 +85,4 @@ const getParsedURI = ({ uri, userProof }) => {
   return uri;
 };
 
-export { getUserProof, getParsedURI };
+export { getUserProof, getUserProofEthers, getParsedURI };
