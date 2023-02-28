@@ -1,3 +1,5 @@
+const { utils } = require("ethers");
+
 const STORAGE_MESSAGE = "STYLE Protocol\r\nI am a human";
 const STORAGE_PREFIX = "STYLE_PROTOCOL_";
 
