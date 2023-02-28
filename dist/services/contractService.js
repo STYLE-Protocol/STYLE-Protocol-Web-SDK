@@ -290,6 +290,30 @@ const getRequestedSingularNFTs = async ({
   }
 };
 
+const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
+  try {
+    const tokenContract = new web3.eth.Contract(
+      ERC20_ABI,
+      NFT.paymentToken.address
+    );
+
+    const allowance = await tokenContract.methods
+      .allowance(walletAddress, spender)
+      .call();
+
+    if (NFT.payment.value.gt(allowance)) {
+      await tokenContract.methods
+        .approve(spender, NFT.payment.value)
+        .send({ from: walletAddress });
+    }
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 const approveERC20Ethers = async ({ signer, walletAddress, NFT, spender }) => {
   try {
     const tokenContract = new Contract(
