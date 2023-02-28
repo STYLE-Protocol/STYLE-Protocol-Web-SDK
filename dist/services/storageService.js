@@ -39,18 +39,6 @@ const getUserProof = async ({ web3, walletAddress, cached = true }) => {
   return userProof;
 };
 
-const getParsedURI = ({ uri, userProof }) => {
-  if (uri.startsWith("https")) {
-    const splitted = uri.split("/");
-    const before = splitted.slice(0, splitted.length - 1).join("/");
-    const modelName = splitted[splitted.length - 1];
-
-    return `${before}/${userProof.signature}/${userProof.walletAddress}/${modelName}`;
-  }
-
-  return uri;
-};
-
 const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
   let userProof = {};
   const label = `${STORAGE_PREFIX}${walletAddress.toLowerCase()}`;
@@ -83,6 +71,18 @@ const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
   }
 
   return userProof;
+};
+
+const getParsedURI = ({ uri, userProof }) => {
+  if (uri.startsWith("ipfs")) {
+    return uri;
+  }
+
+  const splitted = uri.split("/");
+  const before = splitted.slice(0, splitted.length - 1).join("/");
+  const modelName = splitted[splitted.length - 1];
+
+  return `${before}/${userProof.signature}/${userProof.walletAddress}/${modelName}`;
 };
 
 exports.getUserProof = getUserProof;

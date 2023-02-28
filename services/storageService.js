@@ -74,15 +74,15 @@ const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
 };
 
 const getParsedURI = ({ uri, userProof }) => {
-  if (uri.startsWith("https")) {
-    const splitted = uri.split("/");
-    const before = splitted.slice(0, splitted.length - 1).join("/");
-    const modelName = splitted[splitted.length - 1];
-
-    return `${before}/${userProof.signature}/${userProof.walletAddress}/${modelName}`;
+  if (uri.startsWith("ipfs")) {
+    return uri;
   }
 
-  return uri;
+  const splitted = uri.split("/");
+  const before = splitted.slice(0, splitted.length - 1).join("/");
+  const modelName = splitted[splitted.length - 1];
+
+  return `${before}/${userProof.signature}/${userProof.walletAddress}/${modelName}`;
 };
 
 export { getUserProof, getUserProofEthers, getParsedURI };
