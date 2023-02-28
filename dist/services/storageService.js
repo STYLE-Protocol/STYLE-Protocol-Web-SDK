@@ -1,4 +1,5 @@
-const { STORAGE_MESSAGE, STORAGE_PREFIX } = require("../../constants");
+const STORAGE_MESSAGE = "STYLE Protocol\r\nI am a human";
+const STORAGE_PREFIX = "STYLE_PROTOCOL_";
 
 const getUserProof = async ({ web3, walletAddress, cached = true }) => {
   let userProof = {};
