@@ -62,3 +62,8 @@ export const GATEWAY = "styleprotocol.mypinata.cloud";
 
 export const DEFAULT_IMAGE = "/assets/images/default_nft.svg";
 export const DEFAULT_IMAGE_3D = "/assets/images/derivative.png";
+
+export const STORAGE_MESSAGE = "STYLE Protocol\r\nI am a human";
+export const STORAGE_PREFIX = "STYLE_PROTOCOL_";
+
+export const API_HOST = "style-protocol-api.vercel.app";

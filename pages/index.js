@@ -54,12 +54,6 @@ export default function Home() {
   const fetchRequestedNFTs = async (cursor, amount, chainId_, metaverse_) => {
     setIsLoading(true);
     setRequestedNFTs([]);
-    console.log(
-      await getRequestedSingularNFTs({
-        owner: "0x67701e71F9412Af1BcB2D77897F40139B6Ccc073",
-        chainId: chainId_,
-      })
-    );
     const requestedNFTs_ = await getRequestedNFTs({
       cursor,
       amount,

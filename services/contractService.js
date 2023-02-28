@@ -3,9 +3,9 @@ const Web3 = require("web3");
 const { BigNumber } = require("ethers");
 const {
   PROTOCOL_CONTRACTS,
-  metaversesJson,
   ENDPOINTS,
   GATEWAY,
+  API_HOST,
 } = require("../constants");
 
 const NFTMarketplace_metadata = require("../public/contracts/NFTMarketplace_metadata.json");
@@ -36,110 +36,32 @@ const getRequestedNFTs = async ({
       return [];
     }
 
-    const web3 = new Web3(ENDPOINTS[chainId]);
-    const protocolContract = new web3.eth.Contract(
-      NFTMarketplace_metadata["output"]["abi"],
-      PROTOCOL_CONTRACTS[chainId]
-    );
-
-    const stakes = (
-      await protocolContract.methods.getStakes(cursor, amount).call()
-    )[0];
-
-    var stakesData = {};
-    stakes.forEach((stake) => {
-      stakesData[`${stake.tokenAddress.toLowerCase()}|${stake.tokenId}`] =
-        stake;
+    const params = new URLSearchParams({
+      endpoint: ENDPOINTS[chainId],
+      cursor,
+      amount,
+      chainId,
     });
 
-    let url = `https://api.pinata.cloud/data/pinList?status=pinned&pageLimit=1000&metadata[name]=NonmintedNFT&metadata[keyvalues]={"chainId": {"value": "${chainId}", "op": "eq"}`;
-
-    if (metaverseFilter[0] != null) {
-      url += `, "metaverse": {"value": "${metaverseFilter.join(
-        "|"
-      )}", "op": "regexp"}`;
+    if (metaverseFilter[0] !== null) {
+      params.set("metaverseFilter", metaverseFilter);
     }
-    if (typeFilter[0] != null) {
-      url += `, "type": {"value": "${typeFilter.join("|")}", "op": "regexp"}`;
+    if (typeFilter[0] !== null) {
+      params.set("typeFilter", typeFilter);
     }
-    if (subtypeFilter[0] != null) {
-      url += `, "subtype": {"value": "${subtypeFilter.join(
-        "|"
-      )}", "op": "regexp"}`;
+    if (subtypeFilter[0] !== null) {
+      params.set("subtypeFilter", subtypeFilter);
     }
 
-    url += "}";
+    const apiUrl = `https://${API_HOST}/api/nfts/get-requested-nfts?${params.toString()}`;
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY,
-        pinata_secret_api_key: process.env.NEXT_PUBLIC_PINATA_SECRET_API_KEY,
-      },
-    };
+    let res = await fetch(apiUrl);
+    res = await res.json();
 
-    let resultTmp = await axios.get(url, config);
-    let result = resultTmp.data.rows;
+    res.forEach((nft) => {
+      nft.payment.value = BigNumber.from(nft.payment.value);
+    });
 
-    let resultGot = await Promise.all(
-      result.map(async (cur) => {
-        let res = await fetch(`https://${GATEWAY}/ipfs/${cur.ipfs_pin_hash}`);
-        res = await res.json();
-
-        const curStake =
-          stakesData[
-            `${res.tokenAddress.toLowerCase()}|${BigNumber.from(
-              res.tokenId
-            ).toNumber()}`
-          ];
-
-        const numberOfDerivatives = Number.parseInt(
-          curStake?.numberOfDerivatives
-        );
-        if (!numberOfDerivatives || numberOfDerivatives === 0) {
-          return null;
-        }
-
-        const paymentTokenContract = new web3.eth.Contract(
-          ERC20_ABI,
-          res.paymentToken
-        );
-        let decimals;
-        try {
-          decimals = await paymentTokenContract.methods.decimals().call();
-        } catch {
-          return null;
-        }
-
-        res.numberOfDerivatives = numberOfDerivatives;
-        res.cid = cur.ipfs_pin_hash;
-
-        res.payment = {
-          value: BigNumber.from(res.payment),
-          stringValue: `${Number.parseInt(res.payment) / 10 ** decimals}`,
-        };
-
-        res.paymentToken = {
-          address: res.paymentToken,
-          name: await paymentTokenContract.methods.name().call(),
-          symbol: await paymentTokenContract.methods.symbol().call(),
-        };
-
-        var ipfsUrl = res.uri;
-        if (ipfsUrl.slice(0, 4) === "ipfs") {
-          ipfsUrl = `https://${GATEWAY}/ipfs/${ipfsUrl.slice(7)}`;
-        }
-
-        let extra = await fetch(ipfsUrl);
-        extra = await extra.json();
-
-        res.asset = extra;
-
-        return res;
-      })
-    );
-
-    const res = resultGot.filter((cur) => cur !== null);
     return res;
   } catch (e) {
     console.log(e);

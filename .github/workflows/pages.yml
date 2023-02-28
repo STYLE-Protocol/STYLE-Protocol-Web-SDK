@@ -76,7 +76,6 @@ jobs:
       - name: Build with Next.js
         run: |
           touch .env.local
-          echo NEXT_PUBLIC_RINKEBY_ENDPOINT=${{ secrets.NEXT_PUBLIC_RINKEBY_ENDPOINT }} >> .env.local
           echo NEXT_PUBLIC_PINATA_API_KEY=${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_PINATA_SECRET_API_KEY=${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_GOERLI_ENDPOINT=${{ secrets.NEXT_PUBLIC_GOERLI_ENDPOINT }} >> .env.local
