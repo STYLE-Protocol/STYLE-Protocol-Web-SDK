@@ -79,6 +79,7 @@ jobs:
           echo NEXT_PUBLIC_PINATA_API_KEY=${{ secrets.NEXT_PUBLIC_PINATA_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_PINATA_SECRET_API_KEY=${{ secrets.NEXT_PUBLIC_PINATA_SECRET_API_KEY }} >> .env.local
           echo NEXT_PUBLIC_GOERLI_ENDPOINT=${{ secrets.NEXT_PUBLIC_GOERLI_ENDPOINT }} >> .env.local
+          echo NEXT_PUBLIC_ALCHEMY_API_KEY=${{ secrets.NEXT_PUBLIC_ALCHEMY_API_KEY }} >> .env.local
           ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
