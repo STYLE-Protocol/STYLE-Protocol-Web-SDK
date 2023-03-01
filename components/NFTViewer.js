@@ -1,6 +1,6 @@
 import FallbackImage from "./FallbackImage";
 
-import { Box, Progress } from "@chakra-ui/react";
+import { Box, Progress, Image } from "@chakra-ui/react";
 import { BBAnchor, useProgress } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import dynamic from "next/dynamic";
@@ -99,6 +99,7 @@ function Indicator() {
 const NFTViewerBasement = ({
   hovered,
   model,
+  show,
   canvaStyles = {},
   headerModelFile,
   isEnlarge = false,
@@ -142,34 +143,46 @@ const NFTViewerBasement = ({
               ...canvaStyles,
             }}
           >
-            <Canvas
-              frameloop="demand"
-              flat
-              gl={{ preserveDrawingBuffer: true }}
-              orthographic
-              style={{
-                width: "100%",
-                height: "100%",
-              }}
-              resize={{ scroll: false }}
-            >
-              <Suspense fallback={null}>
-                <SceneCustom
-                  model={model}
-                  isEnlarged={isEnlarge}
-                  onBase64Changed={(base64) => {
-                    onBase64Changed(base64);
-                  }}
-                  src={src}
-                  canvaStyles={canvaStyles}
-                  style={{ borderRadius: "2rem" }}
-                  objectFit="cover"
-                  h="full"
-                  rounded="md"
-                  metaverseId={metaverseId}
-                />
-              </Suspense>
-            </Canvas>
+            {!!show ? (
+              <Image
+                src={show}
+                onLoad={() => setLoading(false)}
+                onError={() => {
+                  setLoading(false);
+                  setError(true);
+                }}
+                {...rest}
+              />
+            ) : (
+              <Canvas
+                frameloop="demand"
+                flat
+                gl={{ preserveDrawingBuffer: true }}
+                orthographic
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                resize={{ scroll: false }}
+              >
+                <Suspense fallback={null}>
+                  <SceneCustom
+                    model={model}
+                    isEnlarged={isEnlarge}
+                    onBase64Changed={(base64) => {
+                      onBase64Changed(base64);
+                    }}
+                    src={src}
+                    canvaStyles={canvaStyles}
+                    style={{ borderRadius: "2rem" }}
+                    objectFit="cover"
+                    h="full"
+                    rounded="md"
+                    metaverseId={metaverseId}
+                  />
+                </Suspense>
+              </Canvas>
+            )}
           </div>
         )}
       </Box>
@@ -194,6 +207,7 @@ const NFTViewerBasement = ({
 const NFTViewer = ({
   hovered,
   model,
+  show,
   canvaStyles = {},
   headerModelFile,
   isEnlarge = false,
@@ -209,6 +223,7 @@ const NFTViewer = ({
       <NFTViewerBasement
         hovered={hovered}
         model={model}
+        show={show}
         canvaStyles={canvaStyles}
         headerModelFile={headerModelFile}
         isEnlarge={isEnlarge}

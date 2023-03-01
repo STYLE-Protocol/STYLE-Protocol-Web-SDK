@@ -7,6 +7,7 @@ import NFTViewer from "./NFTViewer";
 const Card = ({
   name,
   animation_url,
+  show,
   image_url,
   properties,
   onClickFunction,
@@ -18,6 +19,13 @@ const Card = ({
       return `https://${GATEWAY}/ipfs/${animation_url.slice(7)}`;
     }
     return animation_url;
+  });
+
+  const showURL = useMemo(() => {
+    if (show.slice(0, 4) === "ipfs") {
+      return `https://${GATEWAY}/ipfs/${show.slice(7)}`;
+    }
+    return show;
   });
 
   const imageUrl = useMemo(() => {
@@ -95,6 +103,7 @@ const Card = ({
               <NFTViewer
                 hovered={hovered}
                 model={animationURL}
+                show={showURL}
                 canvaStyles={{
                   width: modelSize,
                   height: modelSize,
@@ -103,7 +112,7 @@ const Card = ({
                 objectFit="cover"
                 h="full"
                 rounded="md"
-                is3D={animationURL ? true : false}
+                is3D={showURL || animationURL ? true : false}
                 fallback={DEFAULT_IMAGE}
                 src={imageUrl}
                 alt={name || ""}

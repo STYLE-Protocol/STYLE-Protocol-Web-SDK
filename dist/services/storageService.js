@@ -18,7 +18,7 @@ const getUserProof = async ({ web3, walletAddress, cached = true }) => {
     !userProof.signature ||
     web3.eth.accounts
       .recover(STORAGE_MESSAGE, userProof.signature)
-      .toLowerCase() !== walletAddress
+      .toLowerCase() !== walletAddress.toLowerCase()
   ) {
     if (!!cached) {
       localStorage.removeItem(label);
@@ -55,7 +55,7 @@ const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
   if (
     !userProof.signature ||
     utils.verifyMessage(STORAGE_MESSAGE, userProof.signature).toLowerCase() !==
-      walletAddress
+      walletAddress.toLowerCase()
   ) {
     if (!!cached) {
       localStorage.removeItem(label);

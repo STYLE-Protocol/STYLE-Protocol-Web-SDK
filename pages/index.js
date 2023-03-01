@@ -154,6 +154,7 @@ export default function Home() {
                     <Card
                       name={NFT.asset.name}
                       animation_url={NFT.asset.animation_url}
+                      show={NFT.show}
                       image_url={NFT.asset.image}
                       properties={{
                         Metaverse: metaversesJson
