@@ -74,7 +74,7 @@ const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
 };
 
 const getParsedURI = ({ uri, userProof }) => {
-  if (uri.startsWith("ipfs")) {
+  if (uri.startsWith("ipfs") || uri.includes("ipfs/")) {
     return uri;
   }
 
