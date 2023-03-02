@@ -143,9 +143,11 @@ const NFTViewerBasement = ({
               ...canvaStyles,
             }}
           >
-            {!!show ? (
+            {!!!!(
+              animationUrl.endsWith(".gif") || animationUrl.endsWith(".webp")
+            ) ? (
               <Image
-                src={show}
+                src={animationUrl}
                 onLoad={() => setLoading(false)}
                 onError={() => {
                   setLoading(false);
