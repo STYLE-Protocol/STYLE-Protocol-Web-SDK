@@ -99,7 +99,6 @@ function Indicator() {
 const NFTViewerBasement = ({
   hovered,
   model,
-  show,
   canvaStyles = {},
   headerModelFile,
   isEnlarge = false,
@@ -143,11 +142,9 @@ const NFTViewerBasement = ({
               ...canvaStyles,
             }}
           >
-            {!!!!(
-              animationUrl.endsWith(".gif") || animationUrl.endsWith(".webp")
-            ) ? (
+            {!!!!(model.endsWith(".gif") || model.endsWith(".webp")) ? (
               <Image
-                src={animationUrl}
+                src={model}
                 onLoad={() => setLoading(false)}
                 onError={() => {
                   setLoading(false);
@@ -209,7 +206,6 @@ const NFTViewerBasement = ({
 const NFTViewer = ({
   hovered,
   model,
-  show,
   canvaStyles = {},
   headerModelFile,
   isEnlarge = false,
@@ -225,7 +221,6 @@ const NFTViewer = ({
       <NFTViewerBasement
         hovered={hovered}
         model={model}
-        show={show}
         canvaStyles={canvaStyles}
         headerModelFile={headerModelFile}
         isEnlarge={isEnlarge}
