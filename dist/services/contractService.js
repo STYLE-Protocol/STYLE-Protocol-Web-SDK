@@ -328,7 +328,7 @@ const approveERC20Ethers = async ({ signer, NFT, spender }) => {
     );
 
     if (NFT.payment.value.gt(allowance)) {
-      await tokenContract.approve(spender, NFT.payment.value);
+      await (await tokenContract.approve(spender, NFT.payment.value)).wait();
     }
 
     return true;
@@ -380,23 +380,25 @@ const buyAndMintItemEthers = async ({ signer, chainId, NFT }) => {
       signer
     );
 
-    await protocolContract.buyAndMint(
-      await signer.getAddress(),
-      {
-        tokenAddress: NFT.tokenAddress,
-        tokenId: NFT.tokenId,
-        payment: NFT.payment.value,
-        paymentToken: NFT.paymentToken.address,
-        uri: NFT.uri,
-        bidder: NFT.bidder,
-        environment: NFT.environment,
-        modelId: NFT.modelId,
-        metaverseId: NFT.metaverseId,
-        signature: NFT.signature,
-      },
-      NFT.adminSignature,
-      NFT.payment.value
-    );
+    await (
+      await protocolContract.buyAndMint(
+        await signer.getAddress(),
+        {
+          tokenAddress: NFT.tokenAddress,
+          tokenId: NFT.tokenId,
+          payment: NFT.payment.value,
+          paymentToken: NFT.paymentToken.address,
+          uri: NFT.uri,
+          bidder: NFT.bidder,
+          environment: NFT.environment,
+          modelId: NFT.modelId,
+          metaverseId: NFT.metaverseId,
+          signature: NFT.signature,
+        },
+        NFT.adminSignature,
+        NFT.payment.value
+      )
+    ).wait();
 
     return true;
   } catch (e) {
