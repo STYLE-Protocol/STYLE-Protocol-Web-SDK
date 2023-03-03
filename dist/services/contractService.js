@@ -1,6 +1,6 @@
 const axios = require("axios");
 const Web3 = require("web3");
-const { BigNumber } = require("ethers");
+const { BigNumber, Contract } = require("ethers");
 
 const NFTMarketplace_metadata = require("../../public/contracts/NFTMarketplace_metadata.json");
 const ERC20_ABI = require("../../public/contracts/ERC20_ABI.json");
@@ -314,7 +314,7 @@ const approveERC20 = async ({ web3, walletAddress, chainId, NFT, spender }) => {
   }
 };
 
-const approveERC20Ethers = async ({ signer, walletAddress, NFT, spender }) => {
+const approveERC20Ethers = async ({ signer, NFT, spender }) => {
   try {
     const tokenContract = new Contract(
       NFT.paymentToken.address,
@@ -322,7 +322,10 @@ const approveERC20Ethers = async ({ signer, walletAddress, NFT, spender }) => {
       signer
     );
 
-    const allowance = await tokenContract.allowance(walletAddress, spender);
+    const allowance = await tokenContract.allowance(
+      await signer.getAddress(),
+      spender
+    );
 
     if (NFT.payment.value.gt(allowance)) {
       await tokenContract.approve(spender, NFT.payment.value);
@@ -369,12 +372,7 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   }
 };
 
-const buyAndMintItemEthers = async ({
-  signer,
-  walletAddress,
-  chainId,
-  NFT,
-}) => {
+const buyAndMintItemEthers = async ({ signer, chainId, NFT }) => {
   try {
     const protocolContract = new Contract(
       PROTOCOL_CONTRACTS[chainId],
@@ -383,7 +381,7 @@ const buyAndMintItemEthers = async ({
     );
 
     await protocolContract.buyAndMint(
-      walletAddress,
+      await signer.getAddress(),
       {
         tokenAddress: NFT.tokenAddress,
         tokenId: NFT.tokenId,

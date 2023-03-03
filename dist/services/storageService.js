@@ -41,7 +41,9 @@ const getUserProof = async ({ web3, walletAddress, cached = true }) => {
   return userProof;
 };
 
-const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
+const getUserProofEthers = async ({ signer, cached = true }) => {
+  const walletAddress = await signer.getAddress();
+
   let userProof = {};
   const label = `${STORAGE_PREFIX}${walletAddress.toLowerCase()}`;
 
@@ -67,6 +69,13 @@ const getUserProofEthers = async ({ signer, walletAddress, cached = true }) => {
       walletAddress: walletAddress,
     };
   }
+
+  if (!!cached) {
+    localStorage.setItem(label, JSON.stringify(userProof));
+  }
+
+  return userProof;
+};
 
   if (!!cached) {
     localStorage.setItem(label, JSON.stringify(userProof));
