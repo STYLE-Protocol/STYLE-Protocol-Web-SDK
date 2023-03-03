@@ -77,13 +77,6 @@ const getUserProofEthers = async ({ signer, cached = true }) => {
   return userProof;
 };
 
-  if (!!cached) {
-    localStorage.setItem(label, JSON.stringify(userProof));
-  }
-
-  return userProof;
-};
-
 const getParsedURI = ({ uri, userProof }) => {
   if (uri.startsWith("ipfs") || uri.includes("ipfs/")) {
     return uri;
