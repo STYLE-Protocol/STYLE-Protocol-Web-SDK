@@ -1,10 +1,11 @@
 import FallbackImage from "./FallbackImage";
 
-import { Box, Progress, Image } from "@chakra-ui/react";
+import { Box, Progress } from "@chakra-ui/react";
 import { BBAnchor, useProgress } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import dynamic from "next/dynamic";
 import React, { Suspense, useContext, useEffect } from "react";
+import ReactPlayer from "react-player";
 import {
   NFTViewerContext,
   NFTViewerProvider,
@@ -142,15 +143,25 @@ const NFTViewerBasement = ({
               ...canvaStyles,
             }}
           >
-            {!!!!(model.endsWith(".gif") || model.endsWith(".webp")) ? (
-              <Image
-                src={model}
-                onLoad={() => setLoading(false)}
-                onError={() => {
+            {model.endsWith(".webp") ? (
+              <ReactPlayer
+                url={model}
+                playing={true}
+                loop={true}
+                muted={true}
+                playsinline={true}
+                onReady={() => {
+                  console.log("ready");
+                  setLoading(false);
+                }}
+                onError={(e) => {
+                  console.log(e, "eeee");
                   setLoading(false);
                   setError(true);
                 }}
-                {...rest}
+                border="none"
+                height="inherit"
+                width="inherit"
               />
             ) : (
               <Canvas

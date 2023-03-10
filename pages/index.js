@@ -1,27 +1,24 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
 import { useContext, useEffect, useState } from "react";
+import styles from "../styles/Home.module.css";
 
 import {
-  getRequestedNFTs,
   approveERC20,
-  buyItem,
   buyAndMintItem,
-  getRequestedSingularNFTs,
+  getRequestedNFTs,
 } from "../services/contractService";
 
+import {
+  Box,
+  Divider,
+  Flex,
+  Link,
+  Spinner,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import Card from "../components/Card";
 import PropertySelector from "../components/PropertySelector";
-import {
-  Text,
-  Box,
-  VStack,
-  Flex,
-  Wrap,
-  Center,
-  Divider,
-  Spinner,
-} from "@chakra-ui/react";
 
 import { metaversesJson, PROTOCOL_CONTRACTS } from "../constants";
 
@@ -72,7 +69,7 @@ export default function Home() {
   const onBuyAndMint = async (NFT) => {
     setIsLoading(true);
     try {
-      await preBuy();
+      await connectWalletHandler();
       await approveERC20({
         web3,
         walletAddress,
@@ -90,7 +87,7 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  const preBuy = async () => {
+  const connectWalletHandler = async () => {
     if (!(await checkIfWalletIsConnected())) {
       await connectWallet();
     }
@@ -127,56 +124,71 @@ export default function Home() {
               </Box>
             ))}
           </VStack>
-          <Flex w={"100%"} justify={"center"}>
-            {!isLoading ? (
-              <Flex mt="2rem" w="full" flexWrap="wrap">
-                {requestedNFTs.map((NFT, index) => (
-                  <Flex
-                    key={index}
-                    boxSizing="border-box"
-                    p="1rem"
-                    w={
-                      viewFormat !== "mosaic"
-                        ? viewFormat === "window"
-                          ? ["full", "full", "50%", "33.33%", "25%"]
-                          : ["full", "full", "33.33%", "25%", "20%"]
-                        : [
-                            "full",
-                            "full",
-                            "50%",
-                            "33.33%",
-                            "33.33%",
-                            "25%",
-                            "25%",
-                          ]
-                    }
-                  >
-                    <Card
-                      name={NFT.asset.name}
-                      animation_url={NFT.asset.animation_url}
-                      image_url={NFT.asset.image}
-                      properties={{
-                        Metaverse: metaversesJson
-                          .filter((cur) => cur.id === `${NFT.metaverseId}`)[0]
-                          .slug.toLowerCase(),
-                      }}
-                      onClickFunction={() => onBuyAndMint(NFT)}
-                      availiableDerivatives={NFT.numberOfDerivatives}
-                      viewFormat={viewFormat}
-                    />
-                  </Flex>
-                ))}
-                {requestedNFTs.length === 0 && (
-                  <Text fontSize={"1.15rem"} fontWeight={"600"}>
-                    No items to buy.
-                  </Text>
-                )}
-              </Flex>
-            ) : (
-              <Center>
-                <Spinner size={"lg"} />
-              </Center>
-            )}
+          <Flex w={"100%"} justify={"flex-start"} direction="column">
+            <Flex
+              justify={"flex-end"}
+              w="100%"
+              h="5rem"
+              px="5rem"
+              borderY="solid"
+              align="center"
+            >
+              <Link href="./profile">Profile</Link>
+            </Flex>
+
+            <Flex align={"center"} direction="column" h="100%">
+              {!isLoading ? (
+                <Flex mt="2rem" w="full" flexWrap="wrap">
+                  {requestedNFTs.map((NFT) => (
+                    <Flex
+                      key={NFT.cid}
+                      boxSizing="border-box"
+                      p="1rem"
+                      w={
+                        viewFormat !== "mosaic"
+                          ? viewFormat === "window"
+                            ? ["full", "full", "50%", "33.33%", "25%"]
+                            : ["full", "full", "33.33%", "25%", "20%"]
+                          : [
+                              "full",
+                              "full",
+                              "50%",
+                              "33.33%",
+                              "33.33%",
+                              "25%",
+                              "25%",
+                            ]
+                      }
+                    >
+                      <Card
+                        name={NFT.asset.name}
+                        animation_url={NFT.asset.animation_url}
+                        image_url={NFT.asset.image}
+                        properties={{
+                          Metaverse: metaversesJson
+                            .filter((cur) => cur.id === `${NFT.metaverseId}`)[0]
+                            .slug.toLowerCase(),
+                        }}
+                        onClickFunction={() => onBuyAndMint(NFT)}
+                        availiableDerivatives={NFT.numberOfDerivatives}
+                        viewFormat={viewFormat}
+                      />
+                    </Flex>
+                  ))}
+                  {requestedNFTs.length === 0 && (
+                    <Flex w="100%" justify="center">
+                      <Text fontSize={"1.15rem"} fontWeight={"600"}>
+                        No items to buy.
+                      </Text>
+                    </Flex>
+                  )}
+                </Flex>
+              ) : (
+                <Flex justify={"center"} align="center" h="100%">
+                  <Spinner size={"lg"} />
+                </Flex>
+              )}
+            </Flex>
           </Flex>
         </Flex>
       </Box>

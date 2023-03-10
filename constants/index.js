@@ -67,3 +67,27 @@ export const STORAGE_MESSAGE = "STYLE Protocol\r\nI am a human";
 export const STORAGE_PREFIX = "STYLE_PROTOCOL_";
 
 export const API_HOST = "style-protocol-api.vercel.app";
+
+export const MODEL_IDS = {
+  AVATAR_null: 0,
+  WEARABLE_Head: 1,
+  "WEARABLE_Upper Body": 2,
+  "WEARABLE_Lower Body": 3,
+  WEARABLE_Feet: 4,
+  WEARABLE_Earring: 5,
+  WEARABLE_Eyewear: 6,
+  WEARABLE_Hat: 7,
+  WEARABLE_Helmet: 8,
+  WEARABLE_Mask: 9,
+  WEARABLE_Tiara: 10,
+  "WEARABLE_Top Head": 11,
+  MISC_Pet: 12,
+  MISC_Artifact: 13,
+  MISC_Weapon: 14,
+  MISC_Other: 15,
+};
+
+export let MODEL_NAMES = {};
+for (const key in MODEL_IDS) {
+  MODEL_NAMES[MODEL_IDS[key]] = key;
+}

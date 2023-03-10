@@ -1,16 +1,14 @@
-import { Box, Button, Flex, Grid, Tag, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, Grid, Text, VStack } from "@chakra-ui/react";
 import { useMemo, useState } from "react";
 import { DEFAULT_IMAGE, GATEWAY, metaversesJson } from "../constants";
 
 import NFTViewer from "./NFTViewer";
 
-const Card = ({
+const Derivative = ({
   name,
   animation_url,
   image_url,
   properties,
-  onClickFunction,
-  availiableDerivatives,
   viewFormat,
 }) => {
   const animationURL = useMemo(() => {
@@ -42,7 +40,9 @@ const Card = ({
 
   const metaverseId = useMemo(() => {
     return Number(
-      metaversesJson.find((mv) => mv.slug === properties.Metaverse).id
+      metaversesJson.find(
+        (mv) => mv.slug.toUpperCase() === properties.Metaverse
+      ).id
     );
   }, [properties]);
 
@@ -115,9 +115,6 @@ const Card = ({
                 metaverseId={metaverseId}
               />
             </Flex>
-            <Flex justify={"flex-end"}>
-              <Tag w={"fit-content"}>{availiableDerivatives} left</Tag>
-            </Flex>
             <Grid gap={"0.5rem"}>
               <Box fontWeight={"700"} color="black">
                 Properties:
@@ -130,12 +127,6 @@ const Card = ({
                 ))}
               </VStack>
             </Grid>
-
-            <Flex>
-              <Button w={"100%"} onClick={onClickFunction} color="black">
-                Buy
-              </Button>
-            </Flex>
           </Flex>
         </Box>
       </Box>
@@ -143,4 +134,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default Derivative;
