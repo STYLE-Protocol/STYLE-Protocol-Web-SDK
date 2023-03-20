@@ -5,64 +5,9 @@ const { BigNumber, Contract } = require("ethers");
 const NFTMarketplace_metadata = require("../../public/contracts/NFTMarketplace_metadata.json");
 const ERC20_ABI = require("../../public/contracts/ERC20_ABI.json");
 const Base_metadata = require("../../public/contracts/Base_metadata.json");
+const { getAllContracts } = require("../");
 
 const API_HOST = "style-protocol-api.vercel.app";
-
-const PROTOCOL_CONTRACTS = {
-  80001: "0xFfe8B49e11883De88e110604DA018572b93f9f24",
-  5: "0x87148553f8D5c32Ec2358Ab1f3b2eF9C3bBd0f6D",
-};
-
-const metaversesJson = [
-  {
-    id: "0",
-    icon: "decentraland.svg",
-    name: "Decentraland",
-    slug: "decentraland",
-    price: 600,
-    availabilityRange: 100000,
-  },
-  // {
-  //   id: '1',
-  //   icon: 'sandbox.svg',
-  //   name: 'The Sandbox',
-  //   slug: 'sandbox',
-  //   price: 200,
-  //   availabilityRange: 1500,
-  // },
-  {
-    id: "1",
-    icon: "somnium.svg",
-    name: "Somnium Space",
-    slug: "somnium_space",
-    price: 200,
-    availabilityRange: 20,
-  },
-  {
-    id: "2",
-    icon: "cryptovoxels.svg",
-    name: "Cryptovoxels",
-    slug: "cryptovoxels",
-    price: 170.01,
-    availabilityRange: 1024,
-  },
-  {
-    id: "3",
-    icon: "monaverse.svg",
-    name: "Monaverse",
-    slug: "monaverse",
-    price: 199,
-    availabilityRange: 1024,
-  },
-  {
-    id: "4",
-    icon: "fabwelt.svg",
-    name: "Fabwelt",
-    slug: "fabwelt",
-    price: 199,
-    availabilityRange: 1024,
-  },
-];
 
 const ENDPOINTS = {
   5: process.env.NEXT_PUBLIC_GOERLI_ENDPOINT,
@@ -70,12 +15,15 @@ const ENDPOINTS = {
 
 const GATEWAY = "styleprotocol.mypinata.cloud";
 
-const validateMetaverseFilter = (metaverseFilter) => {
+const validateMetaverseFilter = async (metaverseFilter) => {
   if (typeof metaverseFilter === "string") {
     metaverseFilter = [metaverseFilter];
   } else if (metaverseFilter.length === 0) {
     metaverseFilter.push(null);
   }
+
+  const contracts = await getAllContracts();
+  const metaversesJson = contracts["metaversesJson"];
 
   const availiableMetaverses = metaversesJson.map((m) => m.slug.toLowerCase());
   if (metaverseFilter.length == 1 && metaverseFilter[0] == null) {
@@ -134,7 +82,7 @@ const getRequestedNFTs = async ({
   subtypeFilter = [],
 }) => {
   try {
-    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    metaverseFilter = await validateMetaverseFilter(metaverseFilter);
     typeFilter = validateTypeFilter(typeFilter);
     subtypeFilter = validateSubtypeFilter(subtypeFilter);
 
@@ -184,7 +132,7 @@ const getRequestedSingularNFTs = async ({
   subtypeFilter = [],
 }) => {
   try {
-    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    metaverseFilter = await validateMetaverseFilter(metaverseFilter);
     typeFilter = validateTypeFilter(typeFilter);
     subtypeFilter = validateSubtypeFilter(subtypeFilter);
 
@@ -192,6 +140,9 @@ const getRequestedSingularNFTs = async ({
       console.log("improper filter");
       return [];
     }
+
+    const contracts = await getAllContracts();
+    const PROTOCOL_CONTRACTS = contracts["protocols"];
 
     const web3 = new Web3(ENDPOINTS[chainId]);
     const protocolContract = new web3.eth.Contract(
@@ -340,6 +291,9 @@ const approveERC20Ethers = async ({ signer, NFT, spender }) => {
 
 const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   try {
+    const contracts = await getAllContracts();
+    const PROTOCOL_CONTRACTS = contracts["protocols"];
+
     const protocolContract = new web3.eth.Contract(
       NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
@@ -374,6 +328,9 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
 
 const buyAndMintItemEthers = async ({ signer, chainId, NFT }) => {
   try {
+    const contracts = await getAllContracts();
+    const PROTOCOL_CONTRACTS = contracts["protocols"];
+
     const protocolContract = new Contract(
       PROTOCOL_CONTRACTS[chainId],
       NFTMarketplace_metadata["output"]["abi"],

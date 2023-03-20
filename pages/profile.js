@@ -5,13 +5,7 @@ import styles from "../styles/Home.module.css";
 import { Box, Button, Flex, Link, Spinner, Text } from "@chakra-ui/react";
 import Derivative from "../components/Derivative";
 
-import {
-  ENDPOINTS,
-  GATEWAY,
-  metaversesJson,
-  MODEL_NAMES,
-  PROTOCOL_CONTRACTS,
-} from "../constants";
+import { ENDPOINTS, GATEWAY, MODEL_NAMES } from "../constants";
 
 import { AppContext } from "../contexts/AppContext";
 
@@ -21,6 +15,7 @@ import Web3 from "web3";
 import Base_metadata from "../public/contracts/Base_metadata.json";
 import NFTMarketplace_metadata from "../public/contracts/NFTMarketplace_metadata.json";
 import { getParsedURI, getUserProof } from "../services/storageService";
+import { getAllContracts } from "../services/constantsService";
 
 export default function Home() {
   const {
@@ -33,6 +28,17 @@ export default function Home() {
     connectWallet,
     setIsOverlayLoading,
   } = useContext(AppContext);
+
+  const [PROTOCOL_CONTRACTS, setPROTOCOL_CONTRACTS] = useState({});
+  const [metaversesJson, setMetaversesJson] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const contracts = await getAllContracts();
+      setPROTOCOL_CONTRACTS(contracts["protocols"]);
+      setMetaversesJson(contracts["metaversesJson"]);
+    })();
+  }, []);
 
   const [ownedDerivatives, setOwnedDerivatives] = useState([]);
 
@@ -276,10 +282,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (!!walletAddress) {
+    if (!!walletAddress && !!metaversesJson && !!PROTOCOL_CONTRACTS) {
       fetchOwnedDerivatives(chainId || 5);
     }
-  }, [chainId, walletAddress]);
+  }, [chainId, walletAddress, metaversesJson, PROTOCOL_CONTRACTS]);
 
   const connectWalletHandler = async () => {
     if (!(await checkIfWalletIsConnected())) {

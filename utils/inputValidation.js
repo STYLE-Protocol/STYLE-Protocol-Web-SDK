@@ -1,11 +1,14 @@
-const { metaversesJson } = require("../constants");
+import { getAllContracts } from "../services/constantsService";
 
-export const validateMetaverseFilter = (metaverseFilter) => {
+export const validateMetaverseFilter = async (metaverseFilter) => {
   if (typeof metaverseFilter === "string") {
     metaverseFilter = [metaverseFilter];
   } else if (metaverseFilter.length === 0) {
     metaverseFilter.push(null);
   }
+
+  const contracts = await getAllContracts();
+  const metaversesJson = contracts["metaversesJson"];
 
   const availiableMetaverses = metaversesJson.map((m) => m.slug.toLowerCase());
   if (metaverseFilter.length == 1 && metaverseFilter[0] == null) {

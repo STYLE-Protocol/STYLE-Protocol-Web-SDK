@@ -1,12 +1,9 @@
+import { getAllContracts } from "./constantsService";
+
 const axios = require("axios");
 const Web3 = require("web3");
 const { BigNumber, Contract } = require("ethers");
-const {
-  PROTOCOL_CONTRACTS,
-  ENDPOINTS,
-  GATEWAY,
-  API_HOST,
-} = require("../constants");
+const { ENDPOINTS, GATEWAY, API_HOST } = require("../constants");
 
 const NFTMarketplace_metadata = require("../public/contracts/NFTMarketplace_metadata.json");
 const ERC20_ABI = require("../public/contracts/ERC20_ABI.json");
@@ -27,7 +24,7 @@ const getRequestedNFTs = async ({
   subtypeFilter = [],
 }) => {
   try {
-    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    metaverseFilter = await validateMetaverseFilter(metaverseFilter);
     typeFilter = validateTypeFilter(typeFilter);
     subtypeFilter = validateSubtypeFilter(subtypeFilter);
 
@@ -77,7 +74,7 @@ const getRequestedSingularNFTs = async ({
   subtypeFilter = [],
 }) => {
   try {
-    metaverseFilter = validateMetaverseFilter(metaverseFilter);
+    metaverseFilter = await validateMetaverseFilter(metaverseFilter);
     typeFilter = validateTypeFilter(typeFilter);
     subtypeFilter = validateSubtypeFilter(subtypeFilter);
 
@@ -85,6 +82,9 @@ const getRequestedSingularNFTs = async ({
       console.log("improper filter");
       return [];
     }
+
+    const contracts = await getAllContracts();
+    const PROTOCOL_CONTRACTS = contracts["protocols"];
 
     const web3 = new Web3(ENDPOINTS[chainId]);
     const protocolContract = new web3.eth.Contract(
@@ -238,6 +238,9 @@ const approveERC20Ethers = async ({ signer, NFT, spender }) => {
 
 const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
   try {
+    const contracts = await getAllContracts();
+    const PROTOCOL_CONTRACTS = contracts["protocols"];
+
     const protocolContract = new web3.eth.Contract(
       NFTMarketplace_metadata["output"]["abi"],
       PROTOCOL_CONTRACTS[chainId]
@@ -272,6 +275,9 @@ const buyAndMintItem = async ({ web3, walletAddress, chainId, NFT }) => {
 
 const buyAndMintItemEthers = async ({ signer, chainId, NFT }) => {
   try {
+    const contracts = await getAllContracts();
+    const PROTOCOL_CONTRACTS = contracts["protocols"];
+
     const protocolContract = new Contract(
       PROTOCOL_CONTRACTS[chainId],
       NFTMarketplace_metadata["output"]["abi"],

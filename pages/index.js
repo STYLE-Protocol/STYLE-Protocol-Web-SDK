@@ -20,10 +20,9 @@ import {
 import Card from "../components/Card";
 import PropertySelector from "../components/PropertySelector";
 
-import { metaversesJson, PROTOCOL_CONTRACTS } from "../constants";
-
 import { AppContext } from "../contexts/AppContext";
 import { getAllContracts } from "../services/constantsService";
+import { useMemo } from "react";
 
 export default function Home() {
   const {
@@ -36,14 +35,28 @@ export default function Home() {
     connectWallet,
   } = useContext(AppContext);
 
+  const [PROTOCOL_CONTRACTS, setPROTOCOL_CONTRACTS] = useState({});
+  const [metaversesJson, setMetaversesJson] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const contracts = await getAllContracts();
+      setPROTOCOL_CONTRACTS(contracts["protocols"]);
+      setMetaversesJson(contracts["metaversesJson"]);
+    })();
+  }, []);
+
   const [requestedNFTs, setRequestedNFTs] = useState([]);
   const [metaverseFilter, setMetaverseFilter] = useState([]);
 
-  const allProperties = {
-    METAVERSE: metaversesJson.map((cur) => {
-      return { name: cur.name, slug: cur.slug };
-    }),
-  };
+  const allProperties = useMemo(() => {
+    console.log(metaversesJson, "metaversesJson");
+    return {
+      METAVERSE: metaversesJson?.map((cur) => {
+        return { name: cur.name, slug: cur.slug };
+      }),
+    };
+  }, [metaversesJson]);
 
   const allSetters = {
     METAVERSE: setMetaverseFilter,

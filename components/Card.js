@@ -1,6 +1,8 @@
 import { Box, Button, Flex, Grid, Tag, Text, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { useMemo, useState } from "react";
-import { DEFAULT_IMAGE, GATEWAY, metaversesJson } from "../constants";
+import { DEFAULT_IMAGE, GATEWAY } from "../constants";
+import { getAllContracts } from "../services/constantsService";
 
 import NFTViewer from "./NFTViewer";
 
@@ -13,6 +15,15 @@ const Card = ({
   availiableDerivatives,
   viewFormat,
 }) => {
+  const [metaversesJson, setMetaversesJson] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const contracts = await getAllContracts();
+      setMetaversesJson(contracts["metaversesJson"]);
+    })();
+  }, []);
+
   const animationURL = useMemo(() => {
     if (animation_url.slice(0, 4) === "ipfs") {
       return `https://${GATEWAY}/ipfs/${animation_url.slice(7)}`;
@@ -42,9 +53,9 @@ const Card = ({
 
   const metaverseId = useMemo(() => {
     return Number(
-      metaversesJson.find((mv) => mv.slug === properties.Metaverse).id
+      metaversesJson?.find((mv) => mv.slug === properties.Metaverse)?.id
     );
-  }, [properties]);
+  }, [properties, metaversesJson]);
 
   const HOVER_DELAY = 500;
 
