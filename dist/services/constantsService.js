@@ -1,4 +1,4 @@
-import { API_HOST } from "../../constants";
+const API_HOST = "style-protocol-api.vercel.app";
 
 const getAllContracts = async () => {
   const apiUrl = `https://${API_HOST}/api/contracts`;
