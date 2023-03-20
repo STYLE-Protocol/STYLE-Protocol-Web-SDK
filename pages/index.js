@@ -23,6 +23,7 @@ import PropertySelector from "../components/PropertySelector";
 import { metaversesJson, PROTOCOL_CONTRACTS } from "../constants";
 
 import { AppContext } from "../contexts/AppContext";
+import { getAllContracts } from "../services/constantsService";
 
 export default function Home() {
   const {
@@ -64,6 +65,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchRequestedNFTs(0, 100, chainId || 5, metaverseFilter);
+    getAllContracts();
   }, [chainId, metaverseFilter]);
 
   const onBuyAndMint = async (NFT) => {

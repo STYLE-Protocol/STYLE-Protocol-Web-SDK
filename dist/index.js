@@ -13,3 +13,5 @@ exports.getUserProof = require("../dist/services/storageService").getUserProof;
 exports.getUserProofEthers =
   require("../dist/services/storageService").getUserProofEthers;
 exports.getParsedURI = require("../dist/services/storageService").getParsedURI;
+exports.getAllContracts =
+  require("../dist/services/constantsService").getAllContracts;
