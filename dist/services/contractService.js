@@ -5,7 +5,7 @@ const { BigNumber, Contract } = require("ethers");
 const NFTMarketplace_metadata = require("../../public/contracts/NFTMarketplace_metadata.json");
 const ERC20_ABI = require("../../public/contracts/ERC20_ABI.json");
 const Base_metadata = require("../../public/contracts/Base_metadata.json");
-const { getAllContracts } = require("../");
+const { getAllContracts } = require("./constantsService");
 
 const API_HOST = "style-protocol-api.vercel.app";
 
