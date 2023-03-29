@@ -135,7 +135,7 @@ export default function Home() {
           (async () => {
             if (salt !== null) {
               return await protocolContract.methods
-                .isDerivative(ownedNFTs[i].contract.address, salts[i])
+                .isDerivative(ownedNFTs[i].contract.address)
                 .call();
             } else {
               return false;
