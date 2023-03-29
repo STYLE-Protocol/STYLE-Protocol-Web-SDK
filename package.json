@@ -48,7 +48,7 @@
     "sdk"
   ],
   "author": "Hamza Salem & Andrey Korokhov",
-  "license": "ISC",
+  "license": "(MIT OR Apache-2.0)",
   "bugs": {
     "url": "https://github.com/STYLE-Protocol/STYLE-Protocol-SDK/issues"
   },
